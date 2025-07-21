@@ -30,10 +30,7 @@
                     }
                 }
             }
-        }; // Added semicolon for clarity and safety
-
-        // Ensure Tailwind config is processed before other scripts that might rely on it
-        // This is a common pattern when using Tailwind with a custom config in a single HTML file.
+        };
     </script>
     <style>
         /* Base styles for the sleek modern theme */
@@ -51,35 +48,34 @@
         /* Main container styling */
         .main-container {
             background-color: #122121;
-            
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); /* Soft, diffused shadow */
-            max-width: 1400px; /* Wider max width */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            max-width: 1400px;
             width: 100%;
-            display: flex; /* Ensure flex for inner sections */
-            flex-direction: column; /* Default to column on small screens */
-            gap: 1.5rem; /* Gap between sections */
-            border-radius: 3rem; /* More rounded overall container */
-            padding: 2.5rem; /* Adjusted padding for main container */
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            border-radius: 3rem;
+            padding: 2.5rem;
         }
-        @media (min-width: 768px) { /* On medium screens and up */
+        @media (min-width: 768px) {
             .main-container {
-                flex-direction: row; /* Row layout */
-                gap: 2.5rem; /* Larger gap */
-                padding: 3.5rem; /* Larger padding for desktop */
+                flex-direction: row;
+                gap: 2.5rem;
+                padding: 3.5rem;
             }
         }
 
         /* Watch display area styling */
         #watch-display {
-            min-height: 480px; /* Taller display area */
+            min-height: 480px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #020203 0%, #464747 100%); /* Soft light blue gradient */
+            background: linear-gradient(135deg, #020203 0%, #464747 100%);
             border: 1px solid theme('colors.border-light');
             border-radius: 2.5rem;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05), 0 15px 30px -5px rgba(0, 0, 0, 0.1); /* Subtle shadows */
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05), 0 15px 30px -5px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             position: relative;
             padding: 3rem;
@@ -87,27 +83,26 @@
 
         /* Customization Options Section Styling */
         .customization-panel {
-            background-color: #694900; /* Slightly darker than main card */
+            background-color: #694900;
             border: 1px solid theme('colors.border-light');
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
-            border-radius: 2.5rem; /* Match watch display panel radius */
-            padding: 2.5rem; /* Adjusted padding for customization panel */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-radius: 2.5rem;
+            padding: 2.5rem;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center content within the panel */
+            align-items: center;
             justify-content: center;
         }
     
-
         /* Headings style */
         h2, h3 {
             font-family: 'poppins', sans-serif;
             color: theme('colors.text-dark');
             text-align: center;
-            font-weight: 600; /* Semi-bold for headings */
+            font-weight: 600;
         }
         h2 {
-            font-weight: 700; /* Bold for main titles */
+            font-weight: 700;
         }
 
         /* Styles for the buttons */
@@ -122,12 +117,12 @@
             overflow: hidden;
             text-align: center;
             width: 100%;
-            font-weight: 500; /* Medium weight for button text */
+            font-weight: 500;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0.75rem 1.5rem; /* Consistent button padding */
-            border-radius: 0.75rem; /* Rounded corners for buttons */
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
         }
         .custom-button::before {
             content: '';
@@ -164,13 +159,15 @@
         .animate-strap {
             animation: fadeInScaleRotate 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
-        /* Animation for watch face */
-        @keyframes fadeInZoom {
-            from { opacity: 0; transform: scale(0.8) translate(-50%, -50%); }
-            to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
-        }
-        .animate-face {
-            animation: fadeInZoom 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        /* Watch face specific styles removed */
+
+        /* Positioning the strap to be centered vertically without a watch face */
+        #watch-strap {
+            position: absolute;
+            left: 10%; /* Center horizontally */
+            transform: translate(-50%, -50%) rotate(90deg); /* Adjust for strap's origin and rotation */
+            width: 400px; /* Slightly larger to fill space */
+            z-index: 0;
         }
 
         /* Responsive adjustments */
@@ -202,14 +199,10 @@
                 min-height: 280px;
                 padding: 1rem;
             }
-            #watch-face {
-                width: 160px;
-                height: 160px;
-            }
             #watch-strap {
                 width: 280px;
                 height: 50px;
-                transform: translate(-50%, 60px) rotate(90deg);
+                transform: translate(-50%, -50%) rotate(90deg); /* Adjusted for smaller screens */
             }
             .text-xl, .text-2xl, .text-3xl {
                 font-size: 0.9rem;
@@ -223,10 +216,9 @@
 <body class="p-4 sm:p-8 md:p-10 lg:p-12">
     <div class="main-container p-6 sm:p-8 md:p-10 lg:p-12 rounded-3xl shadow-lg">
         <div class="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 rounded-3xl text-center">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-#d4af37 mb-6 sm:mb-8 lg:mb-10 tracking-wide">YOUR CUSTOM WATCH</h2>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-#d4af37 mb-6 sm:mb-8 lg:mb-10 tracking-wide">YOUR CUSTOM STRAP</h2>
             <div id="watch-display" class="w-full max-w-sm sm:max-w-md lg:max-w-lg h-72 sm:h-80 lg:h-96 mb-6 sm:mb-8 lg:mb-10 relative">
-                <img id="watch-face" src="https://placehold.co/220x220/FFFFFF/1F2937?text=WATCH+FACE" alt="Watch Face" class="absolute top-1/2 left-1/1 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-xl z-10 animate-face">
-                <img id="watch-strap" src="https://placehold.co/400x80/3B82F6/FFFFFF?text=SELECT+STRAP" alt="Watch Strap" class="absolute top-1/1 left-1/3 -translate-x-1/2 translate-y-16 sm:translate-y-20 transform rotate-90 w-full max-w-xs sm:max-w-md h-auto z-0 animate-strap">
+                <img id="watch-strap" src="https://placehold.co/400x80/3B82F6/FFFFFF?text=SELECT+STRAP" alt="Watch Strap" class="animate-strap">
             </div>
             <div class="text-center w-full">
                 <p class="text-xl sm:text-2xl lg:text-3xl font-medium text-text-muted mb-2 sm:mb-4">TYPE: <span id="selected-type" class="text-accent-white">None</span></p>
@@ -236,10 +228,10 @@
         </div>
 
         <div class="flex-1 customization-panel">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-dark mb-6 sm:mb-8 lg:mb-10 tracking-wide">CUSTOMIZE YOUR WATCH</h2>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-text-dark mb-6 sm:mb-8 lg:mb-10 tracking-wide">CUSTOMIZE YOUR STRAP</h2>
 
             <div class="mb-10 sm:mb-12 w-full">
-                <h3 class="text-xl sm:text-2xl lg:text-3xl font-semibold text-text-dark mb-4 sm:mb-6">1. CHOOSE WATCH TYPE</h3>
+                <h3 class="text-xl sm:text-2xl lg:text-3xl font-semibold text-text-dark mb-4 sm:mb-6">1. CHOOSE WATCH TYPE (FOR PRICING)</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-md mx-auto">
                     <button id="basic-btn" class="custom-button py-3 sm:py-4 px-6 sm:px-8 font-medium text-base sm:text-lg rounded-2xl focus:outline-none focus:ring-4 focus:ring-accent-blue focus:ring-opacity-70">
                         BASIC ($100)
@@ -253,13 +245,13 @@
             <div id="strap-options" class="mb-10 sm:mb-12 w-full hidden">
                 <h3 class="text-xl sm:text-2xl lg:text-3xl font-semibold text-text-dark mb-4 sm:mb-6">2. CHOOSE STRAP TYPE</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-md mx-auto">
-                    <button id="belt-strap-btn" class="custom-button py-3 sm:py-4 px-6 sm:px-8 font-medium text-base sm:text-lg rounded-2xl focus:outline-none focus:ring-4 focus:ring-accent-blue focus:ring-opacity-70 hidden">
+                    <button id="belt-strap-btn" class="custom-button py-3 sm:py-4 px-6 sm:px-8 font-medium text-base sm:text-lg rounded-2xl focus:outline-none focus:ring-4 focus:ring-accent-blue focus:ring-opacity-70 hidden" data-strap-image="/images/c85264a70bc46321aef23f2b08d2831f.jpg_720x720q80-removebg-preview.png">
                         BELT ($20)
                     </button>
-                    <button id="nylon-strap-btn" class="custom-button py-3 sm:py-4 px-6 sm:px-8 font-medium text-base sm:text-lg rounded-2xl focus:outline-none focus:ring-4 focus:ring-ring-accent-blue focus:ring-opacity-70 hidden">
+                    <button id="nylon-strap-btn" class="custom-button py-3 sm:py-4 px-6 sm:px-8 font-medium text-base sm:text-lg rounded-2xl focus:outline-none focus:ring-4 focus:ring-ring-accent-blue focus:ring-opacity-70 hidden" data-strap-image="/images/two-piece-nylon-strap-blue-wb-original-back-66b21d1a35a7e-removebg-preview.png">
                         NYLON ($40)
                     </button>
-                    <button id="chain-strap-btn" class="custom-button py-3 sm:py-4 px-6 sm:px-8 font-medium text-base sm:text-lg rounded-2xl focus:outline-none focus:ring-4 focus:ring-accent-blue focus:ring-opacity-70 hidden">
+                    <button id="chain-strap-btn" class="custom-button py-3 sm:py-4 px-6 sm:px-8 font-medium text-base sm:text-lg rounded-2xl focus:outline-none focus:ring-4 focus:ring-accent-blue focus:ring-opacity-70 hidden" data-strap-image="/images/0745011JAA_flat_1-removebg-preview.png">
                         CHAIN ($80)
                     </button>
                 </div>
@@ -285,7 +277,6 @@
         const selectedStrapSpan = document.getElementById('selected-strap');
         const totalPricelSpan = document.getElementById('total-price');
         const watchStrapImg = document.getElementById('watch-strap');
-        const watchFaceImg = document.getElementById('watch-face');
         const submitBtn = document.getElementById('submit-btn');
 
         // State variables to store current selections and prices
@@ -311,36 +302,19 @@
             // Update total price
             totalPricelSpan.textContent = `$${(watchTypePrice + strapTypePrice).toFixed(2)}`;
 
-            // Update watch face based on type
-            if (currentWatchType === 'Premium') {
-                watchFaceImg.src = "https://placehold.co/220x220/1F2937/FFFFFF?text=PREMIUM+WATCH"; /* Dark face, white text */
-            } else {
-                watchFaceImg.src = "https://placehold.co/220x220/FFFFFF/1F2937?text=BASIC+WATCH"; /* White face, dark text */
-            }
-
             // Update strap image based on selection
-            switch (currentStrapType) {
-                case 'Belt':
-                    watchStrapImg.src = `https://placehold.co/400x80/${tailwind.config.theme.extend.colors['strap-brown'].substring(1)}/FFFFFF?text=LEATHER+BELT`;
-                    break;
-                case 'Nylon':
-                    watchStrapImg.src = `https://placehold.co/400x80/${tailwind.config.theme.extend.colors['strap-navy'].substring(1)}/FFFFFF?text=NYLON+STRAP`;
-                    break;
-                case 'Chain':
-                    watchStrapImg.src = `https://placehold.co/400x80/${tailwind.config.theme.extend.colors['strap-silver'].substring(1)}/FFFFFF?text=METAL+STRAP`;
-                    break;
-                default:
-                    watchStrapImg.src = `https://placehold.co/400x80/${tailwind.config.theme.extend.colors['border-light'].substring(1)}/${tailwind.config.theme.extend.colors['text-muted'].substring(1)}?text=SELECT+STRAP`;
-                    break;
+            const selectedStrapButton = document.querySelector('.custom-button.selected[data-strap-image]');
+            if (selectedStrapButton) {
+                watchStrapImg.src = selectedStrapButton.dataset.strapImage;
+            } else {
+                // Default image if no strap is selected
+                watchStrapImg.src = `https://placehold.co/400x80/${tailwind.config.theme.extend.colors['border-light'].substring(1)}/${tailwind.config.theme.extend.colors['text-muted'].substring(1)}?text=SELECT+STRAP`;
             }
 
-            // Re-add animation classes to trigger animations on change
+            // Re-add animation class to trigger animation on change
             watchStrapImg.classList.remove('animate-strap');
-            watchFaceImg.classList.remove('animate-face');
-            void watchStrapImg.offsetWidth; // Trigger reflow for strap
-            void watchFaceImg.offsetWidth; // Trigger reflow for face
+            void watchStrapImg.offsetWidth; // Trigger reflow
             watchStrapImg.classList.add('animate-strap');
-            watchFaceImg.classList.add('animate-face');
         }
 
         // Function to reset strap options visibility and selection state
@@ -419,9 +393,9 @@
         submitBtn.addEventListener('click', () => {
             if (currentWatchType && currentStrapType) {
                 const totalPrice = (watchTypePrice + strapTypePrice).toFixed(2);
-                alert(`Your custom watch details:\nType: ${currentWatchType}\nStrap: ${currentStrapType}\nTotal Price: $${totalPrice}\n\nThank you for your order! (This is a simulation. No actual order is placed.)`);
+                alert(`Your custom strap details:\nType (Watch Model for Pricing): ${currentWatchType}\nStrap: ${currentStrapType}\nTotal Price: $${totalPrice}\n\nThank you for your order! (This is a simulation. No actual order is placed.)`);
             } else {
-                alert('Please select both a watch type and a strap type before submitting.');
+                alert('Please select both a watch type (for pricing) and a strap type before submitting.');
             }
         });
 

@@ -19,10 +19,6 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap"
       rel="stylesheet"
     />
-    <link
-      href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
-      rel="stylesheet"
-    />
     <style>
       /* General Styles */
       html {
@@ -36,7 +32,10 @@
         background-color: #0d0d0d;
         color: #f5f5f5;
         font-family: "Poppins", sans-serif;
-        padding-top: 100px; /* offset for fixed navbar */
+        padding-top: 90px;
+      }
+      body.nav-open {
+        overflow: hidden;
       }
       a {
         text-decoration: none;
@@ -45,6 +44,9 @@
       button {
         cursor: pointer;
         font-family: inherit;
+        background: none;
+        border: none;
+        padding: 0;
       }
       .container {
         max-width: 1140px;
@@ -59,14 +61,13 @@
         width: 100%;
         background: rgba(13, 13, 13, 0.95);
         backdrop-filter: blur(10px);
-        z-index: 999;
+        z-index: 1000;
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 16px 24px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
       }
-
       .logo {
         font-family: "Playfair Display", serif;
         font-size: 1.8rem;
@@ -76,23 +77,18 @@
         text-transform: uppercase;
         user-select: none;
       }
-
       .nav-menu {
         display: flex;
         gap: 32px;
       }
-
       .nav-menu a {
         position: relative;
-        font-family: "Poppins", sans-serif;
         font-weight: 600;
         font-size: 1rem;
         color: #d4af37;
         text-transform: uppercase;
-        text-decoration: none;
         transition: color 0.3s ease;
       }
-
       .nav-menu a::after {
         content: "";
         position: absolute;
@@ -100,802 +96,198 @@
         height: 2px;
         bottom: -4px;
         left: 0;
-        background-color: #d4af37; /* Consistent gold color for underline */
+        background-color: #d4af37;
         transition: width 0.3s ease-in-out;
       }
-
-      .nav-menu a:hover::after {
+      .nav-menu a:hover { color: #fff; }
+      .nav-menu a:hover::after { width: 100%; }
+      .nav-toggler {
+        display: none;
+        width: 30px;
+        height: 22px;
+        position: relative;
+        z-index: 1001;
+      }
+      .nav-toggler .line {
+        position: absolute;
+        left: 0;
         width: 100%;
+        height: 3px;
+        background-color: #d4af37;
+        border-radius: 2px;
+        transition: transform 0.3s ease, top 0.3s ease, opacity 0.3s ease;
       }
-
-      .nav-menu a:hover {
-        color: #ffffffff;
-      }
+      .nav-toggler .line1 { top: 0; }
+      .nav-toggler .line2 { top: 50%; transform: translateY(-50%); }
+      .nav-toggler .line3 { top: 100%; transform: translateY(-100%); }
+      header.nav-active .line1 { top: 50%; transform: translateY(-50%) rotate(45deg); }
+      header.nav-active .line2 { opacity: 0; }
+      header.nav-active .line3 { top: 50%; transform: translateY(-50%) rotate(-45deg); }
 
       /* Hero Section */
-      .hero {
-        position: relative;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        color: #fff;
-        text-align: center;
-      }
-
-      .hero-bg-video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        z-index: 0;
-        filter: brightness(0.4);
-        transition: opacity 1s ease;
-      }
-
-      .hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-      .hero::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-          to right,
-          rgba(13, 13, 13, 0.9) 30%,
-          transparent 100%
-        );
-        z-index: 1;
-      }
-      .hero-content {
-        position: relative;
-        z-index: 2;
-        max-width: 700px;
-        padding: 0 20px;
-      }
-      .hero-content h1,
-      .hero-content p,
-      .hero-content button {
-        opacity: 0;
-        transform: translateY(30px);
-        animation: fadeUp 1s ease-out forwards;
-      }
-      .hero-content p {
-        animation-delay: 0.3s;
-        margin-bottom: 50px;
-      }
-      .hero-content button {
-        animation-delay: 0.6s;
-      }
-
-      .btn-primary {
-        background: linear-gradient(45deg, #d4af37, #b8860b);
-        padding: 16px 48px;
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 1.1rem;
-        color: #0d0d0d;
-        border: none;
-        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
-        transition: all 0.3s ease;
-      }
-      .btn-primary:hover {
-        filter: brightness(1.2);
-        box-shadow: 0 12px 30px rgba(212, 175, 55, 0.8);
-        transform: translateY(-3px);
-      }
-
-      /* Collections Section */
-      .modern-text {
-        font-family: "Poppins", sans-serif;
-        font-weight: 800;
-        font-size: 3rem;
-        color: #d6b13a; /* Luxury gold */
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        position: relative;
-        padding-bottom: 8px;
-        user-select: none;
-        transition: color 0.3s ease;
-        text-align: center;
-        margin-top: 50px;
-      }
-
-      .modern-text:hover {
-        color: #ffff;
-        cursor: default;
-      }
-
-      .watches {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 30px;
-        max-width: 1140px;
-        margin: 50px auto;
-        padding: 0 20px;
-      }
-
-      .watch-card {
-        background: #121212;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .watch-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 40px rgba(212, 175, 55, 0.3);
-      }
-      .watch-img {
-        width: 100%;
-        height: 260px;
-        object-fit: cover;
-        border-bottom: 1px solid #333;
-        transition: transform 0.5s ease;
-      }
-      .watch-card:hover .watch-img {
-        transform: scale(1.05);
-      }
-      .watch-info {
-        padding: 20px 24px;
-      }
-      .watch-title {
-        font-family: "Playfair Display", serif;
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: #d4af37;
-        margin-bottom: 10px;
-        text-transform: uppercase;
-      }
-      .watch-desc {
-        font-size: 1rem;
-        font-weight: 300;
-        color: #bbb;
-        margin-bottom: 20px;
-      }
-      .watch-price {
-        font-weight: 700;
-        font-size: 1.1rem;
-        color: #d4af37;
-        margin-bottom: 20px;
-      }
-      .btn-secondary {
-        background: transparent;
-        border: 2px solid #d4af37;
-        padding: 12px 28px;
-        border-radius: 50px;
-        color: #d4af37;
-        font-weight: 700;
-        text-transform: uppercase;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
-      }
-      .btn-secondary:hover {
-        background-color: #d4af37;
-        color: #0d0d0d;
-      }
-
-      /* Watch Actions (Like Button) */
-      .watch-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
-      }
-
-      .like-button {
-        background: none;
-        border: none;
-        color: #d4af37;
-        font-size: 1.8rem;
-        cursor: pointer;
-        transition: transform 0.2s ease, color 0.2s ease;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .like-button:hover {
-        transform: scale(1.1);
-        color: #f0f0f0;
-      }
-
-      .like-button.liked .heart-icon {
-        color: #e74c3c; /* Red color when liked */
-        animation: pulse 0.4s ease-in-out;
-      }
-
+      .hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; color: #fff; text-align: center; }
+      .hero-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; filter: brightness(0.4); }
+      .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right,rgba(13, 13, 13, 0.9) 30%,transparent 100%); z-index: 1; }
+      .hero-content { position: relative; z-index: 2; max-width: 700px; padding: 0 20px; }
+      .hero-content h1, .hero-content p, .hero-content button { opacity: 0; transform: translateY(30px); animation: fadeUp 1s ease-out forwards; }
+      .hero-content p { animation-delay: 0.3s; margin-bottom: 50px; }
+      .hero-content button { animation-delay: 0.6s; }
+      .btn-primary { background: linear-gradient(45deg, #d4af37, #b8860b); padding: 16px 48px; border-radius: 50px; font-weight: 700; font-size: 1.1rem; color: #0d0d0d; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5); transition: all 0.3s ease; border: none; }
+      .btn-primary:hover { filter: brightness(1.2); box-shadow: 0 12px 30px rgba(212, 175, 55, 0.8); transform: translateY(-3px); }
+      
       /* Special Watch Section */
-      .special-watch-section {
-        background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
-        padding: 80px 20px;
-        color: #f5f5f5;
-        font-synthesis: none;
-        font-feature-settings: "liga" 0;
-        -webkit-font-smoothing: antialiased;
-      }
+      .special-watch-section { background: linear-gradient(135deg, #1a1a1a, #0d0d0d); padding: 80px 20px; }
+      .special-watch-container { max-width: 1200px; margin: 0 auto; display: flex; gap: 60px; align-items: center; justify-content: center; flex-wrap: wrap; }
+      .special-watch-left { flex: 2 1 600px; text-align: center; border-radius: 24px; overflow: hidden; box-shadow: 0 8px 24px rgba(212, 175, 55, 0.25), 0 16px 48px rgba(0, 0, 0, 0.6); transition: transform 0.3s ease; }
+      .special-watch-left img { width: 100%; height: auto; display: block; object-fit: cover; border-radius: 24px; }
+      .special-watch-left:hover { transform: scale(1.05) rotate(1deg); }
+      .special-watch-right { flex: 1 1 350px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+      .watch-image { width: 100%; max-width: 320px; border-radius: 24px; box-shadow: 0 12px 24px rgba(212, 175, 55, 0.5), 0 24px 48px rgba(0, 0, 0, 0.8); animation: float 4s ease-in-out infinite; }
+      .watch-description h2 { font-family: "Playfair Display", serif; font-size: 2.8rem; font-weight: 700; margin: 0; letter-spacing: 2px; text-transform: uppercase; color: #d4af37; }
 
-      .special-watch-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        gap: 60px;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        animation: fadeSlideUp 1.2s ease forwards;
-      }
+      /* Showcase Section - DESKTOP */
+      .showcase-desktop-wrapper { display: block; }
+      .showcase-mobile-wrapper { display: none; }
+      .features-showcase-wrapper { position: relative; height: 400vh; margin-top: 80px; }
+      .features-showcase { position: sticky; top: 0; width: 100%; height: 100vh; background-color: #000; overflow: hidden; }
+      .particles-js-canvas-el { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
+      .showcase-container { max-width: 1200px; height: 100%; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; position: relative; z-index: 2; }
+      .showcase-image-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+      .showcase-image-container img { max-width: 100%; max-height: 70vh; object-fit: contain; border-radius: 16px; filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.4)); transition: opacity 0.5s ease-in-out; }
+      .showcase-features-list { position: relative; height: 100%; }
+      .feature-item { position: absolute; top: 50%; left: 0; width: 100%; opacity: 0; visibility: hidden; transform: translateY(-40%); pointer-events: none; transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s 0.5s; }
+      .feature-item.is-active { opacity: 1; visibility: visible; transform: translateY(-50%); pointer-events: auto; transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s, visibility 0s 0s; }
+      .feature-item h3 { font-family: 'Playfair Display', serif; font-size: 2.8rem; color: #d4af37; margin-bottom: 25px; }
+      .feature-item p { font-size: 1.15rem; line-height: 1.8; color: #ccc; max-width: 450px; }
+      
+      /* Collections Section Styles */
+      .modern-text { font-family: "Poppins", sans-serif; font-weight: 800; font-size: 3rem; color: #d6b13a; text-transform: uppercase; letter-spacing: 0.15em; text-align: center; margin-top: 80px; }
+      .watches { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1140px; margin: 50px auto; padding: 0 20px; }
+      .watch-card { background: #121212; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+      .watch-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(212, 175, 55, 0.3); }
+      .watch-img { width: 100%; height: 260px; object-fit: cover; border-bottom: 1px solid #333; }
+      .watch-info { padding: 20px 24px; }
+      .watch-title { font-family: "Playfair Display", serif; font-size: 1.6rem; color: #d4af37; }
+      .watch-desc { font-size: 1rem; color: #bbb; margin-bottom: 20px; }
+      .watch-price { font-weight: 700; font-size: 1.1rem; color: #d4af37; margin-bottom: 20px; }
+      .watch-actions { display: flex; justify-content: space-between; align-items: center; }
+      .like-button { font-size: 1.8rem; color: #d4af37; }
+      .like-button.liked { color: #e74c3c; }
+      .btn-secondary { background: transparent; border: 2px solid #d4af37; padding: 12px 28px; border-radius: 50px; color: #d4af37; font-weight: 700; transition: all 0.3s ease; }
+      .btn-secondary:hover { background-color: #d4af37; color: #0d0d0d; }
+      .search-container { display: flex; justify-content: center; margin: 40px auto; gap: 15px; flex-wrap: wrap; }
+      .search-input { width: 100%; max-width: 450px; padding: 14px 25px; border: 2px solid #d4af37; border-radius: 50px; background-color: #1a1a1a; color: #f5f5f5; font-size: 1.05rem; outline: none; }
+      .search-button { background: linear-gradient(45deg, #d4af37, #b8860b); color: #0d0d0d; padding: 14px 30px; border-radius: 50px; font-weight: 700; }
+      .pagination { display: flex; justify-content: center; gap: 12px; margin: 60px 0 80px; flex-wrap: wrap; }
+      .pagination button { background-color: #1a1a1a; border: 1px solid #333; color: #d4af37; padding: 10px 18px; border-radius: 6px; }
+      .pagination button.active { background-color: #d4af37; color: #0d0d0d; }
+      .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+      .full-width-image-section { margin: 60px 0; }
+      .full-width-image-section img { max-width: 100%; border-radius: 12px; }
+      
+      @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-      .special-watch-left {
-        flex: 2 1 600px;
-        text-align: center;
-        border-radius: 24px;
-        overflow: hidden;
-        box-shadow: 0 8px 24px rgba(212, 175, 55, 0.25),
-          0 16px 48px rgba(0, 0, 0, 0.6);
-        transition: transform 0.3s ease;
-      }
-
-      .special-watch-left img {
-        width: 100%;
-        height: auto;
-        display: block;
-        object-fit: cover;
-        border-radius: 24px;
-        user-select: none;
-      }
-
-      .special-watch-left:hover {
-        transform: scale(1.05) rotate(1deg);
-        box-shadow: 0 12px 36px rgba(212, 175, 55, 0.45),
-          0 20px 60px rgba(0, 0, 0, 0.8);
-      }
-
-      .special-watch-right {
-        flex: 1 1 350px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 24px;
-      }
-
-      .watch-image {
-        width: 100%;
-        max-width: 320px;
-        border-radius: 24px;
-        box-shadow: 0 12px 24px rgba(212, 175, 55, 0.5),
-          0 24px 48px rgba(0, 0, 0, 0.8);
-        animation: float 4s ease-in-out infinite;
-        user-select: none;
-      }
-
-      .watch-description h2 {
-        font-family: "Playfair Display", serif;
-        font-size: 2.8rem;
-        font-weight: 700;
-        margin: 0;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: #d4af37;
-      }
-
-      .watch-description p {
-        font-size: 1.15rem;
-        line-height: 1.5;
-        color: #ccc;
-        max-width: 320px;
-        margin: 0 auto;
-      }
-
-      /* New Full-Width Image Section */
-      .full-width-image-section {
-          width: 100%;
-          padding: 0; /* Remove padding if you want image to touch edges */
-          background-color: #0d0d0d; /* Match body background */
-          display: flex;
-          justify-content: center; /* Center the image */
-          align-items: center;
-          margin: 60px 0; /* Add some vertical spacing */
-      }
-
-      .full-width-image-section img {
-          max-width: 100%; /* Ensure image is responsive */
-          height: auto;
-          display: block; /* Remove extra space below image */
-          border-radius: 12px; /* Slightly rounded corners */
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); /* Subtle shadow */
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .full-width-image-section img:hover {
-          transform: scale(1.01); /* Slight zoom on hover */
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9); /* More pronounced shadow */
-      }
-
-      /* Why Choose Us Section */
-      .why-choose-us {
-        padding: 100px 20px;
-        background: linear-gradient(145deg, #0a0a0a, #151515);
-        color: #fff;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-        font-family: "Josefin Sans", sans-serif;
-      }
-
-      .why-choose-us::before {
-        content: "";
-        position: absolute;
-        top: -20%;
-        left: -20%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(#ff572230 1px, transparent 1px);
-        background-size: 40px 40px;
-        opacity: 0.05;
-        z-index: 0;
-        animation: backgroundPan 60s linear infinite;
-      }
-
-      .section-title {
-        font-size: 3.8rem;
-        color: #ff4500;
-        margin-bottom: 60px;
-        font-family: "Josefin Sans", sans-serif;
-        text-shadow: 0 0 20px rgba(255, 69, 0, 0.6);
-        letter-spacing: 2px;
-        animation: fadeInDown 1s ease-out;
-      }
-
-      .choose-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 50px;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .choose-box {
-        background: rgba(255, 255, 255, 0.07);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 69, 0, 0.3);
-        padding: 40px;
-        border-radius: 20px;
-        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-          box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        position: relative;
-        z-index: 1;
-        overflow: hidden;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-      }
-
-      .choose-box::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(
-          circle at center,
-          rgba(255, 69, 0, 0.1) 0%,
-          transparent 70%
-        );
-        opacity: 0;
-        transition: opacity 0.5s ease-out;
-        z-index: -1;
-      }
-
-      .choose-box:hover::before {
-        opacity: 1;
-      }
-
-      .choose-box:hover {
-        transform: translateY(-15px) scale(1.02);
-        box-shadow: 0 15px 40px rgba(255, 69, 0, 0.8),
-          0 0 30px rgba(255, 69, 0, 0.4);
-        border-color: rgba(255, 69, 0, 0.6);
-      }
-
-      .choose-box .icon {
-        font-size: 3rem;
-        margin-bottom: 20px;
-        color: #ff4500;
-        animation: float 3s ease-in-out infinite, pulse 2s infinite alternate;
-        text-shadow: 0 0 10px rgba(255, 69, 0, 0.7);
-      }
-
-      .choose-box h3 {
-        font-size: 1.8rem;
-        margin-bottom: 15px;
-        color: #fff;
-        font-family: "Josefin Sans", sans-serif;
-        letter-spacing: 1px;
-      }
-
-      .choose-box p {
-        font-size: 1.1rem;
-        color: #e0e0e0;
-        line-height: 1.7;
-      }
-
-      /* Search Bar Styles */
-      .search-container {
-        display: flex;
-        justify-content: center;
-        align-items: center; /* Align items vertically */
-        margin-top: 40px;
-        margin-bottom: 40px;
-        gap: 15px; /* Increased gap */
-        padding: 0 20px;
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
-      }
-
-      .search-input {
-        width: 100%;
-        max-width: 450px; /* Slightly wider input */
-        padding: 14px 25px; /* More padding */
-        border: 2px solid #d4af37;
-        border-radius: 50px;
-        background-color: #1a1a1a;
-        color: #f5f5f5;
-        font-size: 1.05rem; /* Slightly larger font */
-        outline: none;
-        transition: all 0.3s ease;
-      }
-
-      .search-input::placeholder {
-        color: #999;
-      }
-
-      .search-input:focus {
-        border-color: #b8860b;
-        box-shadow: 0 0 18px rgba(212, 175, 55, 0.6); /* Stronger glow */
-        transform: translateY(-2px); /* Slight lift on focus */
-      }
-
-      .search-button {
-        background: linear-gradient(45deg, #d4af37, #b8860b);
-        color: #0d0d0d;
-        padding: 14px 30px; /* More padding */
-        border: none;
-        border-radius: 50px;
-        font-weight: 700;
-        font-size: 1.05rem; /* Slightly larger font */
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4); /* Stronger shadow */
-      }
-
-      .search-button:hover {
-        filter: brightness(1.15); /* Brighter hover */
-        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.7);
-        transform: translateY(-3px);
-      }
-
-      /* Pagination Styles - MAJOR ADJUSTMENTS HERE */
-      .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px; /* Gap between 'Prev'/'Next' buttons and page numbers */
-        margin-top: 60px;
-        margin-bottom: 80px;
-        padding: 15px 0;
-        font-family: "Poppins", sans-serif;
-        user-select: none;
-      }
-
-      .pagination button { /* Styles for Prev/Next buttons */
-        background-color: #1a1a1a;
-        border: 1px solid #333;
-        color: #d4af37;
-        padding: 10px 18px; /* Slightly more horizontal padding for buttons */
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 0.95rem;
-        transition: all 0.2s ease-in-out;
-        min-width: 60px; /* Ensure buttons have consistent width */
-        text-align: center;
-      }
-
-      .pagination button:hover:not(:disabled) {
-        background-color: #d4af37;
-        color: #0d0d0d;
-        transform: translateY(-2px);
-        box-shadow: 0 3px 8px rgba(212, 175, 55, 0.3);
-        border-color: #d4af37;
-      }
-
-      .pagination button:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        background-color: #1a1a1a;
-        color: #777;
-        border-color: #333;
-        transform: none;
-        box-shadow: none;
-      }
-
-      /* Container for page numbers to control their internal gap */
-      #pageNumbers {
-        display: flex;
-        align-items: center;
-        gap: 10px; /* Gap between individual page numbers */
-      }
-
-      .pagination .page-number {
-        background-color: transparent; /* Make background transparent */
-        border: none; /* Remove border */
-        color: #f5f5f5; /* Use a lighter color for numbers, like text */
-        padding: 8px 10px; /* Reduced padding for text-like appearance */
-        border-radius: 0; /* No border radius for text-like appearance */
-        cursor: pointer;
-        font-size: 1rem; /* Slightly larger font for clarity */
-        transition: all 0.2s ease-in-out;
-        min-width: auto; /* Allow numbers to size naturally */
-        font-weight: 400; /* Regular weight for non-active */
-        position: relative; /* For underline effect */
-      }
-
-      .pagination .page-number.ellipsis {
-        color: #999; /* Softer color for ellipsis */
-        cursor: default;
-        pointer-events: none; /* Make ellipsis truly non-clickable */
-      }
-
-      .pagination .page-number:hover:not(.active):not(.ellipsis) {
-        color: #d4af37; /* Change text color on hover */
-        transform: translateY(-1px); /* Subtle lift on hover */
-      }
-
-      .pagination .page-number:hover:not(.active):not(.ellipsis)::after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        bottom: 0px; /* Position slightly below text */
-        width: 0%;
-        height: 2px;
-        background-color: #d4af37;
-        transform: translateX(-50%);
-        transition: width 0.2s ease-out;
-      }
-
-      .pagination .page-number:hover:not(.active):not(.ellipsis)::after {
-        width: 80%; /* Expand underline on hover */
-      }
-
-      .pagination .page-number.active {
-        background-color: #d4af37; /* Background for active page, like the first image */
-        color: #0d0d0d; /* Dark text for active page */
-        border-radius: 6px; /* Rounded corners for active state */
-        font-weight: 600; /* Bolder for active */
-        padding: 8px 12px; /* Slightly more padding for active button */
-        transform: translateY(-2px); /* Slight lift for active */
-        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.6);
-        border: none; /* No border for active */
-      }
-      .pagination .page-number.active::after {
-          content: none; /* Remove underline for active state */
-      }
-
-
-      /* Animations */
-      @keyframes fadeUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes fadeSlideUp {
-        from {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-15px);
-        }
-      }
-      @keyframes fadeInDown {
-        from {
-          opacity: 0;
-          transform: translateY(-30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-        100% {
-          transform: scale(1);
-        }
-      }
-      @keyframes backgroundPan {
-        from {
-          transform: translate(0, 0);
-        }
-        to {
-          transform: translate(-100%, -100%);
-        }
-      }
-
-      /* Responsive Adjustments */
-      @media (max-width: 900px) {
-        .special-watch-container {
-          flex-direction: column;
-          gap: 40px;
-        }
-        .special-watch-left,
-        .special-watch-right {
-          flex: 1 1 100%;
-          max-width: 100%;
-        }
-        .watch-description p,
-        .watch-description h2 {
-          max-width: 100%;
-        }
-      }
-
+      /* ===== FULLY RESPONSIVE STYLES (Mobile First) ===== */
       @media (max-width: 768px) {
-        .navbar {
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          padding: 24px 16px;
-        }
-
-        .logo {
-          margin-bottom: 12px;
-        }
-
+        .nav-toggler { display: block; }
         .nav-menu {
-          flex-direction: row;
-          gap: 20px;
-          flex-wrap: wrap;
-          justify-content: center;
+          position: fixed; top: 0; left: 0;
+          width: 100%; height: 100vh;
+          background: #0d0d0d;
+          flex-direction: column; justify-content: center; align-items: center;
+          gap: 40px;
+          transform: translateX(100%);
+          transition: transform 0.4s ease-in-out;
         }
+        header.nav-active .nav-menu { transform: translateX(0); }
+        .nav-menu a { font-size: 1.5rem; }
 
-        .section-title {
-          font-size: 2.8rem;
+        /* "Amazing" Mobile Card Stack Showcase */
+        .showcase-desktop-wrapper { display: none; }
+        .showcase-mobile-wrapper {
+          display: block;
+          position: relative;
+          margin-top: 60px;
+          background: transparent; /* Changed */
+          padding-top: 1px;
+          padding-bottom: 50vh;
         }
-        .choose-grid {
-          grid-template-columns: 1fr;
-          padding: 0 15px;
+        #particles-js-mobile {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
+            z-index: 0; /* Behind everything */
         }
-        .choose-box {
-          padding: 30px;
+        .mobile-cards-container {
+            position: relative;
+            z-index: 2; /* Above particles */
         }
-
-        .hero-content h1 {
-          font-size: 3rem;
-        }
-        .hero-content p {
-          font-size: 1rem;
-        }
-      }
-
-      @media (max-width: 600px) {
-        .search-container {
+        .showcase-card {
+          min-height: 90vh;
+          display: flex;
           flex-direction: column;
           align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 24px;
+          position: sticky;
+          top: 90px;
+          background: rgba(17, 17, 17, 0.85); /* Slightly more transparent */
+          backdrop-filter: blur(8px);
+          border: 1px solid #222;
+          border-radius: 20px;
+          transform-origin: center 20%;
+          transition: transform 0.5s ease-out;
+          margin-bottom: 20px;
         }
-        .search-input {
-          max-width: 100%;
-          margin-bottom: 15px;
+        .showcase-card-image {
+          width: 100%;
+          max-width: 300px;
+          margin-bottom: 30px;
+          border-radius: 16px;
         }
-        .search-button {
-          width: 80%;
-        }
-        .pagination {
-          gap: 8px; /* Gap between 'Prev'/'Next' and number group */
-        }
-        #pageNumbers {
-            gap: 6px; /* Smaller gap between numbers on small screens */
-        }
-        .pagination button {
-          padding: 8px 12px;
-          min-width: 50px;
-          font-size: 0.85rem;
-        }
-        .pagination .page-number {
-          padding: 6px 8px; /* Even smaller padding for numbers */
-          font-size: 0.9rem;
-        }
-      }
+        .showcase-card-text h3 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #d4af37; margin-bottom: 15px; }
+        .showcase-card-text p { font-size: 1rem; line-height: 1.7; color: #ccc; }
 
-      @media (max-width: 480px) {
-        .section-title {
-          font-size: 2.2rem;
-          margin-bottom: 40px;
-        }
-        .why-choose-us {
-          padding: 60px 15px;
-        }
-        .hero-content h1 {
-          font-size: 2.5rem;
-        }
+        .special-watch-container { flex-direction: column; }
+        .modern-text { font-size: 2.5rem; }
+        .watch-description h2 { font-size: 2.2rem; }
       }
     </style>
   </head>
   <body>
-    <header class="navbar">
+    <header id="main-header">
       <div class="logo">Dialcraft</div>
+      <button class="nav-toggler" aria-label="Toggle navigation">
+        <span class="line line1"></span>
+        <span class="line line2"></span>
+        <span class="line line3"></span>
+      </button>
       <nav class="nav-menu">
         <a href="#watches">Watches</a>
-        <a href="#features">Why Us</a>
+        <a href="#features-start">Why Us</a>
         <a href="#contact">Contact</a>
-        <a href="#wishlist">wishlist</a>
-        <a href="virtual-watch.html">virtual-watch</a>
+        <a href="#wishlist">Wishlist</a>
       </nav>
     </header>
 
     <section class="hero">
-      <video
-        id="bgVideo1"
-        autoplay
-        muted
-        loop
-        playsinline
-        class="hero-bg-video"
-      ></video>
-      <video
-        id="bgVideo2"
-        autoplay
-        muted
-        loop
-        playsinline
-        class="hero-bg-video hidden"
-      ></video>
+      <video class="hero-bg-video" src="./images/3019-165457954_small.mp4" autoplay muted loop playsinline></video>
       <div class="hero-content">
         <h1>Your Time, Your Style</h1>
         <p>Premium custom-designed watches</p>
-        <a
-          href="https://mustakim-1.github.io/customized-watch/"
-          class="btn-primary"
-          >Customize Yours</a
-        >
+        <a href="https://mustakim-1.github.io/customized-watch/" class="btn-primary">Customize Yours</a>
       </div>
     </section>
 
     <section class="special-watch-section">
       <div class="special-watch-container">
         <div class="special-watch-left" aria-label="Anime theme image">
-          <img
-            src="images/dragon-ball-zee-chromebook-wallpaper.jpg"
-            alt="Anime artwork related to the watch"
-          />
+          <img src="images/dragon-ball-zee-chromebook-wallpaper.jpg" alt="Anime artwork related to the watch" />
         </div>
         <div class="special-watch-right">
-          <img
-            src="images/unnamed.png"
-            alt="Special edition luxury watch"
-            class="watch-image"
-          />
+          <img src="images/unnamed.png" alt="Special edition luxury watch" class="watch-image" />
           <div class="watch-description">
             <h2>Titan x DRAGON BALL Z</h2>
           </div>
@@ -903,814 +295,314 @@
       </div>
     </section>
 
-   
-    <main class="container">
-      <h1 class="modern-text">collections</h1>
+    <div id="features-start"></div>
 
+    <!-- Desktop Showcase -->
+    <div class="features-showcase-wrapper showcase-desktop-wrapper">
+      <section id="features" class="features-showcase">
+        <div id="particles-js"></div>
+        <div class="showcase-container">
+            <div class="showcase-image-container">
+                <img id="showcaseImage" src="images/unnamed.png" alt="Detailed view of the luxury watch">
+            </div>
+            <div class="showcase-features-list">
+                <div class="feature-item" data-img-src="images/unnamed.png"><h3>Intricate Craftsmanship</h3><p>Each watch is assembled by master artisans, ensuring every gear and component functions in perfect harmony.</p></div>
+                <div class="feature-item" data-img-src="images/7_24_2025 12_25_26 PM (2).png"><h3>Premium Materials</h3><p>We use only the finest materials, from surgical-grade stainless steel to sapphire crystal glass.</p></div>
+                <div class="feature-item" data-img-src="images/dragon-ball-zee-chromebook-wallpaper.jpg"><h3>Anime-Infused Design</h3><p>Subtle yet powerful design elements inspired by your favorite anime are etched into the dial and caseback.</p></div>
+                <div class="feature-item" data-img-src="images/unnamed.png"><h3>Precision Movement</h3><p>At its heart is a state-of-the-art automatic movement, offering unparalleled accuracy and reliability.</p></div>
+            </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- "Amazing" Mobile Showcase -->
+    <div class="showcase-mobile-wrapper">
+      <div id="particles-js-mobile"></div>
+      <div class="mobile-cards-container">
+        <div class="showcase-card"><img class="showcase-card-image" src="images/unnamed.png" alt="Detailed view of the luxury watch"><div class="showcase-card-text"><h3>Intricate Craftsmanship</h3><p>Each watch is assembled by master artisans, ensuring every gear and component functions in perfect harmony.</p></div></div>
+        <div class="showcase-card"><img class="showcase-card-image" src="images/7_24_2025 12_25_26 PM (2).png" alt="Premium watch materials"><div class="showcase-card-text"><h3>Premium Materials</h3><p>We use only the finest materials, from surgical-grade stainless steel to sapphire crystal glass.</p></div></div>
+        <div class="showcase-card"><img class="showcase-card-image" src="images/dragon-ball-zee-chromebook-wallpaper.jpg" alt="Anime artwork inspiration"><div class="showcase-card-text"><h3>Anime-Infused Design</h3><p>Subtle yet powerful design elements inspired by your favorite anime are etched into the dial and caseback.</p></div></div>
+        <div class="showcase-card"><img class="showcase-card-image" src="images/unnamed.png" alt="Watch precision movement"><div class="showcase-card-text"><h3>Precision Movement</h3><p>At its heart is a state-of-the-art automatic movement, offering unparalleled accuracy and reliability.</p></div></div>
+      </div>
+    </div>
+   
+     <main class="container">
+      <h1 class="modern-text">Collections</h1>
       <div class="search-container">
-        <input
-          type="text"
-          id="watchSearchInput"
-          class="search-input"
-          placeholder="Search for watches..."
-          aria-label="Search watches by title or description"
-        />
+        <input type="text" id="watchSearchInput" class="search-input" placeholder="Search for watches..." />
         <button id="searchButton" class="search-button">Search</button>
       </div>
-      <section id="watches" class="watches" aria-label="Featured Watches">
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/lRkQj42.jpg"
-            alt="Naruto Storm Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Naruto Storm Watch</h3>
-            <p class="watch-desc">
-              Flame dial design with vibrant red strap. Perfect for Naruto fans.
-            </p>
-            <div class="watch-price">৳1,499</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/h7UoHVZ.jpg"
-            alt="Sailor Moon Dream Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Sailor Moon Dream Watch</h3>
-            <p class="watch-desc">
-              Elegant moon phases dial with soft pastel strap. For magical
-              moments.
-            </p>
-            <div class="watch-price">৳1,599</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/WjwpWKh.jpg"
-            alt="Dragon Ball Z Power Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Dragon Ball Z Power Watch</h3>
-            <p class="watch-desc">
-              Electric blue energy dial with black strap. Feel the power.
-            </p>
-            <div class="watch-price">৳1,699</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/EHtM0Uu.jpg"
-            alt="My Hero Academia Hero Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">My Hero Academia Hero Watch</h3>
-            <p class="watch-desc">
-              Dynamic red and black design with hero emblem dial.
-            </p>
-            <div class="watch-price">৳1,699</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/EHtM0Uu.jpg"
-            alt="One Piece Pirate Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">One Piece Pirate Watch</h3>
-            <p class="watch-desc">
-              Adventure-ready design with skull and crossbones dial.
-            </p>
-            <div class="watch-price">৳1,550</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/Q2k7O5b.jpg"
-            alt="Attack on Titan Survey Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Attack on Titan Survey Watch</h3>
-            <p class="watch-desc">
-              Tactical style with Survey Corps emblem. For true scouts.
-            </p>
-            <div class="watch-price">৳1,750</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/p1Q4M2u.jpg"
-            alt="Demon Slayer Breath Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Demon Slayer Breath Watch</h3>
-            <p class="watch-desc">
-              Intricate patterns inspired by breath styles.
-            </p>
-            <div class="watch-price">৳1,650</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/P5W2H6m.jpg"
-            alt="Pokemon Poke Ball Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Pokemon Poke Ball Watch</h3>
-            <p class="watch-desc">
-              Catch 'em all with this classic Poke Ball design.
-            </p>
-            <div class="watch-price">৳1,399</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/o7RkL2x.jpg"
-            alt="Death Note Ryuk Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Death Note Ryuk Watch</h3>
-            <p class="watch-desc">
-              Dark and mysterious, featuring Ryuk's silhouette.
-            </p>
-            <div class="watch-price">৳1,800</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/x0V6zD0.jpg"
-            alt="Tokyo Ghoul Kaneki Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Tokyo Ghoul Kaneki Watch</h3>
-            <p class="watch-desc">
-              Sleek and understated, inspired by Kaneki's transformation.
-            </p>
-            <div class="watch-price">৳1,700</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/bM7L5Ym.jpg"
-            alt="Jujutsu Kaisen Sukuna Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Jujutsu Kaisen Sukuna Watch</h3>
-            <p class="watch-desc">
-              Cursed energy design for the most powerful sorcerers.
-            </p>
-            <div class="watch-price">৳1,780</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/cE8R7fV.jpg"
-            alt="Chainsaw Man Denji Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Chainsaw Man Denji Watch</h3>
-            <p class="watch-desc">
-              Raw and gritty, reflecting Denji's power.
-            </p>
-            <div class="watch-price">৳1,720</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/dK0T7XQ.jpg"
-            alt="Spy x Family Anya Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">Spy x Family Anya Watch</h3>
-            <p class="watch-desc">
-              Cute and clever design, perfect for secret missions.
-            </p>
-            <div class="watch-price">৳1,450</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-          <img
-            src="https://i.imgur.com/eN8O0fS.jpg"
-            alt="One Punch Man Saitama Watch"
-            class="watch-img"
-          />
-          <div class="watch-info">
-            <h3 class="watch-title">One Punch Man Saitama Watch</h3>
-            <p class="watch-desc">
-              Simple yet powerful, for those who train hard.
-            </p>
-            <div class="watch-price">৳1,500</div>
-            <div class="watch-actions">
-              <button class="btn-secondary">Order Now</button>
-              <button class="like-button" aria-label="Add to wishlist">
-                <span class="heart-icon">&#x2665;</span>
-              </button>
-            </div>
-          </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/s9L1CgN.jpg" alt="Attack on Titan Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">AOT Titan Watch</h3>
-                <p class="watch-desc">Battle-ready design with Titan eye motif.</p>
-                <div class="watch-price">৳1,850</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/G5Z7B1o.jpg" alt="Naruto Akatsuki Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Naruto Akatsuki Watch</h3>
-                <p class="watch-desc">For those who walk the path of justice (or villainy).</p>
-                <div class="watch-price">৳1,700</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/2YcR0xY.jpg" alt="Demon Slayer Tanjiro Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Tanjiro's Sun Watch</h3>
-                <p class="watch-desc">Water breathing style on a serene dial.</p>
-                <div class="watch-price">৳1,680</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/rM7B4wz.jpg" alt="Pokemon Pikachu Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Pikachu Power Watch</h3>
-                <p class="watch-desc">Electrifying yellow with Pikachu silhouette.</p>
-                <div class="watch-price">৳1,420</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/lRkQj42.jpg" alt="Naruto Sage Mode Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Naruto Sage Mode Watch</h3>
-                <p class="watch-desc">Embrace the power of nature with this unique timepiece.</p>
-                <div class="watch-price">৳1,899</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/h7UoHVZ.jpg" alt="Sailor Neptune Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Sailor Neptune Watch</h3>
-                <p class="watch-desc">Deep sea elegance with a tranquil blue dial.</p>
-                <div class="watch-price">৳1,650</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/WjwpWKh.jpg" alt="Dragon Ball Super Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Dragon Ball Super Watch</h3>
-                <p class="watch-desc">Godly power represented in a sleek, modern design.</p>
-                <div class="watch-price">৳1,799</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/EHtM0Uu.jpg" alt="My Hero All Might Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">All Might Symbol Watch</h3>
-                <p class="watch-desc">The symbol of peace, bold and inspiring.</p>
-                <div class="watch-price">৳1,720</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/EHtM0Uu.jpg" alt="One Piece Straw Hat Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Straw Hat Crew Watch</h3>
-                <p class="watch-desc">Join the grand line with this iconic Straw Hat design.</p>
-                <div class="watch-price">৳1,600</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/Q2k7O5b.jpg" alt="Attack on Titan Eren Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Eren Jaeger Watch</h3>
-                <p class="watch-desc">Fight for freedom with the spirit of Eren Jaeger.</p>
-                <div class="watch-price">৳1,820</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/p1Q4M2u.jpg" alt="Demon Slayer Zenitsu Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Zenitsu Thunder Watch</h3>
-                <p class="watch-desc">Electrifying speed and courage for every moment.</p>
-                <div class="watch-price">৳1,670</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/P5W2H6m.jpg" alt="Pokemon Charizard Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Charizard Fire Watch</h3>
-                <p class="watch-desc">Ignite your passion with this fiery Charizard design.</p>
-                <div class="watch-price">৳1,550</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        <article class="watch-card">
-            <img src="https://i.imgur.com/o7RkL2x.jpg" alt="Death Note L Watch" class="watch-img"/>
-            <div class="watch-info">
-                <h3 class="watch-title">Death Note L Watch</h3>
-                <p class="watch-desc">Intelligent and precise, just like the world's greatest detective.</p>
-                <div class="watch-price">৳1,850</div>
-                <div class="watch-actions">
-                    <button class="btn-secondary">Order Now</button>
-                    <button class="like-button" aria-label="Add to wishlist"><span class="heart-icon">&#x2665;</span></button>
-                </div>
-            </div>
-        </article>
-        </section>
-
-      <div id="pagination-controls" class="pagination" role="navigation" aria-label="Pagination for watch collection">
-        <button id="prevPage" class="pagination-button" aria-label="Previous page">&lt; Prev</button>
-        <div id="pageNumbers" aria-live="polite">
-          </div>
-        <button id="nextPage" class="pagination-button" aria-label="Next page">Next &gt;</button>
+      <section id="watches" class="watches" aria-label="Featured Watches"></section>
+      <div id="pagination-controls" class="pagination">
+        <button id="prevPage">< Prev</button>
+        <div id="pageNumbers"></div>
+        <button id="nextPage">Next ></button>
       </div>
       <section id="wishlist" class="container" style="margin-top: 80px">
         <h1 class="modern-text">Your Wishlist</h1>
         <div id="wishlist-items" class="watches"></div>
       </section>
-
-       <section class="full-width-image-section" aria-label="Featured product image">
-        <img src="images/7_24_2025 12_25_26 PM (2).png" alt="Description of your new image" />
+       <section id="contact" class="full-width-image-section" aria-label="Featured product image">
+        <img src="images/7_24_2025 12_25_26 PM (2).png" alt="Custom luxury watch showcase" />
     </section> 
-
     </main>
 
-    <footer>&copy; 2025 LuxWatch. All rights reserved.</footer>
+    <footer>© 2025 LuxWatch. All rights reserved.</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
     <script>
-      AOS.init();
-    </script>
-    <script>
-      // Video background cycling
-      const videos = ["./images/34855-403777679_small.webm"]; // Ensure this path is correct
-      let videoIndex = 0;
-      let activeVideo = 0;
-      const videoElements = [
-        document.getElementById("bgVideo1"),
-        document.getElementById("bgVideo2"),
-      ];
-      if (videoElements[activeVideo]) {
-        videoElements[activeVideo].src = videos[videoIndex];
-        videoElements[activeVideo].load();
-        videoElements[activeVideo].addEventListener("ended", switchVideo);
-      }
-
-      function switchVideo() {
-        videoIndex = (videoIndex + 1) % videos.length;
-        const nextVideo = 1 - activeVideo;
-        if (videoElements[nextVideo]) {
-          videoElements[nextVideo].src = videos[videoIndex];
-          videoElements[nextVideo].load();
-          videoElements[nextVideo].oncanplay = () => {
-            videoElements[nextVideo].play();
-            videoElements[nextVideo].classList.remove("hidden");
-            videoElements[activeVideo].classList.add("hidden");
-            videoElements[activeVideo].pause();
-            videoElements[activeVideo].removeEventListener("ended", switchVideo);
-            videoElements[nextVideo].addEventListener("ended", switchVideo);
-            activeVideo = nextVideo;
-          };
-        }
-      }
-
-      // --- Pagination and Search Logic ---
-      const watchesContainer = document.getElementById("watches");
-      // Clone all watch cards initially for filtering purposes
-      const allWatchCards = Array.from(
-        watchesContainer.getElementsByClassName("watch-card")
-      );
-      const itemsPerPage = 9; // Number of watches per page
-      let currentPage = 1;
-      let filteredWatchCards = []; // Stores cards after search filter is applied
-
-      const searchInput = document.getElementById("watchSearchInput");
-      const searchButton = document.getElementById("searchButton");
-      const prevPageButton = document.getElementById("prevPage");
-      const nextPageButton = document.getElementById("nextPage");
-      const pageNumbersContainer = document.getElementById("pageNumbers");
-
-      function displayPage(page) {
-        currentPage = page;
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-
-        // Hide all cards first, then show only the ones for the current page
-        watchesContainer.innerHTML = ""; // Clear existing cards in the container
-
-        for (let i = startIndex; i < endIndex; i++) {
-          if (filteredWatchCards[i]) {
-            watchesContainer.appendChild(filteredWatchCards[i]);
-          }
-        }
-
-        updatePaginationControls();
-        // Scroll to the top of the watches section, but only if the user is not already there or below.
-        // This prevents annoying auto-scroll if user is interacting with footer or other sections.
-        const currentScrollPos = window.scrollY;
-        const watchesSectionTop = watchesContainer.offsetTop - 120; // Adjust for fixed header
-        if (currentScrollPos > watchesSectionTop + 50 || currentScrollPos < watchesSectionTop - 50) {
-            window.scrollTo({ top: watchesSectionTop, behavior: "smooth" });
-        }
-      }
-
-      function updatePaginationControls() {
-        const totalPages = Math.ceil(filteredWatchCards.length / itemsPerPage);
-        pageNumbersContainer.innerHTML = ""; // Clear existing page numbers
-
-        // Logic for page number display (1, 2, 3, 4, 5 ... 1000 ... 1654)
-        const maxPagesToShow = 5; // e.g., 1, 2, 3, 4, 5
-        let startPage = 1;
-        let endPage = totalPages;
-
-        if (totalPages > maxPagesToShow) {
-          // Determine the range of pages to show around the current page
-          const pagesBefore = Math.floor((maxPagesToShow - 1) / 2); // How many pages before current to show (e.g., 2 for max 5)
-          const pagesAfter = Math.ceil((maxPagesToShow - 1) / 2); // How many pages after current to show (e.g., 2 for max 5)
-
-          startPage = Math.max(1, currentPage - pagesBefore);
-          endPage = Math.min(totalPages, currentPage + pagesAfter);
-
-          // Adjust if we are too close to the beginning or end
-          if (endPage - startPage + 1 < maxPagesToShow) {
-            if (currentPage - pagesBefore < 1) {
-              endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-            } else if (currentPage + pagesAfter > totalPages) {
-              startPage = Math.max(1, endPage - maxPagesToShow + 1);
-            }
-          }
-        }
-
-        // Add "1" if not in the current range
-        if (startPage > 1) {
-          const firstPageLink = document.createElement("span");
-          firstPageLink.classList.add("page-number");
-          firstPageLink.textContent = "1";
-          firstPageLink.tabIndex = 0; // Make it focusable
-          firstPageLink.setAttribute('role', 'link'); // ARIA role
-          firstPageLink.setAttribute('aria-label', 'Go to page 1');
-          firstPageLink.addEventListener("click", () => displayPage(1));
-          firstPageLink.addEventListener("keydown", (e) => {
-            if (e.key === 'Enter' || e.key === ' ') displayPage(1);
-          });
-          pageNumbersContainer.appendChild(firstPageLink);
-          if (startPage > 2) {
-            const ellipsis = document.createElement("span");
-            ellipsis.textContent = "...";
-            ellipsis.classList.add("page-number", "ellipsis"); // Add ellipsis class for styling
-            pageNumbersContainer.appendChild(ellipsis);
-          }
-        }
-
-        // Add main page numbers
-        for (let i = startPage; i <= endPage; i++) {
-          const pageLink = document.createElement("span");
-          pageLink.classList.add("page-number");
-          pageLink.textContent = i;
-          pageLink.tabIndex = 0;
-          pageLink.setAttribute('role', 'link');
-          pageLink.setAttribute('aria-label', `Go to page ${i}`);
-          if (i === currentPage) {
-            pageLink.classList.add("active");
-            pageLink.setAttribute('aria-current', 'page'); // ARIA current page
-          }
-          pageLink.addEventListener("click", () => displayPage(i));
-          pageLink.addEventListener("keydown", (e) => {
-            if (e.key === 'Enter' || e.key === ' ') displayPage(i);
-          });
-          pageNumbersContainer.appendChild(pageLink);
-        }
-
-        // Add "..." and last page if needed
-        if (endPage < totalPages) {
-          if (endPage < totalPages - 1) {
-            const ellipsis = document.createElement("span");
-            ellipsis.textContent = "...";
-            ellipsis.classList.add("page-number", "ellipsis"); // Add ellipsis class for styling
-            pageNumbersContainer.appendChild(ellipsis);
-          }
-          const lastPageLink = document.createElement("span");
-          lastPageLink.classList.add("page-number");
-          lastPageLink.textContent = totalPages;
-          lastPageLink.tabIndex = 0;
-          lastPageLink.setAttribute('role', 'link');
-          lastPageLink.setAttribute('aria-label', `Go to page ${totalPages}`);
-          lastPageLink.addEventListener("click", () => displayPage(totalPages));
-          lastPageLink.addEventListener("keydown", (e) => {
-            if (e.key === 'Enter' || e.key === ' ') displayPage(totalPages);
-          });
-          pageNumbersContainer.appendChild(lastPageLink);
-        }
-
-        prevPageButton.disabled = currentPage === 1;
-        nextPageButton.disabled = currentPage === totalPages;
-      }
-
-      function applySearchAndPagination() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        filteredWatchCards = allWatchCards.filter((card) => {
-          const title = card
-            .querySelector(".watch-title")
-            .textContent.toLowerCase();
-          const description = card
-            .querySelector(".watch-desc")
-            .textContent.toLowerCase();
-          return title.includes(searchTerm) || description.includes(searchTerm);
-        });
-        displayPage(1); // Always reset to the first page after a new search
-      }
-
-      searchButton.addEventListener("click", applySearchAndPagination);
-      searchInput.addEventListener("keyup", (event) => {
-        if (event.key === "Enter") {
-          applySearchAndPagination();
-        }
-        // Optional: Live search on keyup. Be careful with large datasets.
-        // if (searchInput.value.length >= 3 || event.key === 'Backspace' || event.key === 'Delete') {
-        //     applySearchAndPagination();
-        // }
-      });
-
-      prevPageButton.addEventListener("click", () => {
-        if (currentPage > 1) {
-          displayPage(currentPage - 1);
-        }
-      });
-
-      nextPageButton.addEventListener("click", () => {
-        const totalPages = Math.ceil(filteredWatchCards.length / itemsPerPage);
-        if (currentPage < totalPages) {
-          displayPage(currentPage + 1);
-        }
-      });
-
-      // --- Wishlist and Initial Load Logic ---
-      function setupLikeButtons() {
-        document.querySelectorAll(".like-button").forEach((button) => {
-          // Remove existing listeners to prevent duplicates
-          button.removeEventListener("click", handleLikeButtonClick);
-          button.addEventListener("click", handleLikeButtonClick);
-        });
-      }
-
-      function handleLikeButtonClick() {
-        this.classList.toggle("liked");
-
-        const watchCard = this.closest(".watch-card");
-        const watchTitle = watchCard.querySelector(".watch-title").textContent;
-        const watchImg = watchCard.querySelector(".watch-img").src;
-        const watchPrice = watchCard.querySelector(".watch-price").textContent;
-
-        let likedWatches = JSON.parse(localStorage.getItem("likedWatches")) || [];
-
-        if (this.classList.contains("liked")) {
-          const isAlreadyLiked = likedWatches.some(
-            (watch) => watch.title === watchTitle
-          );
-          if (!isAlreadyLiked) {
-            likedWatches.push({
-              title: watchTitle,
-              img: watchImg,
-              price: watchPrice,
-            });
-            console.log(`Added "${watchTitle}" to wishlist!`);
-          }
-        } else {
-          likedWatches = likedWatches.filter(
-            (watch) => watch.title !== watchTitle
-          );
-          console.log(`Removed "${watchTitle}" from wishlist.`);
-        }
-
-        localStorage.setItem("likedWatches", JSON.stringify(likedWatches));
-        renderWishlist();
-      }
-
-      function renderWishlist() {
-        const wishlistContainer = document.getElementById("wishlist-items");
-        if (!wishlistContainer) return;
-
-        wishlistContainer.innerHTML = ""; // Clear existing wishlist items
-
-        let likedWatches =
-          JSON.parse(localStorage.getItem("likedWatches")) || [];
-
-        if (likedWatches.length === 0) {
-          wishlistContainer.innerHTML =
-            "<p style='text-align: center; color: #aaa; margin-top: 20px;'>Your wishlist is empty. Add some watches!</p>";
-          return;
-        }
-
-        likedWatches.forEach((watch) => {
-          const watchElement = document.createElement("article");
-          watchElement.classList.add("watch-card");
-          watchElement.innerHTML = `
-            <img src="${watch.img}" alt="${watch.title}" class="watch-img" />
-            <div class="watch-info">
-              <h3 class="watch-title">${watch.title}</h3>
-              <div class="watch-price">${watch.price}</div>
-              <div class="watch-actions">
-                <button class="btn-secondary remove-btn" data-title="${watch.title}">Remove</button>
-                </div>
-            </div>
-          `;
-          wishlistContainer.appendChild(watchElement);
-        });
-
-        document.querySelectorAll(".remove-btn").forEach((btn) => {
-          btn.addEventListener("click", function () {
-            const titleToRemove = this.getAttribute("data-title");
-            let currentLikedWatches =
-              JSON.parse(localStorage.getItem("likedWatches")) || [];
-            currentLikedWatches = currentLikedWatches.filter(
-              (watch) => watch.title !== titleToRemove
-            );
-            localStorage.setItem(
-              "likedWatches",
-              JSON.stringify(currentLikedWatches)
-            );
-            renderWishlist();
-            // Update like button state on main collection if removed from wishlist
-            document.querySelectorAll(".watch-card").forEach((card) => {
-              if (
-                card.querySelector(".watch-title").textContent === titleToRemove
-              ) {
-                card.querySelector(".like-button").classList.remove("liked");
-              }
-            });
-          });
-        });
-      }
-
-      // Initial setup on DOMContentLoaded
       document.addEventListener("DOMContentLoaded", () => {
-        // Initially populate filteredWatchCards with all watches
-        // Need to clone the cards so we can manage their display property
-        // without affecting the original 'allWatchCards' array for filtering.
-        filteredWatchCards = allWatchCards.map(card => card.cloneNode(true));
+        AOS.init({ once: true, duration: 800, offset: 100 });
+        
+        const particleConfig = { particles: { number: { value: 60 }, color: { value: "#d4af37" }, opacity: { value: 0.4, random: true }, size: { value: 2, random: true }, move: { enable: true, speed: 0.5 } } };
 
-        applySearchAndPagination(); // Apply initial filter (empty search) and display first page
-
-        renderWishlist(); // Render wishlist items
-
-        // Initialize like button states based on localStorage for all watch cards
-        function initializeLikeButtonsState() {
-          const likedWatches =
-            JSON.parse(localStorage.getItem("likedWatches")) || [];
-          document.querySelectorAll(".watch-card").forEach((card) => {
-            const title = card.querySelector(".watch-title").textContent;
-            const likeButton = card.querySelector(".like-button");
-            if (likedWatches.some((watch) => watch.title === title)) {
-              if (likeButton) likeButton.classList.add("liked");
-            } else {
-              if (likeButton) likeButton.classList.remove("liked");
-            }
-          });
+        initializeResponsiveNavbar();
+        
+        if (window.innerWidth <= 768) {
+          initializeMobileShowcase(particleConfig);
+        } else {
+          initializeDesktopShowcase(particleConfig);
         }
-        initializeLikeButtonsState();
-        setupLikeButtons(); // Attach event listeners after initial render
+
+        initializeCollections();
+
+        function initializeResponsiveNavbar() {
+            const header = document.getElementById('main-header');
+            const navToggler = document.querySelector('.nav-toggler');
+            const navMenu = document.querySelector('.nav-menu');
+            if (!header || !navToggler || !navMenu) return;
+
+            navToggler.addEventListener('click', () => {
+                header.classList.toggle('nav-active');
+                document.body.classList.toggle('nav-open');
+            });
+            navMenu.addEventListener('click', (e) => {
+                if(e.target.tagName === 'A'){
+                    header.classList.remove('nav-active');
+                    document.body.classList.remove('nav-open');
+                }
+            });
+        }
+
+        function initializeDesktopShowcase(pConfig) {
+            initializeParticles('particles-js', pConfig);
+            const wrapper = document.querySelector('.showcase-desktop-wrapper');
+            const featureItems = document.querySelectorAll('.feature-item');
+            const showcaseImage = document.getElementById('showcaseImage');
+            if (!wrapper || !featureItems.length || !showcaseImage) return;
+
+            let activeIndex = 0;
+            let isThrottled = false;
+
+            function updateDisplay() {
+                featureItems.forEach((item, index) => {
+                    item.classList.toggle('is-active', index === activeIndex);
+                });
+                const newImgSrc = featureItems[activeIndex].dataset.imgSrc;
+                const newImgUrl = new URL(newImgSrc, window.location.href).href;
+                if (showcaseImage.src !== newImgUrl) {
+                    showcaseImage.style.opacity = 0;
+                    setTimeout(() => {
+                        showcaseImage.src = newImgSrc;
+                        showcaseImage.style.opacity = 1;
+                    }, 300);
+                }
+            }
+
+            function handleScroll(event) {
+                if (isThrottled) return;
+                const direction = event.deltaY > 0 ? 'down' : 'up';
+                if ((direction === 'up' && activeIndex === 0) || (direction === 'down' && activeIndex === featureItems.length - 1)) {
+                    return;
+                }
+                event.preventDefault();
+                isThrottled = true;
+                activeIndex += (direction === 'down' ? 1 : -1);
+                updateDisplay();
+                setTimeout(() => { isThrottled = false; }, 800);
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        window.addEventListener('wheel', handleScroll, { passive: false });
+                    } else {
+                        window.removeEventListener('wheel', handleScroll);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            observer.observe(wrapper);
+            updateDisplay();
+        }
+
+        function initializeMobileShowcase(pConfig) {
+            initializeParticles('particles-js-mobile', pConfig);
+            const cards = document.querySelectorAll('.showcase-card');
+            if (!cards.length) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const cardIndex = Array.from(cards).indexOf(entry.target);
+                        cards.forEach((c, i) => {
+                            if (i > cardIndex) {
+                                const scale = 1 - (i - cardIndex) * 0.05;
+                                c.style.transform = `scale(${scale})`;
+                            } else {
+                                c.style.transform = 'scale(1)';
+                            }
+                        });
+                    }
+                });
+            }, { 
+                rootMargin: '-50% 0px -50% 0px', // FIX FOR READABILITY
+                threshold: 0
+            });
+
+            cards.forEach(card => observer.observe(card));
+        }
+
+        function initializeCollections() {
+            const watchData = [
+                { title: "Naruto Storm Watch", desc: "Flame dial design with vibrant red strap. Perfect for Naruto fans.", price: "৳1,499", img: "https://i.imgur.com/lRkQj42.jpg" },
+                { title: "Sailor Moon Dream Watch", desc: "Elegant moon phases dial with soft pastel strap. For magical moments.", price: "৳1,599", img: "https://i.imgur.com/h7UoHVZ.jpg" },
+                { title: "Dragon Ball Z Power Watch", desc: "Electric blue energy dial with black strap. Feel the power.", price: "৳1,699", img: "https://i.imgur.com/WjwpWKh.jpg" },
+                { title: "My Hero Academia Hero Watch", desc: "Dynamic red and black design with hero emblem dial.", price: "৳1,699", img: "https://i.imgur.com/EHtM0Uu.jpg" },
+                { title: "One Piece Pirate Watch", desc: "Adventure-ready design with skull and crossbones dial.", price: "৳1,550", img: "https://i.imgur.com/EHtM0Uu.jpg" },
+                { title: "Attack on Titan Survey Watch", desc: "Tactical style with Survey Corps emblem. For true scouts.", price: "৳1,750", img: "https://i.imgur.com/Q2k7O5b.jpg" },
+                { title: "Demon Slayer Breath Watch", desc: "Intricate patterns inspired by breath styles.", price: "৳1,650", img: "https://i.imgur.com/p1Q4M2u.jpg" },
+                { title: "Pokemon Poke Ball Watch", desc: "Catch 'em all with this classic Poke Ball design.", price: "৳1,399", img: "https://i.imgur.com/P5W2H6m.jpg" },
+                { title: "Death Note Ryuk Watch", desc: "Dark and mysterious, featuring Ryuk's silhouette.", price: "৳1,800", img: "https://i.imgur.com/o7RkL2x.jpg" },
+                { title: "Tokyo Ghoul Kaneki Watch", desc: "Sleek and understated, inspired by Kaneki's transformation.", price: "৳1,700", img: "https://i.imgur.com/x0V6zD0.jpg" },
+                { title: "Jujutsu Kaisen Sukuna Watch", desc: "Cursed energy design for the most powerful sorcerers.", price: "৳1,780", img: "https://i.imgur.com/bM7L5Ym.jpg" },
+                { title: "Chainsaw Man Denji Watch", desc: "Raw and gritty, reflecting Denji's power.", price: "৳1,720", img: "https://i.imgur.com/cE8R7fV.jpg" },
+                { title: "Spy x Family Anya Watch", desc: "Cute and clever design, perfect for secret missions.", price: "৳1,450", img: "https://i.imgur.com/dK0T7XQ.jpg" },
+                { title: "One Punch Man Saitama Watch", desc: "Simple yet powerful, for those who train hard.", price: "৳1,500", img: "https://i.imgur.com/eN8O0fS.jpg" },
+                { title: "AOT Titan Watch", desc: "Battle-ready design with Titan eye motif.", price: "৳1,850", img: "https://i.imgur.com/s9L1CgN.jpg" },
+                { title: "Naruto Akatsuki Watch", desc: "For those who walk the path of justice (or villainy).", price: "৳1,700", img: "https://i.imgur.com/G5Z7B1o.jpg" },
+                { title: "Tanjiro's Sun Watch", desc: "Water breathing style on a serene dial.", price: "৳1,680", img: "https://i.imgur.com/2YcR0xY.jpg" },
+                { title: "Pikachu Power Watch", desc: "Electrifying yellow with Pikachu silhouette.", price: "৳1,420", img: "https://i.imgur.com/rM7B4wz.jpg" },
+            ];
+
+            const watchesContainer = document.getElementById("watches");
+            const searchInput = document.getElementById("watchSearchInput");
+            const searchButton = document.getElementById("searchButton");
+            const prevPageButton = document.getElementById("prevPage");
+            const nextPageButton = document.getElementById("nextPage");
+            const pageNumbersContainer = document.getElementById("pageNumbers");
+            const wishlistContainer = document.getElementById("wishlist-items");
+            if (!watchesContainer) return;
+            let currentPage = 1;
+            const itemsPerPage = 9;
+            let filteredWatches = [...watchData];
+            
+            function createWatchCard(watch) {
+                const card = document.createElement("article");
+                card.className = "watch-card";
+                card.innerHTML = `
+                <img src="${watch.img}" alt="${watch.title}" class="watch-img" />
+                <div class="watch-info">
+                    <h3 class="watch-title">${watch.title}</h3>
+                    <p class="watch-desc">${watch.desc}</p>
+                    <div class="watch-price">${watch.price}</div>
+                    <div class="watch-actions">
+                    <button class="btn-secondary">Order Now</button>
+                    <button class="like-button" aria-label="Add to wishlist" data-title="${watch.title}">♥</button>
+                    </div>
+                </div>`;
+                return card;
+            }
+            function displayPage(page) {
+                currentPage = page;
+                watchesContainer.innerHTML = "";
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                filteredWatches.slice(startIndex, endIndex).forEach(watch => {
+                    watchesContainer.appendChild(createWatchCard(watch));
+                });
+                updatePaginationControls();
+                updateAllLikeButtons();
+            }
+            function updatePaginationControls() {
+                const totalPages = Math.ceil(filteredWatches.length / itemsPerPage);
+                pageNumbersContainer.innerHTML = "";
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.textContent = i;
+                    if (i === currentPage) pageButton.classList.add('active');
+                    pageButton.addEventListener('click', () => displayPage(i));
+                    pageNumbersContainer.appendChild(pageButton);
+                }
+                prevPageButton.disabled = currentPage === 1;
+                nextPageButton.disabled = currentPage === totalPages;
+            }
+            function applySearchAndPagination() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                filteredWatches = watchData.filter(watch => 
+                    watch.title.toLowerCase().includes(searchTerm) || 
+                    watch.desc.toLowerCase().includes(searchTerm)
+                );
+                displayPage(1);
+            }
+            function getWishlist() { return JSON.parse(localStorage.getItem("wishlist")) || []; }
+            function saveWishlist(wishlist) { localStorage.setItem("wishlist", JSON.stringify(wishlist)); }
+            function toggleWishlistItem(title) {
+                let wishlist = getWishlist();
+                const index = wishlist.findIndex(item => item === title);
+                if (index > -1) { wishlist.splice(index, 1); } else { wishlist.push(title); }
+                saveWishlist(wishlist);
+                renderWishlist();
+                updateAllLikeButtons();
+            }
+            function renderWishlist() {
+                const wishlistTitles = getWishlist();
+                wishlistContainer.innerHTML = "";
+                if (wishlistTitles.length === 0) {
+                    wishlistContainer.innerHTML = "<p style='text-align: center; color: #aaa; width: 100%;'>Your wishlist is empty.</p>";
+                    return;
+                }
+                const wishlistItems = watchData.filter(watch => wishlistTitles.includes(watch.title));
+                wishlistItems.forEach(watch => {
+                    const card = createWatchCard(watch);
+                    const likeButton = card.querySelector('.like-button');
+                    likeButton.textContent = "Remove";
+                    likeButton.classList.add('liked');
+                    wishlistContainer.appendChild(card);
+                });
+            }
+            function updateAllLikeButtons() {
+                const wishlist = getWishlist();
+                document.querySelectorAll('.like-button[data-title]').forEach(button => {
+                    if(wishlistContainer.contains(button)) return; 
+                    const title = button.dataset.title;
+                    button.classList.toggle('liked', wishlist.includes(title));
+                });
+            }
+            
+            applySearchAndPagination();
+            renderWishlist();
+
+            searchButton.addEventListener("click", applySearchAndPagination);
+            searchInput.addEventListener("keyup", (event) => { if (event.key === "Enter") applySearchAndPagination(); });
+            prevPageButton.addEventListener("click", () => { if (currentPage > 1) displayPage(currentPage - 1); });
+            nextPageButton.addEventListener("click", () => { if (currentPage < Math.ceil(filteredWatches.length / itemsPerPage)) displayPage(currentPage + 1); });
+
+            document.body.addEventListener('click', (event) => {
+                const likeButton = event.target.closest('.like-button');
+                if (likeButton && likeButton.dataset.title) {
+                    toggleWishlistItem(likeButton.dataset.title);
+                }
+            });
+        }
+
+        function initializeParticles(elementId, config) {
+            if (typeof particlesJS !== 'undefined' && document.getElementById(elementId)) {
+                particlesJS(elementId, config);
+            }
+        }
       });
     </script>
   </body>

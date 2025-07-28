@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Luxury Custom Watches</title>
+    <meta
+      name="description"
+      content="Customize your dream anime-themed luxury watch. Premium quality, fast delivery, and perfect gifts."
+    />
+    <link rel="icon" href="favicon.ico" />
+    <link
+      rel="preload"
+      as="video"
+      href="./images/3019-165457954_small.webm"
+      type="video/mp4"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* General Styles */
+      html {
+        scroll-behavior: smooth;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background-color: #0d0d0d;
+        color: #f5f5f5;
+        font-family: "Poppins", sans-serif;
+        padding-top: 100px;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      button {
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .container {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      /* Header/Navbar */
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(13, 13, 13, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+      }
+
+      .logo {
+        font-family: "Playfair Display", serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #d4af37;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        user-select: none;
+      }
+
+      .nav-menu {
+        display: flex;
+        gap: 32px;
+      }
+
+      .nav-menu a {
+        position: relative;
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #d4af37;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .nav-menu a::after {
+        content: "";
+        position: absolute;
+        width: 0%;
+        height: 2px;
+        bottom: -4px;
+        left: 0;
+        background-color: #d4af37;
+        transition: width 0.3s ease-in-out;
+      }
+
+      .nav-menu a:hover::after {
+        width: 100%;
+      }
+
+      .nav-menu a:hover {
+        color: #ffffffff;
+      }
+
+      /* Hero Section */
+      .hero {
+        position: relative;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        color: #fff;
+        text-align: center;
+      }
+      
+      .hero-bg-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        filter: brightness(0.4);
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to right,
+          rgba(13, 13, 13, 0.9) 30%,
+          transparent 100%
+        );
+        z-index: 1;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 700px;
+        padding: 0 20px;
+      }
+      .hero-content h1,
+      .hero-content p,
+      .hero-content button {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeUp 1s ease-out forwards;
+      }
+      .hero-content p {
+        animation-delay: 0.3s;
+        margin-bottom: 50px;
+      }
+      .hero-content button {
+        animation-delay: 0.6s;
+      }
+
+      .btn-primary {
+        background: linear-gradient(45deg, #d4af37, #b8860b);
+        padding: 16px 48px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #0d0d0d;
+        border: none;
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        filter: brightness(1.2);
+        box-shadow: 0 12px 30px rgba(212, 175, 55, 0.8);
+        transform: translateY(-3px);
+      }
+      
+      /* ===== RECOVERED: Special Watch Section Styles ===== */
+      .special-watch-section {
+        background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+        padding: 80px 20px;
+      }
+
+      .special-watch-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        gap: 60px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .special-watch-left {
+        flex: 2 1 600px;
+        text-align: center;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(212, 175, 55, 0.25),
+          0 16px 48px rgba(0, 0, 0, 0.6);
+        transition: transform 0.3s ease;
+      }
+
+      .special-watch-left img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+        border-radius: 24px;
+      }
+
+      .special-watch-left:hover {
+        transform: scale(1.05) rotate(1deg);
+      }
+
+      .special-watch-right {
+        flex: 1 1 350px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .watch-image {
+        width: 100%;
+        max-width: 320px;
+        border-radius: 24px;
+        box-shadow: 0 12px 24px rgba(212, 175, 55, 0.5),
+          0 24px 48px rgba(0, 0, 0, 0.8);
+        animation: float 4s ease-in-out infinite;
+      }
+
+      .watch-description h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #d4af37;
+      }
+      /* ===== END RECOVERED CSS ===== */
+
+      /* ===== Cinematic Showcase Section Styles ===== */
+      .features-showcase-wrapper {
+        position: relative;
+        height: 400vh; 
+        margin-top: 80px;
+      }
+
+      .features-showcase {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: #000;
+        overflow: hidden;
+      }
+
+      #particles-js {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          z-index: 1;
+      }
+
+      .showcase-container {
+        max-width: 1200px;
+        height: 100%;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+
+      .showcase-image-container {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .showcase-image-container img {
+          max-width: 100%;
+          max-height: 70vh;
+          object-fit: contain;
+          border-radius: 16px;
+          filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.4));
+          transition: opacity 0.5s ease-in-out, transform 0.6s ease;
+      }
+      
+      .showcase-features-list {
+          position: relative;
+          height: 100%;
+      }
+
+      .feature-item {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          width: 100%;
+          transform: translateY(-50%);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+      }
+
+      .feature-item.is-active {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateY(-50%) scale(1);
+      }
+      
+      .feature-item:not(.is-active) {
+         transform: translateY(-50%) scale(0.95);
+      }
+
+      .feature-item h3 {
+          font-family: 'Playfair Display', serif;
+          font-size: 2.8rem;
+          color: #d4af37;
+          margin-bottom: 25px;
+      }
+
+      .feature-item p {
+          font-family: 'Poppins', sans-serif;
+          font-size: 1.15rem;
+          line-height: 1.8;
+          color: #ccc;
+          max-width: 450px;
+      }
+
+      /* Collections Section Styles */
+      .modern-text {
+        font-family: "Poppins", sans-serif;
+        font-weight: 800;
+        font-size: 3rem;
+        color: #d6b13a;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        text-align: center;
+        margin-top: 80px;
+      }
+      .watches {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        max-width: 1140px;
+        margin: 50px auto;
+        padding: 0 20px;
+      }
+      .watch-card { background: #121212; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+      .watch-card:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(212, 175, 55, 0.3); }
+      .watch-img { width: 100%; height: 260px; object-fit: cover; border-bottom: 1px solid #333; }
+      .watch-info { padding: 20px 24px; }
+      .watch-title { font-family: "Playfair Display", serif; font-size: 1.6rem; color: #d4af37; }
+      .watch-desc { font-size: 1rem; color: #bbb; margin-bottom: 20px; }
+      .watch-price { font-weight: 700; font-size: 1.1rem; color: #d4af37; margin-bottom: 20px; }
+      .watch-actions { display: flex; justify-content: space-between; align-items: center; }
+      .like-button { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #d4af37; }
+      .like-button.liked { color: #e74c3c; }
+      .btn-secondary { background: transparent; border: 2px solid #d4af37; padding: 12px 28px; border-radius: 50px; color: #d4af37; font-weight: 700; transition: all 0.3s ease; }
+      .btn-secondary:hover { background-color: #d4af37; color: #0d0d0d; }
+      .search-container { display: flex; justify-content: center; margin: 40px auto; gap: 15px; }
+      .search-input { width: 100%; max-width: 450px; padding: 14px 25px; border: 2px solid #d4af37; border-radius: 50px; background-color: #1a1a1a; color: #f5f5f5; font-size: 1.05rem; outline: none; }
+      .search-button { background: linear-gradient(45deg, #d4af37, #b8860b); color: #0d0d0d; padding: 14px 30px; border: none; border-radius: 50px; font-weight: 700; }
+      .pagination { display: flex; justify-content: center; gap: 12px; margin: 60px 0 80px; }
+      .pagination button { background-color: #1a1a1a; border: 1px solid #333; color: #d4af37; padding: 10px 18px; border-radius: 6px; }
+      .pagination button.active { background-color: #d4af37; color: #0d0d0d; }
+      .pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+      .full-width-image-section { margin: 60px 0; }
+      .full-width-image-section img { max-width: 100%; border-radius: 12px; }
+      
+      /* Animations */
+      @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+      /* RECOVERED: Animation for the special watch */
+      @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .features-showcase-wrapper { display: none; }
+        .special-watch-container { flex-direction: column; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">Dialcraft</div>
+      <nav class="nav-menu">
+        <a href="#watches">Watches</a>
+        <a href="#features-start">Why Us</a>
+        <a href="#contact">Contact</a>
+        <a href="#wishlist">Wishlist</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <!-- FIXED: Added src attribute to the video tag -->
+      <video class="hero-bg-video" src="./images/3019-165457954_small.webm" autoplay muted loop playsinline></video>
+      <div class="hero-content">
+        <h1>Your Time, Your Style</h1>
+        <p>Premium custom-designed watches</p>
+        <a href="https://mustakim-1.github.io/customized-watch/" class="btn-primary">Customize Yours</a>
+      </div>
+    </section>
+
+    <!-- RECOVERED: Special Watch Section -->
+    <section class="special-watch-section">
+      <div class="special-watch-container">
+        <div class="special-watch-left" aria-label="Anime theme image">
+          <img src="images/dragon-ball-zee-chromebook-wallpaper.jpg" alt="Anime artwork related to the watch" />
+        </div>
+        <div class="special-watch-right">
+          <img src="images/unnamed.png" alt="Special edition luxury watch" class="watch-image" />
+          <div class="watch-description">
+            <h2>Titan x DRAGON BALL Z</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="features-start"></div>
+
+    <div class="features-showcase-wrapper">
+      <section id="features" class="features-showcase">
+        <div id="particles-js"></div>
+        <div class="showcase-container">
+            <div class="showcase-image-container">
+                <img id="showcaseImage" src="images/unnamed.png" alt="Detailed view of the luxury watch">
+            </div>
+            <div class="showcase-features-list">
+                <div class="feature-item" data-img-src="images/unnamed.png">
+                    <h3>Intricate Craftsmanship</h3>
+                    <p>Each watch is assembled by master artisans, ensuring every gear and component functions in perfect harmony.</p>
+                </div>
+                <div class="feature-item" data-img-src="images/7_24_2025 12_25_26 PM (2).png">
+                    <h3>Premium Materials</h3>
+                    <p>We use only the finest materials, from surgical-grade stainless steel to sapphire crystal glass.</p>
+                </div>
+                <div class="feature-item" data-img-src="images/dragon-ball-zee-chromebook-wallpaper.jpg">
+                    <h3>Anime-Infused Design</h3>
+                    <p>Subtle yet powerful design elements inspired by your favorite anime are etched into the dial and caseback.</p>
+                </div>
+                 <div class="feature-item" data-img-src="images/unnamed.png">
+                    <h3>Precision Movement</h3>
+                    <p>At its heart is a state-of-the-art automatic movement, offering unparalleled accuracy and reliability.</p>
+                </div>
+            </div>
+        </div>
+      </section>
+    </div>
+   
+     <main class="container">
+      <h1 class="modern-text">Collections</h1>
+
+      <div class="search-container">
+        <input type="text" id="watchSearchInput" class="search-input" placeholder="Search for watches..." />
+        <button id="searchButton" class="search-button">Search</button>
+      </div>
+      <section id="watches" class="watches" aria-label="Featured Watches"></section>
+
+      <div id="pagination-controls" class="pagination">
+        <button id="prevPage">< Prev</button>
+        <div id="pageNumbers"></div>
+        <button id="nextPage">Next ></button>
+      </div>
+      
+      <section id="wishlist" class="container" style="margin-top: 80px">
+        <h1 class="modern-text">Your Wishlist</h1>
+        <div id="wishlist-items" class="watches"></div>
+      </section>
+
+       <section id="contact" class="full-width-image-section" aria-label="Featured product image">
+        <img src="images/7_24_2025 12_25_26 PM (2).png" alt="Custom luxury watch showcase" />
+    </section> 
+
+    </main>
+
+    <footer>© 2025 LuxWatch. All rights reserved.</footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        AOS.init({ once: true, duration: 800 });
+        initializeParticles();
+        initializeCinematicShowcase();
+
+        const watchData = [
+            { title: "Naruto Storm Watch", desc: "Flame dial design with vibrant red strap.", price: "৳1,499", img: "https://i.imgur.com/lRkQj42.jpg" },
+            { title: "Sailor Moon Dream", desc: "Elegant moon phases dial with pastel strap.", price: "৳1,599", img: "https://i.imgur.com/h7UoHVZ.jpg" },
+            { title: "DBZ Power Watch", desc: "Electric blue energy dial with black strap.", price: "৳1,699", img: "https://i.imgur.com/WjwpWKh.jpg" },
+            { title: "MHA Hero Watch", desc: "Dynamic red and black with hero emblem dial.", price: "৳1,699", img: "https://i.imgur.com/EHtM0Uu.jpg" },
+            { title: "One Piece Pirate Watch", desc: "Adventure-ready with skull and crossbones.", price: "৳1,550", img: "https://i.imgur.com/EHtM0Uu.jpg" },
+            { title: "AOT Survey Watch", desc: "Tactical style with Survey Corps emblem.", price: "৳1,750", img: "https://i.imgur.com/Q2k7O5b.jpg" },
+            { title: "Demon Slayer Watch", desc: "Intricate patterns inspired by breath styles.", price: "৳1,650", img: "https://i.imgur.com/p1Q4M2u.jpg" },
+            { title: "Pokemon Poke Ball Watch", desc: "Classic Poke Ball design.", price: "৳1,399", img: "https://i.imgur.com/P5W2H6m.jpg" },
+            { title: "Death Note Ryuk Watch", desc: "Dark and mysterious, featuring Ryuk.", price: "৳1,800", img: "https://i.imgur.com/o7RkL2x.jpg" },
+        ];
+        const watchesContainer = document.getElementById("watches");
+        const searchInput = document.getElementById("watchSearchInput");
+        const searchButton = document.getElementById("searchButton");
+        const prevPageButton = document.getElementById("prevPage");
+        const nextPageButton = document.getElementById("nextPage");
+        const pageNumbersContainer = document.getElementById("pageNumbers");
+        const wishlistContainer = document.getElementById("wishlist-items");
+
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        let filteredWatches = [...watchData];
+        
+        function initializeCinematicShowcase() {
+            const wrapper = document.querySelector('.features-showcase-wrapper');
+            const featureItems = document.querySelectorAll('.feature-item');
+            const showcaseImage = document.getElementById('showcaseImage');
+
+            if (!wrapper || !featureItems.length || !showcaseImage || window.innerWidth <= 768) {
+                if(wrapper) wrapper.style.display = 'none';
+                return;
+            }
+
+            let activeIndex = 0;
+            let isThrottled = false;
+
+            function updateDisplay() {
+                featureItems.forEach((item, index) => {
+                    item.classList.toggle('is-active', index === activeIndex);
+                });
+                const newImgSrc = featureItems[activeIndex].dataset.imgSrc;
+                const newImgUrl = new URL(newImgSrc, window.location.href).href;
+                if (showcaseImage.src !== newImgUrl) {
+                    showcaseImage.style.opacity = 0;
+                    setTimeout(() => {
+                        showcaseImage.src = newImgSrc;
+                        showcaseImage.style.opacity = 1;
+                    }, 300);
+                }
+            }
+
+            function handleScroll(event) {
+                if (isThrottled) return;
+                const direction = event.deltaY > 0 ? 'down' : 'up';
+
+                if ((direction === 'up' && activeIndex === 0) || (direction === 'down' && activeIndex === featureItems.length - 1)) {
+                    return;
+                }
+
+                event.preventDefault();
+                isThrottled = true;
+
+                activeIndex += (direction === 'down' ? 1 : -1);
+                
+                updateDisplay();
+
+                setTimeout(() => { isThrottled = false; }, 1000);
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        window.addEventListener('wheel', handleScroll, { passive: false });
+                    } else {
+                        window.removeEventListener('wheel', handleScroll);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            observer.observe(wrapper);
+            updateDisplay();
+        }
+
+        function createWatchCard(watch) {
+            const card = document.createElement("article");
+            card.className = "watch-card";
+            card.innerHTML = `
+              <img src="${watch.img}" alt="${watch.title}" class="watch-img" />
+              <div class="watch-info">
+                <h3 class="watch-title">${watch.title}</h3>
+                <p class="watch-desc">${watch.desc}</p>
+                <div class="watch-price">${watch.price}</div>
+                <div class="watch-actions">
+                  <button class="btn-secondary">Order Now</button>
+                  <button class="like-button" aria-label="Add to wishlist" data-title="${watch.title}">♥</button>
+                </div>
+              </div>`;
+            return card;
+        }
+
+        function displayPage(page) {
+            currentPage = page;
+            watchesContainer.innerHTML = "";
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            
+            filteredWatches.slice(startIndex, endIndex).forEach(watch => {
+                watchesContainer.appendChild(createWatchCard(watch));
+            });
+
+            updatePaginationControls();
+            updateAllLikeButtons();
+        }
+
+        function updatePaginationControls() {
+            const totalPages = Math.ceil(filteredWatches.length / itemsPerPage);
+            pageNumbersContainer.innerHTML = "";
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                if (i === currentPage) pageButton.classList.add('active');
+                pageButton.addEventListener('click', () => displayPage(i));
+                pageNumbersContainer.appendChild(pageButton);
+            }
+            
+            prevPageButton.disabled = currentPage === 1;
+            nextPageButton.disabled = currentPage === totalPages;
+        }
+
+        function applySearchAndPagination() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            filteredWatches = watchData.filter(watch => 
+                watch.title.toLowerCase().includes(searchTerm) || 
+                watch.desc.toLowerCase().includes(searchTerm)
+            );
+            displayPage(1);
+        }
+
+        function getWishlist() {
+            return JSON.parse(localStorage.getItem("wishlist")) || [];
+        }
+
+        function saveWishlist(wishlist) {
+            localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        }
+
+        function toggleWishlistItem(title) {
+            let wishlist = getWishlist();
+            const index = wishlist.findIndex(item => item === title);
+            if (index > -1) {
+                wishlist.splice(index, 1);
+            } else {
+                wishlist.push(title);
+            }
+            saveWishlist(wishlist);
+            renderWishlist();
+            updateAllLikeButtons();
+        }
+
+        function renderWishlist() {
+            const wishlistTitles = getWishlist();
+            wishlistContainer.innerHTML = "";
+            if (wishlistTitles.length === 0) {
+                wishlistContainer.innerHTML = "<p style='text-align: center; color: #aaa; width: 100%;'>Your wishlist is empty.</p>";
+                return;
+            }
+            const wishlistItems = watchData.filter(watch => wishlistTitles.includes(watch.title));
+            wishlistItems.forEach(watch => {
+                const card = createWatchCard(watch);
+                card.querySelector('.like-button').textContent = "Remove";
+                wishlistContainer.appendChild(card);
+            });
+        }
+
+        function updateAllLikeButtons() {
+            const wishlist = getWishlist();
+            document.querySelectorAll('.like-button').forEach(button => {
+                const title = button.dataset.title;
+                if (wishlist.includes(title)) {
+                    button.classList.add('liked');
+                } else {
+                    button.classList.remove('liked');
+                }
+            });
+        }
+
+        function initializeParticles() {
+            if (typeof particlesJS !== 'undefined' && document.getElementById('particles-js')) {
+                particlesJS('particles-js', { particles: { number: { value: 60 }, color: { value: "#d4af37" }, opacity: { value: 0.4, random: true }, size: { value: 2, random: true }, move: { enable: true, speed: 0.5 } } });
+            }
+        }
+        
+        applySearchAndPagination();
+        renderWishlist();
+
+        searchButton.addEventListener("click", applySearchAndPagination);
+        searchInput.addEventListener("keyup", (event) => {
+            if (event.key === "Enter") applySearchAndPagination();
+        });
+        prevPageButton.addEventListener("click", () => { if (currentPage > 1) displayPage(currentPage - 1); });
+        nextPageButton.addEventListener("click", () => { if (currentPage < Math.ceil(filteredWatches.length / itemsPerPage)) displayPage(currentPage + 1); });
+
+        document.body.addEventListener('click', (event) => {
+            if (event.target.closest('.like-button')) {
+                toggleWishlistItem(event.target.closest('.like-button').dataset.title);
+            }
+        });
+      });
+    </script>
+  </body>
+</html>

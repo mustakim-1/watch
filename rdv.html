@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChronoFit - Virtual Watch Try-On</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the canvas to ensure it's block-level and responsive */
+        canvas {
+            display: block;
+            border: 1px solid #e0e7ff; /* Lighter blue border */
+            border-radius: 1.5rem; /* Even more rounded corners */
+            background-color: #6d6d6d; /* Off-white background for canvas */
+            touch-action: none; /* Disable default touch actions like scrolling/zooming */
+            cursor: grab; /* Default cursor for canvas */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for background and shadow */
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.08), 0 10px 20px rgba(0,0,0,0.05); /* Stronger inner and outer shadow for depth */
+        }
+
+        canvas.dragging {
+            cursor: grabbing; /* Cursor when dragging */
+            box-shadow: inset 0 4px 15px rgba(0,0,0,0.1), 0 12px 25px rgba(0,0,0,0.1); /* More prominent shadow when dragging */
+        }
+
+        /* Ensure all elements have rounded corners */
+        .rounded-3xl {
+            border-radius: 1.5rem; /* Consistent large radius */
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 10px; /* Wider scrollbar */
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #303a5c; /* Indigo-50 track */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #6d6ba4; /* Indigo-400 */
+            border-radius: 10px;
+            border: 2px solid #eef2ff; /* Border to create a gap */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1; /* Indigo-500 */
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+
+        /* Basic spinner for loading feedback */
+        .spinner {
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #c0942f; /* Indigo-600 */
+            border-radius: 50%;
+            width: 36px; /* Larger spinner */
+            height: 36px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hand shade and watch face image styling */
+        .option-image {
+            width: 120px; /* Even larger fixed width for options */
+            height: 120px; /* Even larger fixed height for options */
+            border: 4px solid transparent; /* Thicker border */
+            border-radius: 1rem; /* More rounded */
+            cursor: pointer;
+            transition: border-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            object-fit: cover; /* Ensure image covers the area */
+            flex-shrink: 0; /* Prevent shrinking in flex container */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* More pronounced subtle shadow */
+        }
+
+        .option-image:hover {
+            transform: translateY(-6px) scale(1.02); /* More pronounced lift and slight scale */
+            box-shadow: 0 12px 25px rgba(0,0,0,0.18); /* Stronger shadow on hover */
+        }
+
+        .option-image.selected {
+            border-color: #dbac3e; /* Indigo-600 for selected */
+            box-shadow: 0 0 0 6px rgba(230, 221, 99, 0.5), 0 10px 20px rgba(0,0,0,0.15); /* Indigo-600 with transparency, thicker glow */
+            transform: translateY(-3px) scale(1.01); /* Slightly lifted */
+        }
+
+        /* Styles for the horizontally scrollable containers */
+        .scrollable-container {
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #818cf8 #eef2ff; /* Firefox */
+            padding-bottom: 1.5rem; /* Add more padding for scrollbar visibility */
+            margin-bottom: -1.5rem; /* Compensate for padding to keep layout tight */
+        }
+
+        /* Custom slider thumb and track styles */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px; /* Thicker track */
+            background: #c7d2fe; /* Indigo-200 track */
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.9;
+            transition: opacity .2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px; /* Larger thumb */
+            height: 24px;
+            border-radius: 50%;
+            background: #1500ff; /* Indigo-600 thumb */
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            margin-top: -7px; /* Center thumb vertically */
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #3730a3; /* Indigo-800 on hover */
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+         input[type="range"]::-moz-range-thumb:hover {
+            background: #3730a3;
+        }
+
+        /* Enhanced button styles */
+        .btn-primary {
+            background: linear-gradient(to right, #6366f1, #4f46e5); /* Indigo gradient */
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #4f46e5, #3730a3);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to right, #94a3b8, #64748b); /* Slate gradient */
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+            box-shadow: 0 6px 15px rgba(100, 116, 139, 0.3);
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(to right, #64748b, #475569);
+            box-shadow: 0 8px 20px rgba(100, 116, 139, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Message Box Styling */
+        .message-box {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .message-box > div {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-black font-montserrat antialiased flex flex-col items-center justify-center min-h-screen p-6 text-gray-100">
+    <div class="bg-gray-800 shadow-2xl rounded-3xl p-8 w-full max-w-7xl flex flex-col gap-10 border border-gray-700">
+        <header class="text-center mb-6">
+            <h1 class="text-6xl font-extrabold text-yellow-400 font-playfair leading-tight">ChronoFit ✨</h1>
+            <p class="text-xl text-gray-300 mt-3 font-montserrat">Adorn your wrist with virtual elegance.</p>
+        </header>
+
+        <section class="bg-gray-700 p-7 rounded-2xl shadow-inner border border-gray-600">
+            <label class="block text-3xl font-bold text-yellow-400 mb-5 font-playfair">1. Choose Your Hand Shade:</label>
+            <div class="flex flex-wrap justify-center sm:justify-start gap-8 overflow-x-auto pb-6 -mb-6 scrollbar-thin scrollbar-thumb-yellow-500 scrollbar-track-gray-700" id="handShadeOptions">
+                <img src="images/1000_F_174142972_58FXtl75ZTDaY2mv29PfZmGw1u5CEwH9.jpg" alt="Light Skin Hand Shade" class="option-image selected rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-hand-src="images/1000_F_174142972_58FXtl75ZTDaY2mv29PfZmGw1u5CEwH9.jpg">
+                <img src="https://via.placeholder.com/150x150/D2B48C/333333?text=Fair+Skin" alt="Fair Skin Hand Shade" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-hand-src="https://via.placeholder.com/600x800/D2B48C/333333?text=Fair+Skin+Hand">
+                <img src="https://via.placeholder.com/150x150/A0522D/FFFFFF?text=Medium+Skin" alt="Medium Skin Hand Shade" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-hand-src="https://via.placeholder.com/600x800/A0522D/FFFFFF?text=Medium+Skin+Hand">
+                <img src="https://via.placeholder.com/150x150/654321/FFFFFF?text=Dark+Skin" alt="Dark Skin Hand Shade" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-hand-src="https://via.placeholder.com/600x800/654321/FFFFFF?text=Dark+Skin+Hand">
+            </div>
+        </section>
+
+        <section class="bg-gray-700 p-7 rounded-2xl shadow-inner border border-gray-600">
+            <label class="block text-3xl font-bold text-yellow-400 mb-5 font-playfair">2. Select Your Watch Face:</label>
+            <div class="flex flex-nowrap overflow-x-auto pb-6 -mb-6 gap-8 scrollbar-thin scrollbar-thumb-yellow-500 scrollbar-track-gray-700" id="watchFaceOptions">
+                <img src="images/unnamed-removebg-preview.png" alt="Indigo Dress Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="images/unnamed-removebg-preview.png">
+                <img src="https://via.placeholder.com/300x300/E74C3C/FFFFFF?text=Racing+Chrono" alt="Racing Chrono Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.com/300x300/E74C3C/FFFFFF?text=Racing+Chrono">
+                <img src="https://via.placeholder.com/300x300/BDC3C7/2C3E50?text=Minimal+Silver" alt="Minimal Silver Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/BDC3C7/2C3E50?text=Minimal+Silver">
+                <img src="https://via.placeholder.co/300x300/9B59B6/FFFFFF?text=Smart+Hybrid" alt="Smart Hybrid Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/9B59B6/FFFFFF?text=Smart+Hybrid">
+                <img src="https://via.placeholder.co/300x300/F39C12/FFFFFF?text=Vintage+Gold" alt="Vintage Gold Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/F39C12/FFFFFF?text=Vintage+Gold">
+                <img src="https://via.placeholder.co/300x300/27AE60/FFFFFF?text=Diver+Green" alt="Diver Green Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/27AE60/FFFFFF?text=Diver+Green">
+                <img src="https://via.placeholder.co/300x300/E67E22/FFFFFF?text=Field+Orange" alt="Field Orange Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/E67E22/FFFFFF?text=Field+Orange">
+                <img src="https://via.placeholder.co/300x300/7F8C8D/FFFFFF?text=Tactical+Grey" alt="Tactical Grey Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/7F8C8D/FFFFFF?text=Tactical+Grey">
+                <img src="https://via.placeholder.co/300x300/C0392B/FFFFFF?text=Dress+Red" alt="Dress Red Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/C0392B/FFFFFF?text=Dress+Red">
+                <img src="https://via.placeholder.co/300x300/1ABC9C/FFFFFF?text=Aqua+Blue" alt="Aqua Blue Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/1ABC9C/FFFFFF?text=Aqua+Blue">
+                <img src="https://via.placeholder.co/300x300/FFC0CB/000000?text=Rose+Gold+Elegant" alt="Rose Gold Elegant Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/FFC0CB/000000?text=Rose+Gold+Elegant">
+                <img src="https://via.placeholder.co/300x300/5D4037/FFFFFF?text=Leather+Brown" alt="Leather Brown Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/5D4037/FFFFFF?text=Leather+Brown">
+                <img src="https://via.placeholder.co/300x300/4A69BD/FFFFFF?text=Deep+Blue+Pilot" alt="Deep Blue Pilot Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/4A69BD/FFFFFF?text=Deep+Blue+Pilot">
+                <img src="https://via.placeholder.co/300x300/8E44AD/FFFFFF?text=Luxury+Purple" alt="Luxury Purple Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/8E44AD/FFFFFF?text=Luxury+Purple">
+                <img src="https://via.placeholder.co/300x300/F1C40F/000000?text=Yellow+Sport" alt="Yellow Sport Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/F1C40F/000000?text=Yellow+Sport">
+                <img src="https://via.placeholder.co/300x300/34495E/FFFFFF?text=Dark+Analog" alt="Dark Analog Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/34495E/FFFFFF?text=Dark+Analog">
+                <img src="https://via.placeholder.co/300x300/2ECC71/FFFFFF?text=Emerald+Green" alt="Emerald Green Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/2ECC71/FFFFFF?text=Emerald+Green">
+                <img src="https://via.placeholder.co/300x300/95A5A6/2C3E50?text=Grey+Digital" alt="Grey Digital Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/95A5A6/2C3E50/2C3E50?text=Grey+Digital">
+                <img src="https://via.placeholder.co/300x300/D35400/FFFFFF?text=Burnt+Orange" alt="Burnt Orange Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/D35400/FFFFFF?text=Burnt+Orange">
+                <img src="https://via.placeholder.co/300x300/2980B9/FFFFFF?text=Sky+Blue+Casual" alt="Sky Blue Casual Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/2980B9/FFFFFF?text=Sky+Blue+Casual">
+                <img src="https://via.placeholder.co/300x300/8B0000/FFFFFF?text=Crimson+Dress" alt="Crimson Dress Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/8B0000/FFFFFF?text=Crimson+Dress">
+                <img src="https://via.placeholder.co/300x300/7B68EE/FFFFFF?text=Medium+Slate" alt="Medium Slate Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/7B68EE/FFFFFF?text=Medium+Slate">
+                <img src="https://via.placeholder.co/300x300/5F9EA0/FFFFFF?text=Cadet+Blue+Sport" alt="Cadet Blue Sport Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/5F9EA0/FFFFFF?text=Cadet+Blue+Sport">
+                <img src="https://via.placeholder.co/300x300/A0522D/FFFFFF?text=Saddle+Brown" alt="Saddle Brown Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/A0522D/FFFFFF?text=Saddle+Brown">
+                <img src="https://via.placeholder.co/300x300/663399/FFFFFF?text=Amethyst+Luxury" alt="Amethyst Luxury Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/663399/FFFFFF?text=Amethyst+Luxury">
+                <img src="https://via.placeholder.co/300x300/FF7F50/FFFFFF?text=Coral+Casual" alt="Coral Casual Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/FF7F50/FFFFFF?text=Coral+Casual">
+                <img src="https://via.placeholder.co/300x300/4682B4/FFFFFF?text=Steel+Blue+Diver" alt="Steel Blue Diver Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/4682B4/FFFFFF?text=Steel+Blue+Diver">
+                <img src="https://via.placeholder.co/300x300/DAA520/FFFFFF?text=Goldenrod+Vintage" alt="Goldenrod Vintage Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/DAA520/FFFFFF?text=Goldenrod+Vintage">
+                <img src="https://via.placeholder.co/300x300/708090/FFFFFF?text=Slate+Grey+Tactical" alt="Slate Grey Tactical Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/708090/FFFFFF?text=Slate+Grey+Tactical">
+                <img src="https://via.placeholder.co/300x300/808000/FFFFFF?text=Olive+Green+Field" alt="Olive Green Field Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/808000/FFFFFF?text=Olive+Green+Field">
+                <img src="https://via.placeholder.co/300x300/3498DB/FFFFFF?text=Sport+Digital" alt="Sport Digital Watch Face" class="option-image rounded-lg border-4 border-transparent hover:border-yellow-400 transition duration-200 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50 w-36 h-36 object-cover cursor-pointer" data-watch-src="https://via.placeholder.co/300x300/3498DB/FFFFFF?text=Sport+Digital">
+            </div>
+        </section>
+
+        <div class="flex-grow flex items-center justify-center bg-gray-700 rounded-3xl shadow-xl overflow-hidden min-h-[650px] max-w-xl mx-auto relative border border-gray-600">
+            <canvas id="tryOnCanvas" class="w-full h-full object-contain"></canvas>
+            <div id="loadingOverlay" class="absolute inset-0 bg-gray-800 bg-opacity-85 flex flex-col items-center justify-center hidden transition-opacity duration-300">
+                <div class="spinner border-6 border-gray-600 border-t-yellow-500 rounded-full w-12 h-12 animate-spin mb-4"></div>
+                <p class="text-gray-300 text-xl font-semibold font-playfair">Loading image...</p>
+            </div>
+        </div>
+
+        <section id="watchControls" class="bg-gray-700 p-7 rounded-2xl shadow-md border border-gray-600 space-y-6 hidden">
+            <h2 class="text-3xl font-bold text-yellow-400 font-playfair">3. Adjust Your Watch</h2>
+
+            <div>
+                <label for="watchSize" class="block text-xl font-semibold text-gray-300 mb-3 font-montserrat">Size:</label>
+                <input type="range" id="watchSize" min="10" max="300" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-yellow-500">
+            </div>
+
+            <div>
+                <label for="watchRotation" class="block text-xl font-semibold text-gray-300 mb-3 font-montserrat">Rotation:</label>
+                <input type="range" id="watchRotation" min="0" max="360" value="0" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer accent-yellow-500">
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-5 mt-6">
+                <button id="downloadBtn" class="flex-1 bg-gradient-to-r from-yellow-500 to-yellow-700 text-gray-900 py-3 px-6 rounded-xl hover:from-yellow-600 hover:to-yellow-800 transition duration-300 ease-in-out font-semibold text-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 border border-yellow-600 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Download Masterpiece
+                </button>
+                <button id="clearWatchBtn" class="flex-1 bg-gradient-to-r from-gray-700 to-gray-900 text-white py-3 px-6 rounded-xl hover:from-gray-800 hover:to-black transition duration-300 ease-in-out font-semibold text-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 border border-gray-600 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2A9 9 0 111 10a9 9 0 0118 0z" />
+                    </svg>
+                    Reset Vision
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const handShadeOptionsContainer = document.getElementById('handShadeOptions');
+        const watchFaceOptionsContainer = document.getElementById('watchFaceOptions');
+        const tryOnCanvas = document.getElementById('tryOnCanvas');
+        const ctx = tryOnCanvas.getContext('2d');
+        const watchSizeSlider = document.getElementById('watchSize');
+        const watchRotationSlider = document.getElementById('watchRotation');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const clearWatchBtn = document.getElementById('clearWatchBtn');
+        const watchControls = document.getElementById('watchControls');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        let handPhoto = new Image();
+        let watchImage = new Image();
+        let watchX = 0;
+        let watchY = 0;
+        let watchOriginalWidth = 0;
+        let watchOriginalHeight = 0;
+        let watchCurrentWidth = 0;
+        let watchCurrentHeight = 0;
+        let watchRotation = 0; // in degrees
+        let watchScale = 1; // Scale factor applied to original dimensions (1 = 100%)
+
+        let isDragging = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        // Function to draw everything on the canvas
+        function drawCanvas() {
+            ctx.clearRect(0, 0, tryOnCanvas.width, tryOnCanvas.height);
+
+            if (handPhoto.src) {
+                // Calculate aspect ratios
+                const hRatio = tryOnCanvas.width / handPhoto.width;
+                const vRatio = tryOnCanvas.height / handPhoto.height;
+                
+                // Use Math.min to "contain" the image within the canvas (entire image visible)
+                const ratio = Math.min(hRatio, vRatio); 
+                const drawWidth = handPhoto.width * ratio;
+                const drawHeight = handPhoto.height * ratio;
+                
+                // Center the image on the canvas
+                const centerShiftX = (tryOnCanvas.width - drawWidth) / 2;
+                const centerShiftY = (tryOnCanvas.height - drawHeight) / 2;
+                
+                ctx.drawImage(handPhoto, 0, 0, handPhoto.width, handPhoto.height,
+                                centerShiftX, centerShiftY, drawWidth, drawHeight);
+            } else {
+                ctx.fillStyle = '#a8a29e'; /* Stone-400 */
+                ctx.font = '30px "Playfair Display", serif'; /* Changed font for luxury */
+                ctx.textAlign = 'center';
+                ctx.fillText('1. Select a hand shade above', tryOnCanvas.width / 2, tryOnCanvas.height / 2 - 30);
+            }
+
+            if (watchImage.src) {
+                ctx.save();
+                const centerX = watchX + watchCurrentWidth / 2;
+                const centerY = watchY + watchCurrentHeight / 2;
+                ctx.translate(centerX, centerY);
+                ctx.rotate(watchRotation * Math.PI / 180);
+                ctx.drawImage(watchImage, -watchCurrentWidth / 2, -watchCurrentHeight / 2, watchCurrentWidth, watchCurrentHeight);
+                ctx.restore();
+            } else if (handPhoto.src) {
+                ctx.fillStyle = '#a8a29e'; /* Stone-400 */
+                ctx.font = '30px "Playfair Display", serif'; /* Changed font for luxury */
+                ctx.textAlign = 'center';
+                ctx.fillText('2. Select a watch face to overlay', tryOnCanvas.width / 2, tryOnCanvas.height / 2 + 30);
+            }
+
+            downloadBtn.disabled = !(handPhoto.src || watchImage.src);
+        }
+
+        function showLoading() {
+            loadingOverlay.classList.remove('hidden');
+            loadingOverlay.classList.add('opacity-100');
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.add('hidden');
+            loadingOverlay.classList.remove('opacity-100');
+        }
+
+        handShadeOptionsContainer.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('option-image')) {
+                document.querySelectorAll('#handShadeOptions .option-image').forEach(img => {
+                    img.classList.remove('selected');
+                    img.classList.remove('border-yellow-500', 'shadow-xl', 'transform', 'scale-105'); // Adjusted border color
+                    img.classList.add('border-transparent');
+                });
+                target.classList.add('selected', 'border-yellow-500', 'shadow-xl', 'transform', 'scale-105'); // Adjusted border color
+
+                showLoading();
+                handPhoto.src = target.dataset.handSrc;
+                handPhoto.onload = () => {
+                    hideLoading();
+                    resizeCanvas();
+                    drawCanvas();
+                };
+            }
+        });
+
+        watchFaceOptionsContainer.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('option-image')) {
+                document.querySelectorAll('#watchFaceOptions .option-image').forEach(img => {
+                    img.classList.remove('selected');
+                    img.classList.remove('border-yellow-500', 'shadow-xl', 'transform', 'scale-105'); // Adjusted border color
+                    img.classList.add('border-transparent');
+                });
+                target.classList.add('selected', 'border-yellow-500', 'shadow-xl', 'transform', 'scale-105'); // Adjusted border color
+
+                showLoading();
+                watchImage.src = target.dataset.watchSrc;
+                watchImage.onload = () => {
+                    hideLoading();
+                    watchOriginalWidth = watchImage.width;
+                    watchOriginalHeight = watchImage.height;
+
+                    // Initial sizing of the watch to be about 25% of the canvas's smaller dimension
+                    const targetCanvasDim = Math.min(tryOnCanvas.width, tryOnCanvas.height);
+                    const targetWatchDimension = targetCanvasDim * 0.25; // Adjusted percentage for better initial fit
+
+                    // Calculate scale based on the largest dimension of the watch to fit the target dimension
+                    const maxOriginalDimension = Math.max(watchOriginalWidth, watchOriginalHeight);
+                    watchScale = (targetWatchDimension / maxOriginalDimension) * 100;
+                    
+                    // Clamp watchScale between 10% and 300%
+                    watchScale = Math.max(10, Math.min(300, watchScale));
+
+                    watchSizeSlider.value = watchScale;
+
+                    watchCurrentWidth = watchOriginalWidth * (watchScale / 100);
+                    watchCurrentHeight = watchOriginalHeight * (watchScale / 100);
+
+                    // Center the watch initially
+                    watchX = (tryOnCanvas.width - watchCurrentWidth) / 2;
+                    watchY = (tryOnCanvas.height - watchCurrentHeight) / 2;
+
+                    watchRotationSlider.value = 0;
+                    watchRotation = 0;
+                    watchControls.classList.remove('hidden');
+                    drawCanvas();
+                };
+            
+            }
+        });
+
+        watchSizeSlider.addEventListener('input', (event) => {
+            watchScale = parseFloat(event.target.value);
+            if (watchImage.src) {
+                watchCurrentWidth = watchOriginalWidth * (watchScale / 100);
+                watchCurrentHeight = watchOriginalHeight * (watchScale / 100);
+                drawCanvas();
+            }
+        });
+
+        watchRotationSlider.addEventListener('input', (event) => {
+            watchRotation = parseFloat(event.target.value);
+            drawCanvas();
+        });
+
+        function isPointInWatch(px, py) {
+            if (!watchImage.src) return false;
+
+            const centerX = watchX + watchCurrentWidth / 2;
+            const centerY = watchY + watchCurrentHeight / 2;
+            const translatedX = px - centerX;
+            const translatedY = py - centerY;
+
+            const angleRad = -watchRotation * Math.PI / 180;
+            const cos = Math.cos(angleRad);
+            const sin = Math.sin(angleRad);
+
+            const rotatedX = translatedX * cos - translatedY * sin;
+            const rotatedY = translatedX * sin + translatedY * cos;
+
+            return rotatedX >= -watchCurrentWidth / 2 &&
+                    rotatedX <= watchCurrentWidth / 2 &&
+                    rotatedY >= -watchCurrentHeight / 2 &&
+                    rotatedY <= watchCurrentHeight / 2;
+        }
+
+        tryOnCanvas.addEventListener('mousedown', (e) => {
+            if (!watchImage.src) return;
+
+            const rect = tryOnCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            if (isPointInWatch(mouseX, mouseY)) {
+                isDragging = true;
+                tryOnCanvas.classList.add('cursor-grabbing');
+                dragOffsetX = mouseX - watchX;
+                dragOffsetY = mouseY - watchY;
+            }
+        });
+
+        tryOnCanvas.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const rect = tryOnCanvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            watchX = mouseX - dragOffsetX;
+            watchY = mouseY - dragOffsetY;
+            drawCanvas();
+        });
+
+        tryOnCanvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            tryOnCanvas.classList.remove('cursor-grabbing');
+        });
+
+        tryOnCanvas.addEventListener('mouseout', () => {
+            isDragging = false;
+            tryOnCanvas.classList.remove('cursor-grabbing');
+        });
+
+        tryOnCanvas.addEventListener('touchstart', (e) => {
+            if (!watchImage.src) return;
+            e.preventDefault();
+
+            const touch = e.touches[0];
+            const rect = tryOnCanvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+
+            if (isPointInWatch(touchX, touchY)) {
+                isDragging = true;
+                tryOnCanvas.classList.add('cursor-grabbing');
+                dragOffsetX = touchX - watchX;
+                dragOffsetY = touchY - watchY;
+            }
+        }, { passive: false });
+
+        tryOnCanvas.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+
+            const touch = e.touches[0];
+            const rect = tryOnCanvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+
+            watchX = touchX - dragOffsetX;
+            watchY = touchY - dragOffsetY;
+            drawCanvas();
+        }, { passive: false });
+
+        tryOnCanvas.addEventListener('touchend', () => {
+            isDragging = false;
+            tryOnCanvas.classList.remove('cursor-grabbing');
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            if (!handPhoto.src && !watchImage.src) {
+                showMessageBox("No image to download! Please select a hand shade or a watch face first. 🖼️");
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = 'chrono-fit-virtual-try-on.png';
+            link.href = tryOnCanvas.toDataURL('image/png');
+            link.click();
+        });
+
+        clearWatchBtn.addEventListener('click', () => {
+            watchImage.src = '';
+            document.querySelectorAll('#watchFaceOptions .option-image').forEach(img => {
+                img.classList.remove('selected');
+                img.classList.remove('border-yellow-500', 'shadow-xl', 'transform', 'scale-105'); // Adjusted border color
+                img.classList.add('border-transparent');
+            });
+            watchX = 0;
+            watchY = 0;
+            watchOriginalWidth = 0;
+            watchOriginalHeight = 0;
+            watchCurrentWidth = 0;
+            watchCurrentHeight = 0;
+            watchRotation = 0;
+            watchScale = 1;
+            watchSizeSlider.value = 100;
+            watchRotationSlider.value = 0;
+            watchControls.classList.add('hidden');
+            drawCanvas();
+            showMessageBox("Watch cleared! Choose a new one or adjust the hand shade. 👍");
+        });
+
+        function showMessageBox(message) {
+            const messageBox = document.createElement('div');
+            messageBox.className = 'fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50';
+            messageBox.innerHTML = `
+                <div class="bg-gray-800 p-8 rounded-xl shadow-2xl text-center max-w-sm mx-auto transform transition-transform duration-300 scale-100">
+                    <p class="text-xl font-semibold text-gray-100 mb-6 font-playfair">${message}</p>
+                    <button id="closeMessageBox" class="bg-gradient-to-r from-yellow-500 to-yellow-700 text-gray-900 py-3 px-6 rounded-lg hover:from-yellow-600 hover:to-yellow-800 transition duration-300 ease-in-out font-semibold text-lg shadow-md">Got it!</button>
+                </div>
+            `;
+            document.body.appendChild(messageBox);
+
+            document.getElementById('closeMessageBox').addEventListener('click', () => {
+                document.body.removeChild(messageBox);
+            });
+        }
+
+        function resizeCanvas() {
+            const container = tryOnCanvas.parentElement;
+            tryOnCanvas.style.width = '100%'; 
+            tryOnCanvas.style.height = '100%'; 
+
+            tryOnCanvas.width = container.clientWidth;
+            tryOnCanvas.height = container.clientHeight;
+
+            if (watchImage.src && watchOriginalWidth && watchOriginalHeight) {
+                watchCurrentWidth = watchOriginalWidth * (watchScale / 100);
+                watchCurrentHeight = watchOriginalHeight * (watchScale / 100);
+
+                watchX = (tryOnCanvas.width - watchCurrentWidth) / 2;
+                watchY = (tryOnCanvas.height - watchCurrentHeight) / 2;
+            }
+
+            drawCanvas();
+        }
+
+        window.onload = function() {
+            // Set initial hand shade and watch face selections
+            const firstHandShade = document.querySelector('#handShadeOptions .option-image:first-child');
+            if (firstHandShade) {
+                firstHandShade.click();
+            }
+            
+            resizeCanvas();
+            drawCanvas();
+        };
+
+        window.addEventListener('resize', resizeCanvas);
+    </script>
+</body>
+</html>
+
+</html>
+</html>

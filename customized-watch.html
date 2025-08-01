@@ -3,344 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Constellation | An Interactive Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <title>Aura Meridian | Interactive Band Configurator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
-            --bg-deep-space: #050508;
-            --text-primary: #EAEAF0;
+            --bg-deep-space: #0D0D11;
+            --bg-glass: rgba(13, 13, 17, 0.4);
+            --border-color: rgba(243, 244, 246, 0.1);
+            --text-primary: #E0E0E5;
             --text-secondary: #8892b0;
-            --accent-cyan: #22d3ee;
-            --accent-cyan-glow: rgba(34, 211, 238, 0.4);
-            --node-bg: rgba(13, 13, 17, 0.5);
-            --node-border: rgba(34, 211, 238, 0.2);
-            --node-border-hover: rgba(34, 211, 238, 0.7);
+            --accent-primary: #A37EF2; /* A vibrant purple */
+            --accent-primary-glow: rgba(163, 126, 242, 0.5);
+            --core-glow-start: rgba(163, 126, 242, 0.2);
+            --core-glow-end: rgba(163, 126, 242, 0);
         }
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-deep-space);
             color: var(--text-primary);
             overflow: hidden;
-            cursor: default;
-        }
-        #constellation-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
         }
 
-        /* --- Holographic & Glitch Effects --- */
-        .holographic-text { text-shadow: 0 0 5px var(--accent-cyan-glow), 0 0 10px var(--accent-cyan-glow); }
-        @keyframes glitch { 0%, 100% { clip-path: inset(0 0 0 0); } 20% { clip-path: inset(40% 0 41% 0); } 40% { clip-path: inset(20% 0 61% 0); } 60% { clip-path: inset(80% 0 1% 0); } 80% { clip-path: inset(50% 0 31% 0); } }
-        .glitch:hover span { animation: glitch 0.3s steps(1, end) infinite; }
-        .glitch span { display: block; position: relative; }
-        .glitch:hover::before, .glitch:hover::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-deep-space);
+        #particle-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
         }
-        .glitch:hover::before { animation: glitch 0.4s steps(1, end) infinite; left: 2px; text-shadow: -1px 0 #ff00c1; }
-        .glitch:hover::after { animation: glitch 0.2s steps(1, end) infinite; left: -2px; text-shadow: 1px 0 #00fff9; }
 
-        /* --- Main Layout & UI Nodes --- */
         .main-container {
-            position: relative; height: 100vh; width: 100vw; z-index: 2;
+            height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center;
+            padding: 1.5rem;
         }
-        .ui-node {
-            position: absolute;
-            background-color: var(--node-bg);
-            border: 1px solid var(--node-border);
-            border-radius: 50%; width: 140px; height: 140px;
-            backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; font-size: 0.8rem;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            transform: translate(-50%, -50%) scale(0);
-            cursor: pointer;
-        }
-        .ui-node.active-path, .ui-node:hover {
-            border-color: var(--node-border-hover);
-            box-shadow: 0 0 20px var(--accent-cyan-glow);
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-        .ui-node.selected {
-            background-color: rgba(34, 211, 238, 0.1);
-            border-color: var(--accent-cyan);
-            transform: translate(-50%, -50%) scale(1.15);
-        }
-        .ui-node h3 { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--accent-cyan); }
-        .ui-node p { font-size: 0.75rem; color: var(--text-secondary); }
 
-        /* --- Central Core & Strap --- */
-        #core-container {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            perspective: 1500px; width: 300px; height: 300px;
+        .config-grid {
+            display: grid; grid-template-columns: 1fr; gap: 2rem;
+            width: 100%; max-width: 1400px; height: 95vh; max-height: 850px;
         }
-        @keyframes core-pulse { 0%, 100% { box-shadow: 0 0 30px 5px var(--accent-cyan-glow); } 50% { box-shadow: 0 0 50px 15px var(--accent-cyan-glow); } }
-        #material-core {
-            position: relative; width: 100%; height: 100%;
-            border-radius: 50%; transform-style: preserve-3d;
-            animation: core-pulse 6s ease-in-out infinite;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-        }
-        #strap-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            transition: transform 1s ease-out;
-        }
-        .strap-image {
-            position: absolute; top: -30%; left: -30%; width: 160%;
-            opacity: 0; filter: drop-shadow(0 0 15px var(--accent-cyan-glow));
-            transition: opacity 0.5s ease, filter 0.5s ease;
-        }
-        .strap-image.active-strap { opacity: 1; }
+        @media (min-width: 1024px) { .config-grid { grid-template-columns: 1fr 1fr; } }
+
+        /* Cinematic Entry Animations */
+        @keyframes slide-in-left { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slide-in-right { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        .animate-entry-left { animation: slide-in-left 0.8s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
+        .animate-entry-right { animation: slide-in-right 0.8s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
         
-        /* --- Initial Awakening Screen --- */
-        #awakening-screen {
-            position: absolute; inset: 0; z-index: 100;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background-color: var(--bg-deep-space);
-            transition: opacity 0.8s ease;
+        /* Display Panel with Material Core */
+        .display-panel { display: flex; flex-direction: column; z-index: 2; }
+        #core-container { perspective: 1000px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+
+        #material-core {
+            width: 100%; max-width: 300px; aspect-ratio: 1/1;
+            position: relative;
+            border-radius: 50%;
+            transition: transform 0.4s ease-out, box-shadow 0.5s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 0 40px 10px var(--core-glow-start), 0 0 80px 20px var(--core-glow-end);
         }
-        #awaken-button {
-            border: 1px solid var(--node-border); padding: 1rem 2rem; border-radius: 99px;
-            font-family: 'Orbitron', sans-serif; font-size: 1.2rem;
-            transition: all 0.3s ease;
+        .core-texture {
+            position: absolute; inset: 0; border-radius: 50%;
+            background-size: 200% 200%;
+            transition: opacity 0.5s ease;
+            opacity: 0;
         }
-        #awaken-button:hover {
-            border-color: var(--accent-cyan); background-color: rgba(34, 211, 238, 0.1);
-            color: var(--accent-cyan); letter-spacing: 0.1em;
-            box-shadow: 0 0 20px var(--accent-cyan-glow);
+        .core-texture.active { opacity: 1; }
+        @keyframes flow-texture { to { background-position: 200% 200%; } }
+        #texture-leather { background-image: linear-gradient(45deg, #4d331f 0%, #8b5e34 50%, #4d331f 100%); animation: flow-texture 10s linear infinite; }
+        #texture-metal { background-image: radial-gradient(circle, #d0d0d5, #808085); animation: flow-texture 15s linear infinite reverse; }
+
+        .strap-image {
+            position: absolute; top: 50%; left: 50%; width: 160%;
+            transform: translate(-50%, -50%) rotate(90deg) scale(0.9);
+            transition: opacity 0.5s ease, filter 0.5s ease, transform 0.5s ease;
+            opacity: 0; pointer-events: none;
+            filter: brightness(0.9);
         }
+        .strap-image.active-strap { opacity: 1; transform: translate(-50%, -50%) rotate(90deg) scale(1); filter: brightness(1); }
+
+        /* Controls Panel */
+        .controls-panel {
+            background: var(--bg-glass); border: 1px solid var(--border-color);
+            border-radius: 1.5rem; backdrop-filter: blur(15px); padding: 2.5rem;
+            display: flex; flex-direction: column; z-index: 2; overflow-y: auto;
+        }
+        .option-group { transition: opacity 0.5s ease, max-height 0.6s ease; opacity: 0; max-height: 0; overflow: hidden; }
+        .option-group.visible { opacity: 1; max-height: 500px; }
+
+        .custom-button {
+            transition: all 0.3s ease; border: 1px solid var(--border-color); background-color: rgba(255,255,255,0.05); position: relative;
+        }
+        .custom-button:hover { transform: translateY(-3px); background-color: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+        .custom-button.selected { border-color: var(--accent-primary); box-shadow: 0 0 15px var(--accent-primary-glow); background-color: rgba(163, 126, 242, 0.1); }
+        .custom-button .check-icon { opacity: 0; transform: scale(0.5) rotate(-45deg); transition: all 0.4s cubic-bezier(.34,1.56,.64,1); color: var(--accent-primary); }
+        .custom-button.selected .check-icon { opacity: 1; transform: scale(1) rotate(0); }
     </style>
 </head>
 <body>
-    <canvas id="constellation-canvas"></canvas>
+    <canvas id="particle-canvas"></canvas>
+    <div class="main-container">
+        <div class="config-grid">
+            <!-- Left Panel: Visual Display -->
+            <div class="display-panel animate-entry-left">
+                <div id="core-container">
+                    <div id="material-core">
+                        <div id="texture-leather" class="core-texture"></div>
+                        <div id="texture-metal" class="core-texture"></div>
+                        <img src="https://i.ibb.co/L9B1m62/strap-leather-brown.png" alt="Leather Strap" class="strap-image" data-strap-id="leather">
+                        <img src="https://i.ibb.co/fnywzDq/strap-metal-silver.png" alt="Metal Strap" class="strap-image" data-strap-id="metal">
+                    </div>
+                </div>
+            </div>
 
-    <div id="awakening-screen">
-        <h1 class="text-5xl font-bold mb-4" style="font-family: 'Orbitron', sans-serif;">AURA CONSTELLATION</h1>
-        <p class="text-xl text-text-secondary mb-12">An Interactive Design Experience</p>
-        <button id="awaken-button" class="glitch" data-text="[ AWAKEN THE CORE ]"><span>[ AWAKEN THE CORE ]</span></button>
-    </div>
-
-    <div class="main-container opacity-0">
-        <!-- Central Core & Strap Display -->
-        <div id="core-container">
-            <div id="material-core"></div>
-            <div id="strap-container">
-                <img src="/images/c85264a70bc46321aef23f2b08d2831f.jpg_720x720q80-removebg-preview.png" class="strap-image" data-strap-id="leather">
-                <img src="/images/two-piece-nylon-strap-blue-wb-original-back-66b21d1a35a7e-removebg-preview.png" class="strap-image" data-strap-id="metal">
+            <!-- Right Panel: Customization Controls -->
+            <div class="controls-panel animate-entry-right">
+                <h2 class="text-3xl font-bold mb-8 text-center">Design Your Aura Meridian</h2>
+                <div class="space-y-6 flex-grow">
+                    <!-- Model Selection -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-text-secondary mb-4">1. Select Foundation</h3>
+                        <div class="space-y-3">
+                            <button class="custom-button p-4 rounded-xl w-full flex justify-between items-center" data-model="Artisan" data-price="120" data-texture="leather">
+                                <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-300" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.5 7.5 7.442 9.077c.942 1.577 2.498 2.343 3.992 2.343.996 0 1.928-.327 2.682-.903a6.012 6.012 0 01-1.011 3.56c-1.354 1.832-3.414 2.94-5.66 2.94a6.012 6.012 0 01-4.11-1.928c-.145-.145-.285-.295-.42-.45z" clip-rule="evenodd" /></svg>ARTISAN ($120)</span>
+                                <svg class="check-icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            </button>
+                            <button class="custom-button p-4 rounded-xl w-full flex justify-between items-center" data-model="Technē" data-price="280" data-texture="metal">
+                                <span class="flex items-center gap-3"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-sky-300" viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" /></svg>TECHNĒ ($280)</span>
+                                <svg class="check-icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Strap Type / Color Selection -->
+                    <div id="finish-group" class="option-group">
+                        <h3 class="text-lg font-semibold text-text-secondary mb-4">2. Select Finish</h3>
+                        <div id="artisan-finishes" class="space-y-3 hidden">
+                           <button class="custom-button p-4 rounded-xl w-full flex justify-between items-center" data-strap-id="leather" data-name="Terra Leather" data-price="35" data-filter="hue-rotate(0deg) saturate(1)"><span>TERRA LEATHER ($35)</span><svg class="check-icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg></button>
+                           <button class="custom-button p-4 rounded-xl w-full flex justify-between items-center" data-strap-id="leather" data-name="Oceanic Leather" data-price="45" data-filter="hue-rotate(180deg) saturate(0.7) brightness(0.8)"><span>OCEANIC LEATHER ($45)</span><svg class="check-icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg></button>
+                        </div>
+                        <div id="techne-finishes" class="space-y-3 hidden">
+                           <button class="custom-button p-4 rounded-xl w-full flex justify-between items-center" data-strap-id="metal" data-name="Liquid Silver" data-price="90" data-filter="saturate(0.5) brightness(1.2)"><span>LIQUID SILVER ($90)</span><svg class="check-icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg></button>
+                           <button class="custom-button p-4 rounded-xl w-full flex justify-between items-center" data-strap-id="metal" data-name="Molten Gold" data-price="120" data-filter="hue-rotate(20deg) saturate(2) brightness(1.1)"><span>MOLTEN GOLD ($120)</span><svg class="check-icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-border-color">
+                    <button id="submit-btn" class="w-full p-4 rounded-xl font-bold text-lg justify-center text-white bg-[var(--accent-primary)] hover:bg-opacity-80 transition-all duration-300 transform hover:scale-105">
+                        FINALIZE DESIGN
+                    </button>
+                </div>
             </div>
         </div>
-
-        <!-- Foundation Nodes -->
-        <div id="artisan-node" class="ui-node glitch" data-text="ARTISAN" data-model="Artisan" data-price="120" data-texture="leather">
-            <h3><span>ARTISAN</span></h3>
-            <p><span>Organic Materials</span></p>
-        </div>
-        <div id="techne-node" class="ui-node glitch" data-text="TECHNĒ" data-model="Technē" data-price="280" data-texture="metal">
-            <h3><span>TECHNĒ</span></h3>
-            <p><span>Engineered Alloys</span></p>
-        </div>
-
-        <!-- Finish Nodes -->
-        <div id="terra-node" class="ui-node glitch" data-text="TERRA" data-finish-for="Artisan" data-strap-id="leather" data-name="Terra Leather" data-price="35" data-filter="hue-rotate(0deg) saturate(1)">
-            <h3><span>TERRA</span></h3>
-            <p><span>Earthy Tones</span></p>
-        </div>
-        <div id="oceanic-node" class="ui-node glitch" data-text="OCEANIC" data-finish-for="Artisan" data-strap-id="leather" data-name="Oceanic Leather" data-price="45" data-filter="hue-rotate(180deg) saturate(0.7) brightness(0.8)">
-            <h3><span>OCEANIC</span></h3>
-            <p><span>Deep Blues</span></p>
-        </div>
-        <div id="silver-node" class="ui-node glitch" data-text="SILVER" data-finish-for="Technē" data-strap-id="metal" data-name="Liquid Silver" data-price="90" data-filter="saturate(0.5) brightness(1.2)">
-            <h3><span>SILVER</span></h3>
-            <p><span>Polished Finish</span></p>
-        </div>
-        <div id="gold-node" class="ui-node glitch" data-text="GOLD" data-finish-for="Technē" data-strap-id="metal" data-name="Molten Gold" data-price="120" data-filter="hue-rotate(20deg) saturate(2) brightness(1.1)">
-            <h3><span>GOLD</span></h3>
-            <p><span>Refined Sheen</span></p>
-        </div>
     </div>
-    
+    <audio id="audio-tick" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c359286d38.mp3" preload="auto"></audio>
+    <audio id="audio-confirm" src="https://cdn.pixabay.com/download/audio/2022/01/21/audio_ea3b2a8063.mp3" preload="auto"></audio>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const dom = {
-            mainContainer: document.querySelector('.main-container'),
-            awakeningScreen: document.getElementById('awakening-screen'),
-            awakenButton: document.getElementById('awaken-button'),
-            canvas: document.getElementById('constellation-canvas'),
+            modelButtons: document.querySelectorAll('[data-model]'),
+            finishGroup: document.getElementById('finish-group'),
+            artisanFinishes: document.getElementById('artisan-finishes'),
+            techneFinishes: document.getElementById('techne-finishes'),
+            finishButtons: document.querySelectorAll('#finish-group .custom-button'),
             core: document.getElementById('material-core'),
-            strapContainer: document.getElementById('strap-container'),
-            strapImages: document.querySelectorAll('.strap-image'),
-            foundationNodes: document.querySelectorAll('[data-model]'),
-            finishNodes: document.querySelectorAll('[data-finish-for]'),
+            coreContainer: document.getElementById('core-container'),
+            textures: {
+                leather: document.getElementById('texture-leather'),
+                metal: document.getElementById('texture-metal'),
+            },
+            strapImages: {
+                leather: document.querySelector('[data-strap-id="leather"]'),
+                metal: document.querySelector('[data-strap-id="metal"]'),
+            },
+            audio: { tick: document.getElementById('audio-tick'), confirm: document.getElementById('audio-confirm') }
         };
 
-        const state = { model: null, finish: null, isAwake: false };
-        const ctx = dom.canvas.getContext('2d');
-        let nodes = [];
+        const state = { model: null, modelPrice: 0, finishName: null, finishPrice: 0 };
+
+        // --- Interactive Canvas Background ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+        const mouse = { x: null, y: null, radius: 150 };
+        let particleColor = 'rgba(163, 126, 242, 0.5)';
+        
+        class Particle {
+            constructor() { this.reset(); this.homeX = canvas.width/2; this.homeY = canvas.height/2; }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.vx = 0; this.vy = 0;
+                this.life = 0; this.maxLife = Math.random() * 100 + 50;
+            }
+            draw() { ctx.fillStyle = particleColor; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+            update() {
+                let dx = mouse.x - this.x; let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                let forceDirectionX = dx / distance; let forceDirectionY = dy / distance;
+                let maxDistance = mouse.radius;
+                let force = (maxDistance - distance) / maxDistance;
+                let homeDX = this.homeX - this.x; let homeDY = this.homeY - this.y;
+                
+                if (distance < mouse.radius) { this.vx -= forceDirectionX * force * 0.5; this.vy -= forceDirectionY * force * 0.5; }
+                else { this.vx += homeDX * 0.001; this.vy += homeDY * 0.001; }
+                
+                this.vx *= 0.95; this.vy *= 0.95;
+                this.x += this.vx; this.y += this.vy;
+                
+                this.life++;
+                if (this.life > this.maxLife) this.reset();
+                this.draw();
+            }
+        }
+        function initParticles() { for (let i = 0; i < 150; i++) particles.push(new Particle()); }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => p.update());
+            requestAnimationFrame(animateParticles);
+        }
+        initParticles(); animateParticles();
+        window.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; particles = []; initParticles(); });
 
         // --- Core Application Logic ---
-        function positionNodes() {
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            const foundationRadius = Math.min(centerX, centerY) * 0.6;
-            const finishRadius = Math.min(centerX, centerY) * 0.85;
+        function playSound(sound) { sound.currentTime = 0; sound.play().catch(e => {}); }
 
-            // Position foundation nodes
-            nodes[0].x = centerX - foundationRadius;
-            nodes[0].y = centerY;
-            nodes[1].x = centerX + foundationRadius;
-            nodes[1].y = centerY;
-
-            // Position finish nodes
-            const artisanFinishes = nodes.filter(n => n.el.dataset.finishFor === 'Artisan');
-            artisanFinishes.forEach((node, i) => {
-                const angle = -Math.PI / 2 - (Math.PI / 4) + (i * (Math.PI / 2));
-                node.x = centerX + (finishRadius * 0.7) * Math.cos(angle);
-                node.y = centerY + finishRadius * Math.sin(angle);
-            });
-            const techneFinishes = nodes.filter(n => n.el.dataset.finishFor === 'Technē');
-            techneFinishes.forEach((node, i) => {
-                const angle = Math.PI / 2 - (Math.PI / 4) + (i * (Math.PI / 2));
-                node.x = centerX + (finishRadius * 0.7) * Math.cos(angle);
-                node.y = centerY + finishRadius * Math.sin(angle);
-            });
-
-            nodes.forEach(node => {
-                node.el.style.left = `${node.x}px`;
-                node.el.style.top = `${node.y}px`;
-            });
-        }
-        
-        function drawConstellation() {
-            ctx.clearRect(0, 0, dom.canvas.width, dom.canvas.height);
-            if (!state.model) return;
-
-            const modelNode = nodes.find(n => n.el.dataset.model === state.model);
-            const availableFinishes = nodes.filter(n => n.el.dataset.finishFor === state.model);
-            
-            ctx.strokeStyle = 'rgba(34, 211, 238, 0.2)';
-            ctx.lineWidth = 1;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = 'rgba(34, 211, 238, 0.5)';
-
-            availableFinishes.forEach(finishNode => {
-                ctx.beginPath();
-                ctx.moveTo(modelNode.x, modelNode.y);
-                ctx.lineTo(finishNode.x, finishNode.y);
-                ctx.stroke();
-            });
-        }
-        
-        function awakenExperience() {
-            if (state.isAwake) return;
-            state.isAwake = true;
-
-            dom.awakeningScreen.style.opacity = '0';
-            setTimeout(() => dom.awakeningScreen.style.display = 'none', 800);
-            
-            dom.mainContainer.style.opacity = '1';
-
-            // Animate nodes into view
-            nodes.forEach((node, i) => {
-                setTimeout(() => {
-                    node.el.style.transform = 'translate(-50%, -50%) scale(1)';
-                }, i * 100);
-            });
-        }
-        
         function transitionCore(newTextureId) {
-            // Explosion effect
-            dom.core.style.transform = 'scale(2)';
-            dom.core.style.opacity = '0';
-            
-            // Re-form effect
+            dom.core.style.transform = "scale(0.8) rotateZ(180deg)";
+            dom.core.style.opacity = "0";
+
+            // Scatter particles
+            particles.forEach(p => {
+                p.vx = (Math.random() - 0.5) * 30;
+                p.vy = (Math.random() - 0.5) * 30;
+            });
+
             setTimeout(() => {
-                dom.core.innerHTML = ''; // Clear old shards
-                // Create new shards
-                for(let i = 0; i < 20; i++) {
-                    const shard = document.createElement('div');
-                    shard.style.position = 'absolute';
-                    shard.style.width = '100%';
-                    shard.style.height = '100%';
-                    shard.style.borderRadius = '50%';
-                    shard.style.background = newTextureId === 'leather'
-                        ? 'linear-gradient(45deg, #4d331f, #8b5e34)'
-                        : 'radial-gradient(circle, #d0d0d5, #808085)';
-                    shard.style.clipPath = `inset(${Math.random()*100}% ${Math.random()*100}% ${Math.random()*100}% ${Math.random()*100}%)`;
-                    shard.style.transform = `rotate(${Math.random()*360}deg) scale(1.5)`;
-                    shard.style.opacity = '0';
-                    shard.style.transition = 'all 1s cubic-bezier(0.19, 1, 0.22, 1)';
-                    dom.core.appendChild(shard);
-                    
-                    setTimeout(() => {
-                        shard.style.transform = 'rotate(0deg) scale(1)';
-                        shard.style.opacity = '1';
-                        shard.style.clipPath = 'inset(0% 0% 0% 0%)';
-                    }, 50);
+                Object.values(dom.textures).forEach(t => t.classList.remove('active'));
+                if (dom.textures[newTextureId]) dom.textures[newTextureId].classList.add('active');
+                
+                dom.core.style.transform = "scale(1) rotateZ(0deg)";
+                dom.core.style.opacity = "1";
+
+                // Update particle colors and glow
+                if (newTextureId === 'leather') {
+                    particleColor = 'rgba(200, 160, 120, 0.5)';
+                    document.documentElement.style.setProperty('--core-glow-start', 'rgba(200, 160, 120, 0.2)');
+                } else {
+                    particleColor = 'rgba(180, 220, 255, 0.5)';
+                    document.documentElement.style.setProperty('--core-glow-start', 'rgba(180, 220, 255, 0.2)');
                 }
-                dom.core.style.transform = 'scale(1)';
-                dom.core.style.opacity = '1';
             }, 500);
         }
 
-        // --- Event Listeners ---
-        dom.awakenButton.addEventListener('click', awakenExperience);
-
-        dom.foundationNodes.forEach(nodeEl => {
-            nodeEl.addEventListener('click', () => {
-                state.model = nodeEl.dataset.model;
-                state.finish = null;
+        dom.modelButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                state.model = button.dataset.model;
+                state.modelPrice = parseFloat(button.dataset.price);
+                state.finishName = null; state.finishPrice = 0;
                 
-                dom.foundationNodes.forEach(n => n.classList.remove('selected'));
-                nodeEl.classList.add('selected');
+                dom.modelButtons.forEach(b => b.classList.remove('selected'));
+                button.classList.add('selected');
                 
-                dom.finishNodes.forEach(n => {
-                    n.classList.remove('selected', 'active-path');
-                    if(n.dataset.finishFor === state.model) {
-                       n.classList.add('active-path');
-                    }
-                });
+                transitionCore(button.dataset.texture);
                 
-                dom.strapImages.forEach(img => img.classList.remove('active-strap'));
-                transitionCore(nodeEl.dataset.texture);
-                drawConstellation();
-            });
-        });
-
-        dom.finishNodes.forEach(nodeEl => {
-            nodeEl.addEventListener('click', () => {
-                if (nodeEl.dataset.finishFor !== state.model) return;
-                state.finish = nodeEl.dataset.name;
-
-                dom.finishNodes.forEach(n => n.classList.remove('selected'));
-                nodeEl.classList.add('selected');
-
-                const strapId = nodeEl.dataset.strapId;
-                const activeImg = Array.from(dom.strapImages).find(img => img.dataset.strapId === strapId);
+                dom.artisanFinishes.classList.toggle('hidden', state.model !== 'Artisan');
+                dom.techneFinishes.classList.toggle('hidden', state.model !== 'Technē');
+                dom.finishGroup.classList.add('visible');
                 
-                dom.strapImages.forEach(img => img.classList.remove('active-strap'));
-                if (activeImg) {
-                    activeImg.classList.add('active-strap');
-                    activeImg.style.filter = `drop-shadow(0 0 15px var(--accent-cyan-glow)) ${nodeEl.dataset.filter || ''}`;
-                }
+                Object.values(dom.strapImages).forEach(img => img.classList.remove('active-strap'));
+                dom.finishButtons.forEach(b => b.classList.remove('selected'));
+                playSound(dom.audio.tick);
             });
         });
         
-        window.addEventListener('mousemove', (e) => {
-            const angle = Math.atan2(e.clientY - window.innerHeight / 2, e.clientX - window.innerWidth / 2);
-            dom.strapContainer.style.transform = `rotate(${angle}rad)`;
-        });
+        dom.finishButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                state.finishName = button.dataset.name;
+                state.finishPrice = parseFloat(button.dataset.price);
+                
+                dom.finishButtons.forEach(b => b.classList.remove('selected'));
+                button.classList.add('selected');
 
-        // --- Initial Setup ---
-        function init() {
-            dom.canvas.width = window.innerWidth;
-            dom.canvas.height = window.innerHeight;
-            
-            const allNodeElements = [...dom.foundationNodes, ...dom.finishNodes];
-            nodes = allNodeElements.map(el => ({ el, x: 0, y: 0 }));
-            
-            positionNodes();
-            window.addEventListener('resize', positionNodes);
-        }
-        init();
+                const strapId = button.dataset.strapId;
+                const activeImg = dom.strapImages[strapId];
+                
+                Object.values(dom.strapImages).forEach(img => img.classList.remove('active-strap'));
+                if(activeImg) {
+                    activeImg.classList.add('active-strap');
+                    activeImg.style.filter = button.dataset.filter;
+                }
+                playSound(dom.audio.tick);
+            });
+        });
+        
+        dom.coreContainer.addEventListener('mousemove', e => {
+            const { left, top, width, height } = dom.coreContainer.getBoundingClientRect();
+            const x = (e.clientX - left - width / 2) / (width / 2);
+            const y = (e.clientY - top - height / 2) / (height / 2);
+            dom.core.style.transform = `rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
+        });
+        dom.coreContainer.addEventListener('mouseleave', () => { dom.core.style.transform = 'rotateY(0deg) rotateX(0deg)'; });
     });
     </script>
 </body>

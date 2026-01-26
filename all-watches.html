@@ -61,6 +61,33 @@
             color: var(--gold);
             letter-spacing: 2px;
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 140px;
+            height: 60px;
+        }
+
+        .logo img {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 200px;
+            width: auto;
+            object-fit: contain;
+            max-width: none;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                width: 100px;
+                height: 50px;
+            }
+            .logo img {
+                height: 140px;
+            }
         }
 
         .nav-menu {
@@ -301,215 +328,341 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Layout */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 40px;
-            padding: 40px 24px;
+        /* Top Filter Bar Redesign */
+        .filter-wrapper {
+            position: sticky;
+            top: 85px; /* Just below header */
+            z-index: 900;
+            margin-bottom: 40px;
+            margin-top: 0;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            background: linear-gradient(to bottom, var(--bg) 0%, rgba(13,13,13,0) 100%);
+            pointer-events: none; /* Let clicks pass through transparent areas */
+        }
+
+        .main-filter-bar {
+            pointer-events: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 20, 20, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 10px 15px;
+            gap: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* Sidebar */
-        .filters-sidebar {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 25px;
-            height: fit-content;
-            position: sticky;
-            top: 100px;
+        .main-filter-bar:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            background: rgba(25, 25, 25, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
         }
 
-        .filter-header {
+        /* Search */
+        .search-group {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+            width: 280px;
         }
 
-        .filter-header h3 {
-            font-size: 1.2rem;
-            color: #fff;
-            margin: 0;
+        .search-group:focus-within {
+            background: rgba(0, 0, 0, 0.6);
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
         }
 
-        .reset-btn {
-            background: none;
+        .search-group input {
+            background: transparent;
             border: none;
-            color: var(--gold);
+            color: #fff;
+            margin-left: 10px;
+            width: 100%;
+            outline: none;
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        
+        .search-group input::placeholder { color: #555; }
+
+        .search-group i { color: #555; transition: 0.3s; font-size: 0.9rem; }
+        .search-group:focus-within i { color: var(--gold); }
+
+        /* Category Pills */
+        .category-pills {
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 4px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .filter-pill {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #888;
+            padding: 8px 20px;
+            border-radius: 10px;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.85rem;
-            text-decoration: underline;
-        }
-
-        .filter-section {
-            margin-bottom: 25px;
-        }
-
-        .filter-section h4 {
-            font-size: 0.95rem;
-            color: var(--text-dim);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        /* Search Box Sidebar */
-        .search-box {
             position: relative;
+            overflow: hidden;
         }
 
-        .search-box input {
-            width: 100%;
-            background: #000;
-            border: 1px solid #333;
-            padding: 12px 40px 12px 15px;
-            border-radius: 8px;
-            color: #fff;
-            font-size: 0.9rem;
+        .filter-pill:hover { 
+            color: #fff; 
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
         }
 
-        .search-box i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666;
+        .filter-pill.active {
+            background: var(--gold);
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            border-color: var(--gold);
         }
 
-        /* Checkboxes */
-        .checkbox-group {
+        /* Actions */
+        .filter-actions {
             display: flex;
-            flex-direction: column;
             gap: 12px;
+            align-items: center;
         }
 
-        .checkbox-label {
+        .action-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #ccc;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
+            justify-content: center;
             cursor: pointer;
-            color: #ccc;
-            font-size: 0.95rem;
+            transition: all 0.3s;
             position: relative;
-            padding-left: 30px;
-            user-select: none;
         }
 
-        .checkbox-label input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
-        }
-
-        .checkmark {
-            position: absolute;
-            left: 0;
-            height: 20px;
-            width: 20px;
-            background-color: #000;
-            border: 1px solid #444;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .checkbox-label:hover input ~ .checkmark {
+        .action-btn:hover, .action-btn.active {
             border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+        
+        .results-badge {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            font-weight: 500;
+            margin-right: 10px;
+            border-right: 1px solid rgba(255,255,255,0.1);
+            padding-right: 15px;
+            height: 24px;
+            display: flex;
+            align-items: center;
         }
 
-        .checkbox-label input:checked ~ .checkmark {
-            background-color: var(--gold);
-            border-color: var(--gold);
-        }
-
-        .checkmark:after {
-            content: "";
+        .filter-badge-dot {
             position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 10px;
+            height: 10px;
+            background: var(--gold);
+            border-radius: 50%;
+            border: 2px solid #1a1a1a;
             display: none;
+            box-shadow: 0 0 5px var(--gold);
         }
 
-        .checkbox-label input:checked ~ .checkmark:after {
-            display: block;
+        /* Advanced Panel */
+        .advanced-panel {
+            pointer-events: auto;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(25px);
+            border-radius: 16px;
+            margin-top: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+            opacity: 0;
+            transform: translateY(-10px);
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .checkbox-label .checkmark:after {
-            left: 6px;
-            top: 2px;
-            width: 6px;
-            height: 12px;
-            border: solid #000;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
+        .advanced-panel.open {
+            max-height: 600px;
+            border-color: rgba(212, 175, 55, 0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* Price Slider Inputs */
-        .price-inputs {
+        .panel-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+        }
+
+        .panel-section h4 {
+            color: var(--gold);
+            margin-bottom: 25px;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .price-inputs input {
-            width: 100%;
-            background: #000;
-            border: 1px solid #333;
-            padding: 8px;
-            border-radius: 6px;
-            color: #fff;
-            text-align: center;
+        .panel-section h4::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(212,175,55,0.3), transparent);
         }
 
-        /* Products Header */
-        .products-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+        /* Movement Grid */
+        .movement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
         }
 
-        #results-count {
-            color: var(--text-dim);
-        }
-
-        .sort-box select {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 8px 15px;
-            border-radius: 20px;
+        .movement-option {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 12px;
             cursor: pointer;
-        }
-        
-        .sort-box select option {
-            background: #000;
-        }
-        
-        .no-results {
             text-align: center;
-            padding: 60px;
-            color: #666;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .movement-option:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .movement-option.selected {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
         }
         
-        .no-results i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
+        .movement-icon {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .sort-dropdown {
+            background: rgba(0,0,0,0.5);
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            outline: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
         }
 
         /* Responsive */
         @media (max-width: 992px) {
-            .main-layout {
-                grid-template-columns: 1fr;
+            .main-filter-bar {
+                flex-direction: column;
+                border-radius: 20px;
+                padding: 15px;
+                gap: 15px;
+            }
+            .search-group { width: 100%; }
+            .category-pills { 
+                width: 100%; 
+                justify-content: flex-start; 
+                overflow-x: auto; 
+                padding-bottom: 5px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; /* Firefox */
+            }
+            .category-pills::-webkit-scrollbar {
+                display: none; /* Chrome/Safari */
+            }
+            .filter-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .panel-content { grid-template-columns: 1fr; gap: 30px; }
+        }
+
+        @media (max-width: 576px) {
+            .filter-wrapper { top: 70px; } /* Adjust for mobile header */
+            
+            .category-pills { gap: 10px; }
+            .filter-pill { 
+                padding: 8px 16px; 
+                font-size: 0.8rem; 
+                white-space: nowrap; 
             }
 
-            .filters-sidebar {
-                position: static;
-                margin-bottom: 30px;
+            .filter-actions {
+                display: grid;
+                grid-template-columns: 1fr auto auto;
+                gap: 10px;
+            }
+
+            .results-badge {
+                display: none; /* Hide on small screens to save space */
+            }
+            
+            .sort-dropdown {
+                flex-grow: 1;
+                width: 100%;
+                text-overflow: ellipsis;
+            }
+
+            .movement-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 cols on mobile */
+            }
+            
+            .price-inputs {
+                flex-direction: row; /* Keep row but ensure sizing */
+            }
+            
+            .price-inputs input {
+                width: 70px; /* Smaller inputs */
+            }
+            
+            .panel-content {
+                padding: 20px;
+                gap: 25px;
             }
         }
     </style>
@@ -517,7 +670,9 @@
 
 <body>
     <header>
-        <a href="index.html" class="logo">Dialcraft</a>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Dialcraft Watches">
+        </a>
         <nav class="nav-menu">
             <a href="index.html">Home</a>
             <a href="all-watches.html" style="color: #fff;">Collection</a>
@@ -539,92 +694,101 @@
     </section>
 
     <!-- Main Content Area -->
-    <div class="container main-layout">
-        <!-- Sidebar Filters -->
-        <aside class="filters-sidebar">
-            <div class="filter-header">
-                <h3>Filters</h3>
-                <button id="reset-filters" class="reset-btn">Reset All</button>
-            </div>
-
-            <!-- Search -->
-            <div class="filter-section">
-                <div class="search-box">
-                    <input type="text" id="sidebar-search" placeholder="Search watches...">
+    <div class="container">
+        <!-- Top Filter Bar -->
+        <div class="filter-wrapper">
+            <div class="main-filter-bar">
+                <!-- Search -->
+                <div class="search-group">
                     <i class="fas fa-search"></i>
+                    <input type="text" id="top-search" placeholder="Search collection...">
                 </div>
-            </div>
 
-            <!-- Categories -->
-            <div class="filter-section">
-                <h4>Categories</h4>
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="category" value="luxury">
-                        <span class="checkmark"></span>
-                        Luxury Collection
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="category" value="anime">
-                        <span class="checkmark"></span>
-                        Anime Series
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="category" value="collab">
-                        <span class="checkmark"></span>
-                        Collaborations
-                    </label>
+                <!-- Category Pills -->
+                <div class="category-pills">
+                    <button class="filter-pill active" data-cat="all">All</button>
+                    <button class="filter-pill" data-cat="luxury">Luxury</button>
+                    <button class="filter-pill" data-cat="anime">Anime</button>
+                    <button class="filter-pill" data-cat="collab">Collab</button>
                 </div>
-            </div>
 
-            <!-- Price Range -->
-            <div class="filter-section">
-                <h4>Price Range</h4>
-                <div class="price-slider-container">
-                    <div class="price-inputs">
-                        <input type="number" id="price-min" placeholder="Min" min="0">
-                        <span>-</span>
-                        <input type="number" id="price-max" placeholder="Max" min="0">
-                    </div>
-                    <!-- Simple slider visual could be added here, sticking to inputs for robustness -->
-                </div>
-            </div>
-
-            <!-- Movement -->
-            <div class="filter-section">
-                <h4>Movement</h4>
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="movement" value="Automatic">
-                        <span class="checkmark"></span>
-                        Automatic
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="movement" value="Quartz">
-                        <span class="checkmark"></span>
-                        Quartz
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="movement" value="Swiss">
-                        <span class="checkmark"></span>
-                        Swiss Made
-                    </label>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Product Grid -->
-        <main class="products-area">
-            <div class="products-header">
-                <span id="results-count">Showing all watches</span>
-                <div class="sort-box">
-                    <select id="sort-select">
-                        <option value="featured">Featured</option>
+                <!-- Actions -->
+                <div class="filter-actions">
+                    <span id="mini-results-count" class="results-badge">12 Items</span>
+                    
+                    <button id="toggle-advanced" class="action-btn" title="Advanced Filters">
+                        <i class="fas fa-sliders-h"></i>
+                        <span class="filter-badge-dot"></span>
+                    </button>
+                    
+                    <select id="sort-select" class="sort-dropdown">
+                        <option value="featured">Sort: Featured</option>
                         <option value="price-low">Price: Low to High</option>
                         <option value="price-high">Price: High to Low</option>
                         <option value="newest">Newest Arrivals</option>
                     </select>
+
+                    <button id="reset-filters" class="action-btn" title="Reset">
+                        <i class="fas fa-redo-alt"></i>
+                    </button>
                 </div>
+            </div>
+
+            <!-- Advanced Panel -->
+            <div id="advanced-panel" class="advanced-panel">
+                <div class="panel-content">
+                    <!-- Price Section -->
+                    <div class="panel-section">
+                        <h4><i class="fas fa-coins"></i> Price Range</h4>
+                        <div class="range-slider">
+                            <div class="slider-track"></div>
+                            <input type="range" min="0" max="50000" value="0" id="slider-1" oninput="slideOne()">
+                            <input type="range" min="0" max="50000" value="50000" id="slider-2" oninput="slideTwo()">
+                        </div>
+                        <div class="price-inputs mt-3" style="justify-content: space-between;">
+                            <div style="display:flex; flex-direction:column; gap:5px;">
+                                <span style="color:#666; font-size:0.8rem;">Min Price</span>
+                                <input type="number" id="price-min" value="0" min="0" oninput="updateSlider()">
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:5px; text-align:right;">
+                                <span style="color:#666; font-size:0.8rem;">Max Price</span>
+                                <input type="number" id="price-max" value="50000" min="0" oninput="updateSlider()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Movement Section -->
+                    <div class="panel-section">
+                        <h4><i class="fas fa-cogs"></i> Movement</h4>
+                        <div class="movement-grid">
+                            <div class="movement-option" data-val="automatic">
+                                <i class="fas fa-infinity movement-icon"></i>
+                                <span>Automatic</span>
+                                <span class="count-badge" data-movement="automatic" style="background:rgba(255,255,255,0.1);">0</span>
+                            </div>
+                            <div class="movement-option" data-val="quartz">
+                                <i class="fas fa-bolt movement-icon"></i>
+                                <span>Quartz</span>
+                                <span class="count-badge" data-movement="quartz" style="background:rgba(255,255,255,0.1);">0</span>
+                            </div>
+                            <div class="movement-option" data-val="swiss">
+                                <i class="fas fa-award movement-icon"></i>
+                                <span>Swiss</span>
+                                <span class="count-badge" data-movement="swiss" style="background:rgba(255,255,255,0.1);">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Filters Display -->
+        <div id="active-filters" class="active-filters-row"></div>
+
+        <!-- Product Grid -->
+        <main class="products-area">
+            <div class="products-header">
+                <span id="results-count" class="text-sm text-gray-400">Loading...</span>
             </div>
             
             <div class="watches-grid" id="watches-grid">
@@ -869,7 +1033,47 @@
         function loadWatches() {
             allProducts = JSON.parse(localStorage.getItem('dialcraft_products')) || watchData;
             filteredProducts = [...allProducts];
+            updateFilterCounts();
             renderWatches();
+        }
+
+        function updateFilterCounts() {
+            // Count categories
+            const catCounts = {};
+            const movCounts = {
+                'automatic': 0,
+                'quartz': 0,
+                'swiss': 0
+            };
+
+            allProducts.forEach(p => {
+                // Category
+                const cat = getCategoryFromTitle(p.title);
+                catCounts[cat] = (catCounts[cat] || 0) + 1;
+
+                // Movement
+                const movement = (p.specs?.movement || '').toLowerCase();
+                if (movement.includes('automatic')) movCounts['automatic']++;
+                if (movement.includes('quartz')) movCounts['quartz']++;
+                if (movement.includes('swiss')) movCounts['swiss']++;
+            });
+
+            // Update Category Pills
+            document.querySelectorAll('.filter-pill[data-cat]').forEach(pill => {
+                const cat = pill.dataset.cat;
+                const name = cat.charAt(0).toUpperCase() + cat.slice(1);
+                if(cat === 'all') {
+                    pill.textContent = `All (${allProducts.length})`;
+                } else {
+                    pill.textContent = `${name} (${catCounts[cat] || 0})`;
+                }
+            });
+
+            // Update Movement Badges
+            document.querySelectorAll('.count-badge[data-movement]').forEach(badge => {
+                const mov = badge.dataset.movement;
+                badge.textContent = movCounts[mov] || 0;
+            });
         }
 
         function renderWatches() {
@@ -975,37 +1179,119 @@
             return 'luxury';
         }
 
+        let minGap = 1000;
+        const slider1 = document.getElementById("slider-1");
+        const slider2 = document.getElementById("slider-2");
+        const displayValOne = document.getElementById("price-min");
+        const displayValTwo = document.getElementById("price-max");
+        const track = document.querySelector(".slider-track");
+        const sliderMaxValue = document.getElementById("slider-1").max;
+
+        function slideOne() {
+            if (parseInt(slider2.value) - parseInt(slider1.value) <= minGap) {
+                slider1.value = parseInt(slider2.value) - minGap;
+            }
+            displayValOne.value = slider1.value;
+            fillColor();
+            applyFilters();
+        }
+
+        function slideTwo() {
+            if (parseInt(slider2.value) - parseInt(slider1.value) <= minGap) {
+                slider2.value = parseInt(slider1.value) + minGap;
+            }
+            displayValTwo.value = slider2.value;
+            fillColor();
+            applyFilters();
+        }
+
+        function updateSlider() {
+            // Validate inputs
+            if(parseInt(displayValOne.value) > parseInt(displayValTwo.value)){
+                displayValOne.value = parseInt(displayValTwo.value) - minGap;
+            }
+            slider1.value = displayValOne.value;
+            slider2.value = displayValTwo.value;
+            fillColor();
+            applyFilters();
+        }
+
+        function fillColor() {
+            percent1 = (slider1.value / sliderMaxValue) * 100;
+            percent2 = (slider2.value / sliderMaxValue) * 100;
+            track.style.background = `linear-gradient(to right, #333 ${percent1}%, #d4af37 ${percent1}%, #d4af37 ${percent2}%, #333 ${percent2}%)`;
+        }
+
         function setupAdvancedFilters() {
-            // Checkboxes
-            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                cb.addEventListener('change', applyFilters);
+            // Category Pills
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    applyFilters();
+                });
+            });
+
+            // Toggle Advanced Panel
+            const panel = document.getElementById('advanced-panel');
+            const toggleBtn = document.getElementById('toggle-advanced');
+            toggleBtn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                toggleBtn.classList.toggle('active');
+            });
+
+            // Movement Options
+            document.querySelectorAll('.movement-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    opt.classList.toggle('selected');
+                    applyFilters();
+                });
             });
 
             // Search
-            document.getElementById('sidebar-search').addEventListener('input', applyFilters);
-
-            // Price Inputs
-            document.getElementById('price-min').addEventListener('input', applyFilters);
-            document.getElementById('price-max').addEventListener('input', applyFilters);
+            document.getElementById('top-search').addEventListener('input', applyFilters);
 
             // Sort
             document.getElementById('sort-select').addEventListener('change', applyFilters);
 
             // Reset
             document.getElementById('reset-filters').addEventListener('click', () => {
-                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-                document.getElementById('sidebar-search').value = '';
-                document.getElementById('price-min').value = '';
-                document.getElementById('price-max').value = '';
+                // Reset Category
+                document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                document.querySelector('.filter-pill[data-cat="all"]').classList.add('active');
+
+                // Reset Search
+                document.getElementById('top-search').value = '';
+                
+                // Reset slider
+                slider1.value = 0;
+                slider2.value = 50000;
+                displayValOne.value = 0;
+                displayValTwo.value = 50000;
+                fillColor();
+
+                // Reset Movement
+                document.querySelectorAll('.movement-option').forEach(opt => opt.classList.remove('selected'));
+
+                // Reset Sort
                 document.getElementById('sort-select').value = 'featured';
+                
                 applyFilters();
             });
+
+            // Initial slider fill
+            fillColor();
         }
 
         function applyFilters() {
-            const searchQuery = document.getElementById('sidebar-search').value.toLowerCase();
-            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
-            const selectedMovements = Array.from(document.querySelectorAll('input[name="movement"]:checked')).map(cb => cb.value.toLowerCase());
+            const searchQuery = document.getElementById('top-search').value.toLowerCase();
+            
+            // Get selected category
+            const activePill = document.querySelector('.filter-pill.active');
+            const selectedCategory = activePill ? activePill.dataset.cat : 'all';
+            
+            // Get selected movements
+            const selectedMovements = Array.from(document.querySelectorAll('.movement-option.selected')).map(el => el.dataset.val);
             
             const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
             const maxPrice = parseFloat(document.getElementById('price-max').value) || Infinity;
@@ -1018,7 +1304,7 @@
 
                 // 2. Category
                 const category = getCategoryFromTitle(product.title);
-                const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(category);
+                const matchesCategory = selectedCategory === 'all' || selectedCategory === category;
 
                 // 3. Price
                 const price = parseFloat(product.price.replace(/[^\d.]/g, ''));
@@ -1037,21 +1323,33 @@
             } else if (sortBy === 'price-high') {
                 filteredProducts.sort((a, b) => parseFloat(b.price.replace(/[^\d.]/g, '')) - parseFloat(a.price.replace(/[^\d.]/g, '')));
             } else if (sortBy === 'newest') {
-                filteredProducts.reverse(); // Assuming original order is chronological
+                filteredProducts.reverse(); 
             }
-            // 'featured' is default/original order
 
             updateResultsCount();
             renderWatches();
+
+            // Update badge dot
+            const hasAdvanced = selectedMovements.length > 0 || minPrice > 0 || maxPrice < 50000;
+            const badge = document.querySelector('.filter-badge-dot');
+            if(badge) badge.style.display = hasAdvanced ? 'block' : 'none';
+        }
+
+        function updateActiveFilters() {
+            const container = document.getElementById('active-filters');
+            if(container) container.innerHTML = '';
         }
 
         function updateResultsCount() {
             const count = filteredProducts.length;
             const countEl = document.getElementById('results-count');
+            const miniCountEl = document.getElementById('mini-results-count');
             const grid = document.getElementById('watches-grid');
             const noResults = document.getElementById('no-results');
 
-            countEl.textContent = `Showing ${count} watch${count !== 1 ? 'es' : ''}`;
+            const text = `${count} Watch${count !== 1 ? 'es' : ''}`;
+            countEl.textContent = `Showing ${text}`;
+            if(miniCountEl) miniCountEl.textContent = text;
             
             if (count === 0) {
                 grid.style.display = 'none';

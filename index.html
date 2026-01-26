@@ -26,6 +26,11 @@
             background: #000;
             font-family: 'Poppins', sans-serif;
             color: #fff;
+            overflow-x: hidden; /* Prevent horizontal scroll globally */
+        }
+        
+        html {
+            overflow-x: hidden;
         }
 
         /* ===== TECHNICAL BLUEPRINT ANATOMY SECTION ===== */
@@ -507,13 +512,23 @@
         }
 
         .logo {
-            font-family: "Playfair Display", serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #d4af37;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            user-select: none;
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 140px; /* Reserve width */
+            height: 60px; /* Keep navbar height contained */
+        }
+        
+        .logo img {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 200px; /* Bigger logo */
+            width: auto;
+            object-fit: contain;
+            max-width: none; /* Prevent constraint */
+            z-index: 10;
         }
 
         .nav-menu {
@@ -1832,19 +1847,51 @@
         .exclusive-card:nth-child(even) { animation: card-float 7s ease-in-out infinite 1s; }
 
         @media (max-width: 768px) {
-            .exclusive-header h2 { font-size: 2.2rem; }
+            .exclusive-header h2 { 
+                font-size: 2rem; 
+                letter-spacing: 5px; /* Reduced from 15px to prevent overflow */
+                word-wrap: break-word;
+                padding: 0 10px;
+            }
+
+            /* Logo Fix for Mobile */
+            .logo {
+                width: 100px;
+                height: 50px;
+            }
+            .logo img {
+                height: 140px;
+            }
+            
+            /* Access Dock Fix for Mobile */
+            .access-dock {
+                bottom: 20px;
+                right: 15px;
+                gap: 10px;
+            }
+            
+            .dock-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
             
             .carousel-section {
-                height: 1100px; /* Increased height for mobile */
+                height: auto; /* Allow section to grow with content */
+                min-height: 1400px;
+                padding-top: 40px;
+                padding-bottom: 100px;
+                justify-content: flex-start; /* Start from top to prevent cutoff */
             }
             
             .carousel-container {
-                width: 320px;
-                height: 580px; /* Longer (Taller) boxes to fit content */
+                width: 100%;
+                max-width: 320px;
+                height: 580px; 
             }
             
             .carousel-img {
-                height: 220px; /* Adjust image size */
+                height: 220px; 
                 margin-top: 20px;
             }
 
@@ -1863,12 +1910,13 @@
 
             .active-details-panel {
                 width: 95%;
-                padding: 20px;
-                margin-top: 10px; /* Positive margin to stop overlap */
+                padding: 30px 20px 50px; 
+                margin-top: 20px; 
+                min-height: 800px; /* Increased min-height for longer container */
             }
             
             .detail-grid {
-                grid-template-columns: 1fr 1fr; /* Keep 2 cols if possible, or 1 */
+                grid-template-columns: 1fr; /* Single column for better readability on mobile */
                 gap: 15px;
             }
         }
@@ -2293,7 +2341,9 @@
 
 <body>
     <header id="main-header">
-        <div class="logo">Dialcraft Watches</div>
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Dialcraft Watches">
+        </a>
         <button class="nav-toggler" aria-label="Toggle navigation">
             <span class="line line1"></span>
             <span class="line line2"></span>
@@ -2425,6 +2475,34 @@
             </div>
         </div>
     </section>
+
+    <!-- ===== MOBILE SHOWCASE SECTION (Visible on Mobile Only) ===== -->
+    <div class="showcase-mobile-wrapper">
+        <div id="particles-js-mobile"></div>
+        <div class="mobile-cards-container">
+            <div class="showcase-card">
+                <img src="images/naruto_storm.png" class="showcase-card-image" alt="Naruto Storm">
+                <div class="showcase-card-text">
+                    <h3>Naruto Storm</h3>
+                    <p>Flame dial design with vibrant red strap. Perfect for Naruto fans.</p>
+                </div>
+            </div>
+            <div class="showcase-card">
+                <img src="images/saiyan_force.png" class="showcase-card-image" alt="Saiyan Force">
+                <div class="showcase-card-text">
+                    <h3>Saiyan Force</h3>
+                    <p>Electric blue energy dial with black strap. Feel the power.</p>
+                </div>
+            </div>
+            <div class="showcase-card">
+                <img src="images/lunar_serenity.png" class="showcase-card-image" alt="Lunar Serenity">
+                <div class="showcase-card-text">
+                    <h3>Lunar Serenity</h3>
+                    <p>Elegant moon phases dial with soft pastel strap.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- ===== EXCLUSIVE GALLERY ===== -->
     <section class="exclusive-gallery" id="watches">

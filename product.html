@@ -58,6 +58,33 @@
       color: #d4af37;
       letter-spacing: 2px;
       text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      position: relative;
+      width: 140px;
+      height: 60px;
+    }
+
+    .logo img {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      height: 200px;
+      width: auto;
+      object-fit: contain;
+      max-width: none;
+      z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+      .logo {
+        width: 100px;
+        height: 50px;
+      }
+      .logo img {
+        height: 140px;
+      }
     }
 
     .nav-menu {
@@ -642,7 +669,9 @@
 
 <body>
   <header id="main-header">
-    <div class="logo">Dialcraft Watches</div>
+    <a href="index.html" class="logo">
+      <img src="images/logo.png" alt="Dialcraft Watches">
+    </a>
     <nav class="nav-menu">
       <a href="index.html">Home</a>
       <a href="index.html#watches">Watches</a>

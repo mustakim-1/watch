@@ -327,9 +327,45 @@
             100% { transform: rotate(360deg); }
         }
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; }
+            #sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 50;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                width: 280px !important;
+                overflow-y: auto; /* Enable scrolling on mobile sidebar */
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+            #dashboard-content {
+                width: 100%;
+            }
+            main {
+                width: 100%;
+                padding: 1rem;
+            }
+            /* Sidebar Overlay */
+            #sidebar-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                backdrop-filter: blur(4px);
+                z-index: 40;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s;
+            }
+            #sidebar-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
         }
     </style>
 </head>
@@ -358,15 +394,18 @@
         </div>
     </div>
 
+    <!-- Sidebar Overlay for Mobile -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
     <!-- Dashboard Content -->
     <div id="dashboard-content" class="hidden flex-1 flex">
         <!-- Sidebar -->
         <aside id="sidebar" class="w-80 bg-surface border-r border-gray-800/50 flex flex-col shadow-2xl">
             <div class="p-6 border-b border-gray-800/50">
                 <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-2xl font-display font-bold">DIALCRAFT <span class="gold-text">WATCHES</span></h2>
-                        <p class="text-xs text-gray-500 mt-1">ADMIN CONTROL PANEL</p>
+                    <div class="relative h-12 w-32">
+                        <img src="images/logo.png" alt="Dialcraft Watches" class="absolute h-32 w-auto object-contain top-[-40px] left-0 z-10">
+                        <p class="text-xs text-gray-500 absolute top-8 left-0 w-full mt-4">ADMIN CONTROL PANEL</p>
                     </div>
                     <button onclick="toggleSidebar()" class="md:hidden text-gray-400 hover:text-gold">
                         <i class="fas fa-bars"></i>
@@ -449,6 +488,10 @@
         <main class="flex-1 p-8 overflow-y-auto">
             <div class="dashboard-hero mb-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <div>
+                    <!-- Mobile Toggle -->
+                    <button onclick="toggleSidebar()" class="md:hidden text-gold hover:text-white mb-4 text-2xl">
+                        <i class="fas fa-bars"></i> <span class="text-base font-bold ml-2">MENU</span>
+                    </button>
                     <div class="flex items-center gap-3">
                         <p class="text-gray-400 text-sm uppercase tracking-[4px]">Executive Overview</p>
                         <span class="flex items-center gap-1 bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded-full">
@@ -816,9 +859,9 @@
     </div>
 
     <!-- Product Modal -->
-    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 hidden">
-        <div class="glass-panel p-8 rounded-xl max-w-lg w-full">
-            <h2 id="modal-title" class="text-2xl font-display font-bold mb-6">Add Product</h2>
+    <div id="product-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 hidden backdrop-blur-sm p-4">
+        <div class="glass-panel p-6 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto relative">
+            <h2 id="modal-title" class="text-2xl font-display font-bold mb-6 sticky top-0 bg-[#111] z-10 py-2 border-b border-gray-800">Add Product</h2>
             <form id="product-form" onsubmit="handleProductSubmit(event)">
                 <input type="hidden" id="product-index">
                 <div class="space-y-4">
@@ -837,8 +880,12 @@
                         <input type="text" id="p-category" placeholder="e.g. Exclusive, Limited, Standard" class="w-full bg-black border border-gray-800 rounded p-3 text-white focus:border-gold outline-none">
                     </div>
                     <div>
-                        <label class="block text-gray-400 text-sm mb-1">Image URL</label>
+                        <label class="block text-gray-400 text-sm mb-1">Image URL (Main)</label>
                         <input type="url" id="p-img" required class="w-full bg-black border border-gray-800 rounded p-3 text-white focus:border-gold outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 text-sm mb-1">Additional Images (Comma separated URLs)</label>
+                        <textarea id="p-images" placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" class="w-full bg-black border border-gray-800 rounded p-3 text-white focus:border-gold outline-none h-20"></textarea>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -937,6 +984,13 @@
 
         function logout() {
             location.reload();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
         }
 
         function switchTab(tabId) {
@@ -1758,6 +1812,18 @@
             document.getElementById('p-img').value = p.img;
             document.getElementById('p-desc').value = p.desc;
             
+            // Load Images
+            const images = p.images ? p.images.slice(1).join(', ') : ''; // Exclude first one as it is main img usually, or just list all extra
+            // Better logic: if p.images exists, filter out p.img if needed, or just show all in text area if user prefers
+            // For simplicity, let's just join them all except the one in p-img field if it matches? 
+            // Actually, p.images usually contains ALL images including main.
+            // Let's just put additional images in the textarea.
+            let additionalImages = [];
+            if (p.images && Array.isArray(p.images)) {
+                 additionalImages = p.images.filter(url => url !== p.img);
+            }
+            document.getElementById('p-images').value = additionalImages.join(', ');
+
             // Populate specs if they exist
             document.getElementById('p-movement').value = p.specs?.movement || '';
             document.getElementById('p-case').value = p.specs?.case || '';
@@ -1796,12 +1862,19 @@
                 }
             });
 
+            // Process Images
+            const mainImg = document.getElementById('p-img').value;
+            const additionalImagesStr = document.getElementById('p-images').value;
+            const additionalImages = additionalImagesStr.split(',').map(s => s.trim()).filter(s => s);
+            const allImages = [mainImg, ...additionalImages]; // Combine main + additional
+
             const product = {
                 id: index === -1 ? 'w' + Date.now() : watches[index].id,
                 title: document.getElementById('p-title').value,
                 price: document.getElementById('p-price').value,
                 category: document.getElementById('p-category').value,
-                img: document.getElementById('p-img').value,
+                img: mainImg,
+                images: allImages, // Save all images
                 desc: document.getElementById('p-desc').value,
                 specs: {
                     movement: document.getElementById('p-movement').value,

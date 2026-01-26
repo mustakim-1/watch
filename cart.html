@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shopping Cart | Dialcraft Watches</title>
+  <meta name="description" content="Review your selected luxury watches and proceed to checkout." />
+  <link rel="icon" href="favicon.ico" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* General Styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #0d0d0d;
+      color: #f5f5f5;
+      font-family: "Poppins", sans-serif;
+      padding-top: 90px;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Header/Navbar */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #d4af37;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      position: relative;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #d4af37;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: #d4af37;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-menu a:hover {
+      color: #fff;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    .cart-icon {
+      position: relative;
+      font-size: 1.5rem;
+      color: #d4af37;
+      cursor: pointer;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #d4af37;
+      color: #0d0d0d;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    /* Cart Container */
+    .cart-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .cart-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .cart-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+      color: #d4af37;
+      margin-bottom: 10px;
+    }
+
+    .cart-subtitle {
+      font-size: 1.1rem;
+      color: #ccc;
+    }
+
+    /* Cart Content */
+    .cart-content {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 40px;
+    }
+
+    /* Cart Items */
+    .cart-items {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-image {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .item-details {
+      flex: 1;
+    }
+
+    .item-title {
+      font-size: 1.2rem;
+      color: #d4af37;
+      margin-bottom: 8px;
+    }
+
+    .item-desc {
+      color: #ccc;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .item-price {
+      font-weight: 700;
+      color: #d4af37;
+      font-size: 1.1rem;
+    }
+
+    .item-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      background: #2a2a2a;
+      border: 1px solid #d4af37;
+      color: #d4af37;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+
+    .quantity-btn:hover {
+      background: #d4af37;
+      color: #0d0d0d;
+    }
+
+    .quantity-display {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #d4af37;
+      min-width: 25px;
+      text-align: center;
+    }
+
+    .remove-btn {
+      background: transparent;
+      border: 1px solid #ff4d4d;
+      color: #ff4d4d;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      background: #ff4d4d;
+      color: #fff;
+    }
+
+    /* Empty Cart */
+    .empty-cart {
+      text-align: center;
+      padding: 80px 20px;
+      color: #ccc;
+    }
+
+    .empty-cart i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-cart h3 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #d4af37;
+    }
+
+    .empty-cart p {
+      margin-bottom: 30px;
+    }
+
+    .shop-btn {
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      color: #0d0d0d;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .shop-btn:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Cart Summary */
+    .cart-summary {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      height: fit-content;
+      position: sticky;
+      top: 120px;
+    }
+
+    .summary-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+      color: #d4af37;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      color: #ccc;
+    }
+
+    .summary-row.total {
+      border-top: 1px solid #333;
+      padding-top: 15px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #d4af37;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      color: #0d0d0d;
+      padding: 18px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: none;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .checkout-btn:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .continue-shopping {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #d4af37;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .continue-shopping:hover {
+      color: #fff;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .cart-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .cart-summary {
+        position: static;
+      }
+
+      .cart-item {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .item-controls {
+        justify-content: space-between;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cart-container {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .cart-item {
+      animation: fadeIn 0.6s ease-out;
+    }
+  </style>
+</head>
+
+<body>
+  <header id="main-header">
+    <div class="logo">Dialcraft Watches</div>
+    <nav class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="all-watches.html">Collection</a>
+      <a href="about.html">About</a>
+      <a href="support.html">Support</a>
+      <a href="account.html">Account</a>
+      <a href="admin.html" style="color: #ff4d4d;">Admin</a>
+      <div class="cart-icon" onclick="window.location.href='cart.html'">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count">0</span>
+      </div>
+    </nav>
+  </header>
+
+  <div class="cart-container">
+    <div class="cart-header">
+      <h1 class="cart-title">Shopping Cart</h1>
+      <p class="cart-subtitle">Review your selected luxury timepieces</p>
+    </div>
+
+    <div class="cart-content">
+      <div class="cart-items" id="cart-items">
+        <!-- Cart items will be populated by JavaScript -->
+      </div>
+
+      <div class="cart-summary" id="cart-summary">
+        <!-- Cart summary will be populated by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCart();
+      updateCartCount();
+    });
+
+    function loadCart() {
+      const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+
+      if (cart.length === 0) {
+        displayEmptyCart();
+      } else {
+        displayCartItems(cart);
+        displayCartSummary(cart);
+      }
+    }
+
+    function displayEmptyCart() {
+      const cartItems = document.getElementById('cart-items');
+      cartItems.innerHTML = `
+        <div class="empty-cart">
+          <i class="fas fa-shopping-cart"></i>
+          <h3>Your cart is empty</h3>
+          <p>Add some luxury watches to get started</p>
+          <button class="shop-btn" onclick="window.location.href='index.html'">Start Shopping</button>
+        </div>
+      `;
+
+      document.getElementById('cart-summary').style.display = 'none';
+    }
+
+    function displayCartItems(cart) {
+      const cartItems = document.getElementById('cart-items');
+      cartItems.innerHTML = cart.map((item, index) => `
+        <div class="cart-item">
+          <img src="${item.img || item.image}" alt="${item.title}" class="item-image" />
+          <div class="item-details">
+            <h3 class="item-title">${item.title}</h3>
+            <p class="item-desc">${item.desc || item.description}</p>
+            <p class="item-price">${item.price}</p>
+          </div>
+          <div class="item-controls">
+            <div class="quantity-controls">
+              <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
+              <span class="quantity-display">${item.quantity || 1}</span>
+              <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
+            </div>
+            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function displayCartSummary(cart) {
+      const summary = document.getElementById('cart-summary');
+      const subtotal = calculateTotal(cart);
+      const shipping = subtotal > 5000 ? 0 : 200; // Free shipping over ৳5000
+      const total = subtotal + shipping;
+
+      summary.innerHTML = `
+        <h3 class="summary-title">Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal (${cart.reduce((sum, item) => sum + (item.quantity || 1), 0)} items)</span>
+          <span>৳${subtotal.toLocaleString()}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>${shipping === 0 ? 'Free' : '৳' + shipping}</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>৳${total.toLocaleString()}</span>
+        </div>
+        
+        <!-- Lucky Spin Trigger -->
+        <button class="shop-btn" style="width:100%; margin-top:15px; background:linear-gradient(45deg, #1a1a1a, #333); border:1px solid #d4af37;" onclick="openLuckySpin()">
+            <i class="fas fa-gift" style="margin-right:8px;"></i> Spin for Discount
+        </button>
+
+        <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+        <a href="index.html" class="continue-shopping">Continue Shopping</a>
+      `;
+    }
+
+    function calculateTotal(cart) {
+      return cart.reduce((total, item) => {
+        const price = parseInt(item.price.replace('৳', '').replace(',', ''));
+        const quantity = item.quantity || 1;
+        return total + (price * quantity);
+      }, 0);
+    }
+
+    function changeQuantity(index, delta) {
+      const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + delta);
+      localStorage.setItem('dialcraft_cart', JSON.stringify(cart));
+      loadCart();
+    }
+
+    function removeItem(index) {
+      const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      cart.splice(index, 1);
+      localStorage.setItem('dialcraft_cart', JSON.stringify(cart));
+      loadCart();
+    }
+
+    function proceedToCheckout() {
+      window.location.href = 'checkout.html';
+    }
+  </script>
+  <script src="lucky-spin.js"></script>
+</body>
+
+</html>

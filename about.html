@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Us | Dialcraft Watches</title>
+  <meta name="description"
+    content="Discover the story behind Dialcraft - where anime inspiration meets luxury watchmaking." />
+  <link rel="icon" href="favicon.ico" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* General Styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #0d0d0d;
+      color: #f5f5f5;
+      font-family: "Poppins", sans-serif;
+      padding-top: 90px;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Header/Navbar */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #d4af37;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      position: relative;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #d4af37;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: #d4af37;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-menu a:hover {
+      color: #fff;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .about-hero {
+      position: relative;
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+      overflow: hidden;
+    }
+
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('images/dragon-ball-zee-chromebook-wallpaper.jpg') center/cover;
+      opacity: 0.3;
+      filter: blur(2px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+      padding: 0 24px;
+    }
+
+    .hero-title {
+      font-family: "Playfair Display", serif;
+      font-size: 3.5rem;
+      color: #d4af37;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    /* About Container */
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    /* Story Section */
+    .story-section {
+      margin-bottom: 80px;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .story-content {
+      padding-right: 40px;
+    }
+
+    .story-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+      color: #d4af37;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .story-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #ccc;
+      margin-bottom: 30px;
+    }
+
+    .story-quote {
+      font-style: italic;
+      font-size: 1.2rem;
+      color: #d4af37;
+      border-left: 4px solid #d4af37;
+      padding-left: 20px;
+      margin-bottom: 30px;
+    }
+
+    .story-image {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+    }
+
+    /* Values Section */
+    .values-section {
+      margin-bottom: 80px;
+    }
+
+    .section-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+      color: #d4af37;
+      text-align: center;
+      margin-bottom: 60px;
+      letter-spacing: 1px;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+    }
+
+    .value-card {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 40px 30px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .value-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    .value-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      font-size: 2rem;
+      color: #0d0d0d;
+    }
+
+    .value-title {
+      font-size: 1.5rem;
+      color: #d4af37;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .value-description {
+      color: #ccc;
+      line-height: 1.6;
+    }
+
+    /* Team Section */
+    .team-section {
+      margin-bottom: 80px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+    }
+
+    .team-member {
+      background: #1a1a1a;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .team-member:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+    }
+
+    .team-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .team-info {
+      padding: 25px;
+    }
+
+    .team-name {
+      font-size: 1.3rem;
+      color: #d4af37;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .team-role {
+      color: #ccc;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .team-bio {
+      color: #f5f5f5;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+      border-radius: 24px;
+      padding: 60px 40px;
+      text-align: center;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .cta-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+      color: #d4af37;
+      margin-bottom: 20px;
+    }
+
+    .cta-text {
+      font-size: 1.2rem;
+      color: #ccc;
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      color: #0d0d0d;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid #d4af37;
+      color: #d4af37;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #d4af37;
+      color: #0d0d0d;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .about-hero {
+        height: 50vh;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .story-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .story-content {
+        padding-right: 0;
+        text-align: center;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .story-section,
+    .values-section,
+    .team-section,
+    .cta-section {
+      animation: fadeInUp 0.8s ease-out;
+    }
+  </style>
+</head>
+
+<body>
+  <header id="main-header">
+    <div class="logo">Dialcraft Watches</div>
+    <nav class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="all-watches.html">Collection</a>
+      <a href="about.html" style="color: #fff;">About</a>
+      <a href="support.html">Support</a>
+      <a href="account.html">Account</a>
+      <div class="cart-icon" onclick="window.location.href='cart.html'">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count">0</span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="about-hero">
+    <div class="hero-content">
+      <h1 class="hero-title">The Ethos</h1>
+      <p class="hero-subtitle">Where anime inspiration meets timeless luxury craftsmanship</p>
+    </div>
+  </section>
+
+  <!-- About Content -->
+  <div class="about-container">
+    <!-- Story Section -->
+    <section class="story-section">
+      <div class="story-grid">
+        <div class="story-content">
+          <h2 class="story-title">Our Story</h2>
+          <p class="story-text">
+            Founded in 2024, Dialcraft emerged from a simple yet powerful vision: to create watches that capture the
+            essence of anime culture while maintaining the highest standards of luxury horology. Our journey began when
+            our founder, a passionate anime enthusiast and master watchmaker, realized that the world needed timepieces
+            that could bridge the gap between pop culture and premium craftsmanship.
+          </p>
+          <p class="story-quote">
+            "Every watch tells a story. Ours tell stories of heroes, dreams, and the relentless pursuit of perfection."
+          </p>
+          <p class="story-text">
+            Each Dialcraft timepiece is more than just a watch—it's a wearable tribute to the anime characters and
+            worlds that have inspired millions. From the fiery determination of Goku to the elegant grace of Sailor
+            Moon, our collections bring these iconic figures to life through meticulous design and uncompromising
+            quality.
+          </p>
+        </div>
+        <div>
+          <img src="images/unnamed.png" alt="Dialcraft watch craftsmanship" class="story-image" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+      <h2 class="section-title">Our Values</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-gem"></i>
+          </div>
+          <h3 class="value-title">Excellence</h3>
+          <p class="value-description">
+            We pursue perfection in every detail, from the precision of our movements to the artistry of our designs.
+            Quality is not an option—it's our promise.
+          </p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 class="value-title">Passion</h3>
+          <p class="value-description">
+            Every piece is crafted with genuine love for anime culture and horological tradition. Our passion drives
+            innovation and inspires creativity.
+          </p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3 class="value-title">Community</h3>
+          <p class="value-description">
+            We believe in building connections between fans, creators, and collectors. Your story becomes part of our
+            legacy.
+          </p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <i class="fas fa-infinity"></i>
+          </div>
+          <h3 class="value-title">Timelessness</h3>
+          <p class="value-description">
+            While trends come and go, true craftsmanship endures. Our watches are designed to be cherished for
+            generations.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+      <h2 class="section-title">Meet the Artisans</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <img src="images/7_24_2025 12_25_26 PM (2).png" alt="Master Watchmaker" class="team-image" />
+          <div class="team-info">
+            <h3 class="team-name">Ahmed Rahman</h3>
+            <p class="team-role">Master Watchmaker & Founder</p>
+            <p class="team-bio">
+              With over 15 years in luxury horology, Ahmed combines traditional Swiss techniques with modern
+              anime-inspired design. His vision drives every Dialcraft creation.
+            </p>
+          </div>
+        </div>
+        <div class="team-member">
+          <img src="images/lunar_serenity.png" alt="Design Director" class="team-image" />
+          <div class="team-info">
+            <h3 class="team-name">Maya Chen</h3>
+            <p class="team-role">Design Director</p>
+            <p class="team-bio">
+              A digital artist turned watch designer, Maya bridges anime aesthetics with functional luxury. Her designs
+              have won multiple international awards.
+            </p>
+          </div>
+        </div>
+        <div class="team-member">
+          <img src="images/saiyan_force.png" alt="Quality Assurance" class="team-image" />
+          <div class="team-info">
+            <h3 class="team-name">Raj Kumar</h3>
+            <p class="team-role">Quality Assurance Lead</p>
+            <p class="team-bio">
+              Ensuring every watch meets our uncompromising standards, Raj oversees the final inspection process with
+              meticulous attention to detail.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <h2 class="cta-title">Join Our Story</h2>
+      <p class="cta-text">
+        Become part of the Dialcraft legacy. Discover watches that speak to your soul and tell your story.
+      </p>
+      <div class="cta-buttons">
+        <a href="index.html" class="btn-primary">Explore Collection</a>
+        <a href="customized-watch.html" class="btn-secondary">Customize Yours</a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Smooth scroll and animations
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add intersection observer for animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // Observe all sections
+      document.querySelectorAll('.story-section, .values-section, .team-section, .cta-section').forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(section);
+      });
+    });
+  </script>
+</body>
+
+</html>

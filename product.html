@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Product Details | Dialcraft Watches</title>
+  <meta name="description"
+    content="Explore our premium anime-themed luxury watches. Crafted with precision and passion." />
+  <link rel="icon" href="favicon.ico" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* General Styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #0d0d0d;
+      color: #f5f5f5;
+      font-family: "Poppins", sans-serif;
+      padding-top: 90px;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Header/Navbar */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #d4af37;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      position: relative;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #d4af37;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: #d4af37;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-menu a:hover {
+      color: #fff;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    .cart-icon {
+      position: relative;
+      font-size: 1.5rem;
+      color: #d4af37;
+      cursor: pointer;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #d4af37;
+      color: #0d0d0d;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    /* Product Container */
+    .product-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    /* Product Gallery */
+    .product-gallery {
+      position: sticky;
+      top: 120px;
+    }
+
+    .main-image {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(212, 175, 55, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .thumbnail-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .thumbnail {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .thumbnail.active {
+      opacity: 1;
+      border-color: #d4af37;
+    }
+
+    /* Product Info */
+    .product-info h1 {
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+      color: #d4af37;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    .product-price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #d4af37;
+      margin-bottom: 30px;
+    }
+
+    .product-description {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #ccc;
+      margin-bottom: 40px;
+    }
+
+    .product-features {
+      margin-bottom: 40px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      background: #d4af37;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0d0d0d;
+      font-size: 0.8rem;
+    }
+
+    .feature-text {
+      color: #f5f5f5;
+      font-size: 1rem;
+    }
+
+    /* Quantity Selector */
+    .quantity-selector {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .quantity-btn {
+      width: 40px;
+      height: 40px;
+      background: #1a1a1a;
+      border: 2px solid #d4af37;
+      color: #d4af37;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+
+    .quantity-btn:hover {
+      background: #d4af37;
+      color: #0d0d0d;
+    }
+
+    .quantity-display {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #d4af37;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #0d0d0d;
+      border: none;
+      transition: all 0.3s ease;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid #d4af37;
+      padding: 16px 32px;
+      border-radius: 50px;
+      color: #d4af37;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .btn-secondary:hover {
+      background-color: #d4af37;
+      color: #0d0d0d;
+    }
+
+    /* Related Products */
+    .related-products {
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid #333;
+    }
+
+    .related-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2rem;
+      color: #d4af37;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .related-card {
+      background: #1a1a1a;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      transition: transform 0.3s ease;
+    }
+
+    .related-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .related-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .related-info {
+      padding: 20px;
+    }
+
+    .related-title {
+      font-size: 1.2rem;
+      color: #d4af37;
+      margin-bottom: 10px;
+    }
+
+    .related-price {
+      font-weight: 700;
+      color: #d4af37;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .product-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .product-gallery {
+        position: static;
+      }
+
+      .thumbnail-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        min-width: auto;
+      }
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+      padding: 80px 24px;
+      background: var(--surface);
+      margin: 60px 0;
+    }
+
+    .reviews-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .reviews-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .reviews-summary {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 40px;
+      margin-bottom: 40px;
+      padding: 30px;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .average-rating {
+      text-align: center;
+    }
+
+    .rating-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .rating-stars {
+      font-size: 2.5rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .rating-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .rating-count {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    .rating-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rating-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rating-bar span:first-child {
+      width: 20px;
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .rating-bar .bar {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .rating-bar .fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 4px;
+    }
+
+    .rating-bar span:last-child {
+      width: 30px;
+      text-align: left;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .reviews-list {
+      margin-bottom: 40px;
+    }
+
+    .review-item {
+      background: var(--bg);
+      padding: 25px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .review-author {
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    .review-rating {
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    .review-date {
+      color: var(--text-dim);
+      font-size: 0.8rem;
+    }
+
+    .review-text {
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .review-form-container {
+      background: var(--bg);
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .review-form-container h3 {
+      color: var(--gold);
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .review-form .form-group {
+      margin-bottom: 20px;
+    }
+
+    .review-form label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    .review-form input,
+    .review-form textarea {
+      width: 100%;
+      padding: 12px;
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    .review-form input:focus,
+    .review-form textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .star-rating {
+      display: flex;
+      gap: 5px;
+    }
+
+    .star-rating input {
+      display: none;
+    }
+
+    .star-rating label {
+      font-size: 2rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: var(--gold);
+    }
+
+    .submit-review-btn {
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .submit-review-btn:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .product-container {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .reviews-summary {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .rating-breakdown {
+        order: -1;
+      }
+
+      .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header id="main-header">
+    <div class="logo">Dialcraft Watches</div>
+    <nav class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="index.html#watches">Watches</a>
+      <a href="about.html">About</a>
+      <a href="support.html">Support</a>
+      <a href="account.html">Account</a>
+      <div class="cart-icon" onclick="window.location.href='cart.html'">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count">0</span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="product-container">
+    <div class="product-gallery">
+      <img id="main-image" src="" alt="Product Image" class="main-image" />
+      <div class="thumbnail-grid" id="thumbnail-grid"></div>
+    </div>
+
+    <div class="product-info">
+      <h1 id="product-title">Loading...</h1>
+      <div class="product-price" id="product-price">৳0</div>
+      <div class="product-description" id="product-description">
+        Loading product details...
+      </div>
+
+      <div class="product-features" id="product-specs">
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-cog"></i></div>
+          <span class="feature-text">Precision Swiss Movement</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+          <span class="feature-text">Sapphire Crystal Glass</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-water"></i></div>
+          <span class="feature-text">100m Water Resistance</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-award"></i></div>
+          <span class="feature-text">Limited Edition Design</span>
+        </div>
+      </div>
+      <p id="product-warranty" style="color: #888; margin-bottom: 20px; font-style: italic;"></p>
+
+      <div class="quantity-selector">
+        <span>Quantity:</span>
+        <div class="quantity-controls">
+          <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+          <span class="quantity-display" id="quantity">1</span>
+          <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn-primary" onclick="addToCart()">Add to Cart</button>
+        <button class="btn-secondary" onclick="addToWishlist()">
+          <i class="fas fa-heart"></i> Add to Wishlist
+        </button>
+        <button class="btn-secondary" onclick="window.location.href='virtual-watch.html'">
+          <i class="fas fa-vr-cardboard"></i> Virtual Try-On
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <section class="related-products">
+    <h2 class="related-title">You Might Also Like</h2>
+    <div class="related-grid" id="related-products"></div>
+  </section>
+
+  <!-- Reviews Section -->
+  <section class="reviews-section">
+    <div class="reviews-container">
+      <h2 class="reviews-title">Customer Reviews</h2>
+
+      <div class="reviews-summary" id="reviews-summary">
+        <!-- Reviews summary will be populated by JavaScript -->
+      </div>
+
+      <div class="reviews-list" id="reviews-list">
+        <!-- Reviews will be populated by JavaScript -->
+      </div>
+
+      <div class="review-form-container">
+        <h3>Write a Review</h3>
+        <form class="review-form" id="review-form">
+          <div class="form-group">
+            <label for="review-name">Name</label>
+            <input type="text" id="review-name" placeholder="Your name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="review-rating">Rating</label>
+            <div class="star-rating">
+              <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+              <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+              <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+              <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+              <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="review-text">Review</label>
+            <textarea id="review-text" rows="4" placeholder="Share your experience with this watch..." required></textarea>
+          </div>
+
+          <button type="submit" class="submit-review-btn">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script src="products.js"></script>
+  <script>
+    // Data is now loaded from products.js (watchData)
+    let watchDataList = typeof watchData !== 'undefined' ? watchData : [];
+
+    // Sync with localStorage
+    let currentWatchData = JSON.parse(localStorage.getItem('dialcraft_products')) || watchDataList;
+    if (currentWatchData.length === 0) currentWatchData = watchDataList;
+
+    // Use the combined data for lookups
+    watchDataList = currentWatchData;
+
+
+    let currentProduct = null;
+    let currentQuantity = 1;
+    let currentImageIndex = 0;
+
+    // Get product ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id'); // String or null
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProduct(productId);
+      updateCartCount();
+    });
+
+    function loadProduct(id) {
+      // Find product by ID (string match) or index (if numeric)
+      let product = watchDataList.find(w => w.id === id);
+
+
+      // Fallback for old integer IDs
+      if (!product && !isNaN(parseInt(id))) {
+        product = watchDataList[parseInt(id)];
+
+      }
+
+      if (product) {
+        currentProduct = product;
+        displayProduct();
+        loadRelatedProducts();
+        loadReviews();
+      } else {
+        // Fallback to first product
+        currentProduct = watchDataList[0];
+
+        displayProduct();
+        loadRelatedProducts();
+        loadReviews();
+      }
+    }
+
+    function displayProduct() {
+      document.getElementById('product-title').textContent = currentProduct.title;
+      document.getElementById('product-price').textContent = currentProduct.price;
+      document.getElementById('product-description').textContent = currentProduct.desc;
+
+      // Render Specs
+      const specs = currentProduct.specs || {};
+      const specsContainer = document.getElementById('product-specs');
+      specsContainer.innerHTML = `
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-cog"></i></div>
+          <span class="feature-text">${specs.movement || 'Automatic Mechanical Movement'}</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-expand"></i></div>
+          <span class="feature-text">${specs.case || '42mm Stainless Steel Case'}</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-water"></i></div>
+          <span class="feature-text">${specs.water || '100m Water Resistance'}</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+          <span class="feature-text">${specs.strap || 'Premium Leather Strap'}</span>
+        </div>
+      `;
+
+      // Render Warranty
+      document.getElementById('product-warranty').textContent =
+        specs.warranty ? `Warranty: ${specs.warranty}` : 'Includes 2-Year International Warranty.';
+
+      // Set main image
+      document.getElementById('main-image').src = currentProduct.img;
+
+      // Create thumbnails (using same image for now, in real app would have multiple images)
+      const thumbnailGrid = document.getElementById('thumbnail-grid');
+      thumbnailGrid.innerHTML = '';
+
+      // Create 4 thumbnails (same image for demo)
+      for (let i = 0; i < 4; i++) {
+        const thumb = document.createElement('img');
+        thumb.src = currentProduct.img;
+        thumb.className = 'thumbnail' + (i === 0 ? ' active' : '');
+        thumb.onclick = () => changeImage(i);
+        thumbnailGrid.appendChild(thumb);
+      }
+    }
+
+    function changeImage(index) {
+      currentImageIndex = index;
+      document.getElementById('main-image').src = currentProduct.img;
+
+      // Update thumbnail active state
+      document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+      });
+    }
+
+    function changeQuantity(delta) {
+      currentQuantity = Math.max(1, currentQuantity + delta);
+      document.getElementById('quantity').textContent = currentQuantity;
+    }
+
+    function addToCart() {
+      let cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      // Match by ID if available, or title as fallback for uniqueness in this simple demo
+      const existingItem = cart.find(item => (item.id && item.id === currentProduct.id) || item.title === currentProduct.title);
+
+      if (existingItem) {
+        existingItem.quantity = (existingItem.quantity || 1) + currentQuantity;
+      } else {
+        cart.push({
+          ...currentProduct,
+          quantity: currentQuantity
+        });
+      }
+
+      localStorage.setItem('dialcraft_cart', JSON.stringify(cart));
+      updateCartCount();
+      alert(`${currentProduct.title} added to cart!`);
+    }
+
+    function addToWishlist() {
+      let wishlist = JSON.parse(localStorage.getItem('dialcraft_wishlist')) || [];
+      const exists = wishlist.includes(currentProduct.title);
+
+      if (!exists) {
+        wishlist.push(currentProduct.title);
+        localStorage.setItem('dialcraft_wishlist', JSON.stringify(wishlist));
+        alert(`${currentProduct.title} added to wishlist!`);
+      } else {
+        alert('Already in wishlist!');
+      }
+    }
+
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      document.getElementById('cart-count').textContent = count;
+    }
+
+    function loadRelatedProducts() {
+      const relatedGrid = document.getElementById('related-products');
+      const relatedItems = watchDataList.filter(item => item.title !== currentProduct.title).slice(0, 4);
+
+
+      relatedGrid.innerHTML = relatedItems.map(item => `
+        <div class="related-card" onclick="window.location.href='product.html?id=${item.id || watchDataList.indexOf(item)}'">
+
+          <img src="${item.img}" alt="${item.title}" class="related-img" />
+          <div class="related-info">
+            <h3 class="related-title">${item.title}</h3>
+            <p class="related-price">${item.price}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Reviews System
+    function loadReviews() {
+      if (!currentProduct || !currentProduct.id) return;
+
+      const reviewsData = JSON.parse(localStorage.getItem('dialcraft_reviews')) || {};
+      const productReviews = reviewsData[currentProduct.id] || [];
+
+      displayReviewsSummary(productReviews);
+      displayReviewsList(productReviews);
+    }
+
+    function displayReviewsSummary(reviews) {
+      const summaryContainer = document.getElementById('reviews-summary');
+
+      if (reviews.length === 0) {
+        summaryContainer.innerHTML = `
+          <div class="average-rating">
+            <div class="rating-display">
+              <div class="rating-stars">★★★★★</div>
+              <div class="rating-number">0.0</div>
+              <div class="rating-count">No reviews yet</div>
+            </div>
+          </div>
+          <div class="rating-breakdown">
+            <p>Be the first to review this watch!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const averageRating = reviews.reduce((sum, review) => sum + parseInt(review.rating), 0) / reviews.length;
+      const ratingCounts = [0, 0, 0, 0, 0];
+
+      reviews.forEach(review => {
+        ratingCounts[parseInt(review.rating) - 1]++;
+      });
+
+      summaryContainer.innerHTML = `
+        <div class="average-rating">
+          <div class="rating-display">
+            <div class="rating-stars">${generateStars(averageRating)}</div>
+            <div class="rating-number">${averageRating.toFixed(1)}</div>
+            <div class="rating-count">${reviews.length} review${reviews.length !== 1 ? 's' : ''}</div>
+          </div>
+        </div>
+        <div class="rating-breakdown">
+          ${[5, 4, 3, 2, 1].map(stars => {
+            const count = ratingCounts[stars - 1];
+            const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+            return `
+              <div class="rating-bar">
+                <span>${stars}★</span>
+                <div class="bar">
+                  <div class="fill" style="width: ${percentage}%"></div>
+                </div>
+                <span>${count}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function displayReviewsList(reviews) {
+      const listContainer = document.getElementById('reviews-list');
+
+      if (reviews.length === 0) {
+        listContainer.innerHTML = '<p style="text-align: center; color: #888;">No reviews yet. Be the first to share your experience!</p>';
+        return;
+      }
+
+      listContainer.innerHTML = reviews.map(review => `
+        <div class="review-item">
+          <div class="review-header">
+            <div class="review-author">${review.name}</div>
+            <div class="review-rating">${generateStars(review.rating)}</div>
+          </div>
+          <div class="review-date">${new Date(review.date).toLocaleDateString()}</div>
+          <div class="review-text">${review.text}</div>
+        </div>
+      `).join('');
+    }
+
+    function generateStars(rating) {
+      const fullStars = Math.floor(rating);
+      const hasHalfStar = rating % 1 >= 0.5;
+      const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+      return '★'.repeat(fullStars) +
+             (hasHalfStar ? '☆' : '') +
+             '☆'.repeat(emptyStars);
+    }
+
+    function setupReviewForm() {
+      const form = document.getElementById('review-form');
+      form.addEventListener('submit', handleReviewSubmit);
+    }
+
+    function handleReviewSubmit(e) {
+      e.preventDefault();
+
+      if (!currentProduct || !currentProduct.id) {
+        alert('Error: Product not loaded properly.');
+        return;
+      }
+
+      const name = document.getElementById('review-name').value.trim();
+      const rating = document.querySelector('input[name="rating"]:checked')?.value;
+      const text = document.getElementById('review-text').value.trim();
+
+      if (!name || !rating || !text) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      const review = {
+        name: name,
+        rating: rating,
+        text: text,
+        date: new Date().toISOString()
+      };
+
+      const reviewsData = JSON.parse(localStorage.getItem('dialcraft_reviews')) || {};
+      if (!reviewsData[currentProduct.id]) {
+        reviewsData[currentProduct.id] = [];
+      }
+
+      reviewsData[currentProduct.id].push(review);
+      localStorage.setItem('dialcraft_reviews', JSON.stringify(reviewsData));
+
+      // Reset form
+      document.getElementById('review-form').reset();
+
+      // Reload reviews
+      loadReviews();
+
+      alert('Thank you for your review!');
+    }
+  </script>
+</body>
+
+</html>

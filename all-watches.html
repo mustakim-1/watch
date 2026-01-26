@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>All Watches | Dialcraft Watches</title>
+    <meta name="description" content="Browse our complete collection of luxury anime-themed watches." />
+    <link rel="icon" href="favicon.ico" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        :root {
+            --bg: #0d0d0d;
+            --surface: #1a1a1a;
+            --gold: #d4af37;
+            --gold-dark: #b8860b;
+            --text: #f5f5f5;
+            --text-dim: #999;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: "Poppins", sans-serif;
+            padding-top: 90px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(13, 13, 13, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .logo {
+            font-family: "Playfair Display", serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #fff;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.5rem;
+            color: var(--gold);
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--gold);
+            color: var(--bg);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Hero Banner */
+        .collection-hero {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%);
+            padding: 80px 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .collection-hero h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 4rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .collection-hero h1 span {
+            color: var(--gold);
+        }
+
+        .collection-hero p {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 30px 24px;
+            flex-wrap: wrap;
+            background: var(--bg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-btn {
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gold);
+            color: var(--bg);
+            border-color: var(--gold);
+        }
+
+        /* Watch Grid */
+        .watches-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .watches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        /* Watch Card */
+        .watch-card {
+            background: var(--surface);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .watch-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .watch-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .watch-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .watch-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .watch-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .watch-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .watch-card-image {
+            position: relative;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .watch-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .watch-card:hover .watch-card-image img {
+            transform: scale(1.1);
+        }
+
+        .watch-card-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--gold);
+            color: var(--bg);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .watch-card-content {
+            padding: 25px;
+        }
+
+        .watch-card-title {
+            font-family: "Playfair Display", serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .watch-card-desc {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .watch-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .watch-card-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .watch-card-btn {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--bg);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .watch-card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Footer */
+        .simple-footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-dim);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+            padding: 40px 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .filters-sidebar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-header h3 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin: 0;
+        }
+
+        .reset-btn {
+            background: none;
+            border: none;
+            color: var(--gold);
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-decoration: underline;
+        }
+
+        .filter-section {
+            margin-bottom: 25px;
+        }
+
+        .filter-section h4 {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        /* Search Box Sidebar */
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: #000;
+            border: 1px solid #333;
+            padding: 12px 40px 12px 15px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 0.95rem;
+            position: relative;
+            padding-left: 30px;
+            user-select: none;
+        }
+
+        .checkbox-label input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #000;
+            border: 1px solid #444;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .checkbox-label:hover input ~ .checkmark {
+            border-color: var(--gold);
+        }
+
+        .checkbox-label input:checked ~ .checkmark {
+            background-color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-label input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkbox-label .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 6px;
+            height: 12px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Price Slider Inputs */
+        .price-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-inputs input {
+            width: 100%;
+            background: #000;
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 6px;
+            color: #fff;
+            text-align: center;
+        }
+
+        /* Products Header */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        #results-count {
+            color: var(--text-dim);
+        }
+
+        .sort-box select {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        
+        .sort-box select option {
+            background: #000;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                position: static;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">Dialcraft</a>
+        <nav class="nav-menu">
+            <a href="index.html">Home</a>
+            <a href="all-watches.html" style="color: #fff;">Collection</a>
+            <a href="about.html">About</a>
+            <a href="support.html">Support</a>
+            <a href="account.html">Account</a>
+            <div class="cart-icon" onclick="window.location.href='cart.html'">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="collection-hero">
+        <h1>Our <span>Collection</span></h1>
+        <p>Discover the perfect timepiece that speaks to your soul. Each watch is crafted with passion and precision.
+        </p>
+    </section>
+
+    <!-- Main Content Area -->
+    <div class="container main-layout">
+        <!-- Sidebar Filters -->
+        <aside class="filters-sidebar">
+            <div class="filter-header">
+                <h3>Filters</h3>
+                <button id="reset-filters" class="reset-btn">Reset All</button>
+            </div>
+
+            <!-- Search -->
+            <div class="filter-section">
+                <div class="search-box">
+                    <input type="text" id="sidebar-search" placeholder="Search watches...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="filter-section">
+                <h4>Categories</h4>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="category" value="luxury">
+                        <span class="checkmark"></span>
+                        Luxury Collection
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="category" value="anime">
+                        <span class="checkmark"></span>
+                        Anime Series
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="category" value="collab">
+                        <span class="checkmark"></span>
+                        Collaborations
+                    </label>
+                </div>
+            </div>
+
+            <!-- Price Range -->
+            <div class="filter-section">
+                <h4>Price Range</h4>
+                <div class="price-slider-container">
+                    <div class="price-inputs">
+                        <input type="number" id="price-min" placeholder="Min" min="0">
+                        <span>-</span>
+                        <input type="number" id="price-max" placeholder="Max" min="0">
+                    </div>
+                    <!-- Simple slider visual could be added here, sticking to inputs for robustness -->
+                </div>
+            </div>
+
+            <!-- Movement -->
+            <div class="filter-section">
+                <h4>Movement</h4>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="movement" value="Automatic">
+                        <span class="checkmark"></span>
+                        Automatic
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="movement" value="Quartz">
+                        <span class="checkmark"></span>
+                        Quartz
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="movement" value="Swiss">
+                        <span class="checkmark"></span>
+                        Swiss Made
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <main class="products-area">
+            <div class="products-header">
+                <span id="results-count">Showing all watches</span>
+                <div class="sort-box">
+                    <select id="sort-select">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="newest">Newest Arrivals</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="watches-grid" id="watches-grid">
+                <!-- Watches injected here -->
+            </div>
+            
+            <div id="no-results" class="no-results" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No watches found</h3>
+                <p>Try adjusting your filters or search terms.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quick-view-modal" class="modal-overlay">
+        <div class="quick-view-content">
+            <button class="close-modal" onclick="closeQuickView()">&times;</button>
+            <div class="qv-grid">
+                <div class="qv-gallery">
+                    <div class="qv-main-img-wrapper">
+                        <img id="qv-main-img" src="" alt="Watch">
+                    </div>
+                    <div class="qv-thumbnails" id="qv-thumbnails">
+                        <!-- Thumbs injected here -->
+                    </div>
+                </div>
+                <div class="qv-info">
+                    <h2 id="qv-title">Watch Title</h2>
+                    <p id="qv-price" class="qv-price">৳0</p>
+                    <p id="qv-desc" class="qv-desc">Description</p>
+                    
+                    <div class="qv-specs" id="qv-specs">
+                        <!-- Specs -->
+                    </div>
+
+                    <div class="qv-actions">
+                        <button class="qv-btn-primary" id="qv-add-cart">Add to Cart</button>
+                        <button class="qv-btn-secondary" id="qv-details">View Full Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Quick View Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .quick-view-content {
+            background: #111;
+            border: 1px solid #d4af37;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            position: relative;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+
+        .close-modal:hover { color: #fff; }
+
+        .qv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .qv-grid { grid-template-columns: 1fr; }
+            .quick-view-content { padding: 20px; }
+        }
+
+        .qv-main-img-wrapper {
+            width: 100%;
+            height: 400px;
+            background: #050505;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #222;
+        }
+
+        #qv-main-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .qv-thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+
+        .qv-thumb {
+            width: 70px;
+            height: 70px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            cursor: pointer;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .qv-thumb:hover, .qv-thumb.active {
+            border-color: #d4af37;
+            opacity: 1;
+        }
+
+        .qv-info h2 {
+            font-family: 'Playfair Display', serif;
+            color: #fff;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .qv-price {
+            color: #d4af37;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .qv-desc {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .qv-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .qv-spec-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .qv-spec-label {
+            color: #d4af37;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .qv-spec-val { color: #fff; }
+
+        .qv-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .qv-btn-primary, .qv-btn-secondary {
+            flex: 1;
+            padding: 15px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .qv-btn-primary {
+            background: #d4af37;
+            color: #000;
+            border: none;
+        }
+
+        .qv-btn-primary:hover { background: #fff; }
+
+        .qv-btn-secondary {
+            background: transparent;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+        }
+
+        .qv-btn-secondary:hover { background: rgba(212, 175, 55, 0.1); }
+    </style>
+
+    <footer class="simple-footer">
+        <p>&copy; 2026 Dialcraft Watches. All rights reserved.</p>
+    </footer>
+
+    <script src="products.js"></script>
+    <script>
+        let allProducts = [];
+        let filteredProducts = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadWatches();
+            updateCartCount();
+            setupAdvancedFilters();
+        });
+
+        function loadWatches() {
+            allProducts = JSON.parse(localStorage.getItem('dialcraft_products')) || watchData;
+            filteredProducts = [...allProducts];
+            renderWatches();
+        }
+
+        function renderWatches() {
+            const grid = document.getElementById('watches-grid');
+            grid.innerHTML = filteredProducts.map((watch, index) => `
+                <div class="watch-card" data-category="${getCategoryFromTitle(watch.title)}" data-price="${parseFloat(watch.price.replace(/[^\d.]/g, ''))}" data-movement="${watch.specs?.movement || ''}" data-water="${watch.specs?.water || ''}" onclick="openQuickView('${watch.id || allProducts.indexOf(watch)}')">
+                    <div class="watch-card-image">
+                        <img src="${watch.img}" alt="${watch.title}" />
+                        ${index < 2 ? '<span class="watch-card-badge">Popular</span>' : ''}
+                    </div>
+                    <div class="watch-card-content">
+                        <h3 class="watch-card-title">${watch.title}</h3>
+                        <p class="watch-card-desc">${watch.desc}</p>
+                        <div class="watch-card-footer">
+                            <span class="watch-card-price">${watch.price}</span>
+                            <button class="watch-card-btn" onclick="event.stopPropagation(); addToCart('${watch.title.replace(/'/g, "\\'")}')">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openQuickView(id) {
+            const products = JSON.parse(localStorage.getItem('dialcraft_products')) || watchData;
+            // Handle both string ID and numeric index
+            let watch = products.find(p => p.id === id);
+            if (!watch && !isNaN(parseInt(id))) {
+                watch = products[parseInt(id)];
+            }
+            
+            if (!watch) return;
+
+            // Populate Modal
+            document.getElementById('qv-title').innerText = watch.title;
+            document.getElementById('qv-price').innerText = watch.price;
+            document.getElementById('qv-desc').innerText = watch.desc;
+            document.getElementById('qv-main-img').src = watch.img;
+
+            // Specs
+            const specsContainer = document.getElementById('qv-specs');
+            specsContainer.innerHTML = '';
+            if (watch.specs) {
+                Object.entries(watch.specs).forEach(([key, val]) => {
+                    specsContainer.innerHTML += `
+                        <div class="qv-spec-item">
+                            <span class="qv-spec-label">${key}</span>
+                            <span class="qv-spec-val">${val}</span>
+                        </div>
+                    `;
+                });
+            }
+
+            // Gallery
+            const thumbsContainer = document.getElementById('qv-thumbnails');
+            thumbsContainer.innerHTML = '';
+            const images = watch.images || [watch.img]; // Use new images array or fallback
+            
+            // If fallback is single image, duplicate it for effect or just show one
+            const displayImages = images.length > 1 ? images : [watch.img, watch.img, watch.img]; 
+
+            displayImages.forEach((img, i) => {
+                const thumb = document.createElement('img');
+                thumb.src = img;
+                thumb.className = 'qv-thumb' + (i === 0 ? ' active' : '');
+                thumb.onclick = () => {
+                    document.getElementById('qv-main-img').src = img;
+                    document.querySelectorAll('.qv-thumb').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                };
+                thumbsContainer.appendChild(thumb);
+            });
+
+            // Buttons
+            document.getElementById('qv-add-cart').onclick = () => {
+                addToCart(watch.title);
+                closeQuickView();
+            };
+            document.getElementById('qv-details').onclick = () => {
+                window.location.href = `product.html?id=${watch.id || products.indexOf(watch)}`;
+            };
+
+            document.getElementById('quick-view-modal').classList.add('active');
+        }
+
+        function closeQuickView() {
+            document.getElementById('quick-view-modal').classList.remove('active');
+        }
+
+        // Close on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('quick-view-modal');
+            if (event.target == modal) {
+                closeQuickView();
+            }
+        }
+
+        function getCategoryFromTitle(title) {
+            title = title.toLowerCase();
+            if (title.includes('naruto') || title.includes('saiyan') || title.includes('dragon ball')) return 'anime';
+            if (title.includes('titan') || title.includes('collab') || title.includes('edition')) return 'collab';
+            return 'luxury';
+        }
+
+        function setupAdvancedFilters() {
+            // Checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', applyFilters);
+            });
+
+            // Search
+            document.getElementById('sidebar-search').addEventListener('input', applyFilters);
+
+            // Price Inputs
+            document.getElementById('price-min').addEventListener('input', applyFilters);
+            document.getElementById('price-max').addEventListener('input', applyFilters);
+
+            // Sort
+            document.getElementById('sort-select').addEventListener('change', applyFilters);
+
+            // Reset
+            document.getElementById('reset-filters').addEventListener('click', () => {
+                document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                document.getElementById('sidebar-search').value = '';
+                document.getElementById('price-min').value = '';
+                document.getElementById('price-max').value = '';
+                document.getElementById('sort-select').value = 'featured';
+                applyFilters();
+            });
+        }
+
+        function applyFilters() {
+            const searchQuery = document.getElementById('sidebar-search').value.toLowerCase();
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
+            const selectedMovements = Array.from(document.querySelectorAll('input[name="movement"]:checked')).map(cb => cb.value.toLowerCase());
+            
+            const minPrice = parseFloat(document.getElementById('price-min').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('price-max').value) || Infinity;
+            const sortBy = document.getElementById('sort-select').value;
+
+            filteredProducts = allProducts.filter(product => {
+                // 1. Search
+                const matchesSearch = product.title.toLowerCase().includes(searchQuery) || 
+                                      (product.desc && product.desc.toLowerCase().includes(searchQuery));
+
+                // 2. Category
+                const category = getCategoryFromTitle(product.title);
+                const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(category);
+
+                // 3. Price
+                const price = parseFloat(product.price.replace(/[^\d.]/g, ''));
+                const matchesPrice = price >= minPrice && price <= maxPrice;
+
+                // 4. Movement
+                const movement = (product.specs?.movement || '').toLowerCase();
+                const matchesMovement = selectedMovements.length === 0 || selectedMovements.some(m => movement.includes(m));
+
+                return matchesSearch && matchesCategory && matchesPrice && matchesMovement;
+            });
+
+            // Sort
+            if (sortBy === 'price-low') {
+                filteredProducts.sort((a, b) => parseFloat(a.price.replace(/[^\d.]/g, '')) - parseFloat(b.price.replace(/[^\d.]/g, '')));
+            } else if (sortBy === 'price-high') {
+                filteredProducts.sort((a, b) => parseFloat(b.price.replace(/[^\d.]/g, '')) - parseFloat(a.price.replace(/[^\d.]/g, '')));
+            } else if (sortBy === 'newest') {
+                filteredProducts.reverse(); // Assuming original order is chronological
+            }
+            // 'featured' is default/original order
+
+            updateResultsCount();
+            renderWatches();
+        }
+
+        function updateResultsCount() {
+            const count = filteredProducts.length;
+            const countEl = document.getElementById('results-count');
+            const grid = document.getElementById('watches-grid');
+            const noResults = document.getElementById('no-results');
+
+            countEl.textContent = `Showing ${count} watch${count !== 1 ? 'es' : ''}`;
+            
+            if (count === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                noResults.style.display = 'none';
+            }
+        }
+
+        function addToCart(title) {
+            const products = JSON.parse(localStorage.getItem('dialcraft_products')) || watchData;
+            const watch = products.find(p => p.title === title);
+            if (!watch) return;
+
+            let cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+            const existing = cart.findIndex(item => item.title === watch.title);
+
+            if (existing > -1) {
+                cart[existing].quantity = (cart[existing].quantity || 1) + 1;
+            } else {
+                cart.push({ ...watch, quantity: 1 });
+            }
+
+            localStorage.setItem('dialcraft_cart', JSON.stringify(cart));
+            updateCartCount();
+            alert(`${watch.title} added to cart!`);
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+            const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation | Dialcraft Watches</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+        .text-gold {
+            color: #d4af37;
+        }
+        .bg-gold {
+            background-color: #d4af37;
+        }
+        .border-gold {
+            border-color: #d4af37;
+        }
+        .btn-gold {
+            background: linear-gradient(45deg, #d4af37, #f1c40f);
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 2px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 2px solid #d4af37;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navbar (Simplified) -->
+    <nav class="p-6 border-b border-white/10 flex justify-center">
+        <a href="index.html" class="text-2xl font-bold tracking-widest uppercase">
+            Dialcraft <span class="text-gold">Watches</span>
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-16 flex flex-col items-center justify-center text-center">
+        
+        <div class="glass-panel p-10 rounded-lg max-w-2xl w-full">
+            <div class="checkmark-circle">
+                <i class="fas fa-check text-4xl text-gold"></i>
+            </div>
+            
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">Order Confirmed</h1>
+            <p class="text-gray-400 mb-8">Thank you for your purchase. Your order has been received and is being processed.</p>
+            
+            <div class="bg-black/40 p-6 rounded mb-8 text-left">
+                <div class="flex justify-between items-center mb-4 border-b border-white/10 pb-4">
+                    <span class="text-gray-400">Order ID:</span>
+                    <span id="order-id" class="text-gold font-mono font-bold">Loading...</span>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-400">Date:</span>
+                    <span id="order-date">Loading...</span>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-400">Total Amount:</span>
+                    <span id="order-total" class="text-xl font-bold">Loading...</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400">Payment Method:</span>
+                    <span id="payment-method" class="capitalize">Loading...</span>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <p class="text-sm text-gray-500">You will receive an email confirmation shortly at <span id="customer-email" class="text-white">...</span></p>
+                
+                <div class="flex flex-col md:flex-row gap-4 justify-center mt-8">
+                    <a href="index.html" class="btn-gold">
+                        Continue Shopping
+                    </a>
+                    <a href="account.html" class="px-8 py-3 border border-white/20 hover:border-gold hover:text-gold transition-colors duration-300 rounded uppercase tracking-wider text-sm font-semibold flex items-center justify-center">
+                        View Order History
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-600 text-sm border-t border-white/5">
+        &copy; 2025 Dialcraft Watches. All rights reserved.
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id') || urlParams.get('order');
+            
+            if (!orderId) {
+                // Optional: redirect or show demo data
+                // window.location.href = 'index.html';
+                console.warn('No order ID found');
+                return;
+            }
+
+            // Retrieve order from storage
+            const orders = JSON.parse(localStorage.getItem('dialcraft_orders')) || [];
+            const order = orders.find(o => o.id === orderId);
+
+            if (order) {
+                document.getElementById('order-id').textContent = order.id;
+                document.getElementById('order-date').textContent = new Date(order.date).toLocaleDateString();
+                
+                // Handle new structure (totals.total) vs old (total)
+                const totalAmount = order.totals ? order.totals.total : order.total;
+                document.getElementById('order-total').textContent = `৳${(totalAmount || 0).toLocaleString()}`;
+                
+                // Handle new structure (payment.method) vs old (paymentMethod)
+                const method = order.payment ? order.payment.method : order.paymentMethod;
+                document.getElementById('payment-method').textContent = (method || 'Card').replace('-', ' ');
+                
+                // Handle new structure (shipping.email) vs old (customer.email)
+                const email = order.shipping ? order.shipping.email : (order.customer ? order.customer.email : 'your email');
+                document.getElementById('customer-email').textContent = email;
+            } else {
+                // Show a friendly message instead of alerting immediately
+                document.querySelector('.glass-panel').innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-exclamation-circle text-4xl text-red-500 mb-4"></i>
+                        <h1 class="text-2xl font-bold mb-2">Order Not Found</h1>
+                        <p class="text-gray-400 mb-6">We couldn't locate the order details.</p>
+                        <a href="index.html" class="btn-gold">Return Home</a>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

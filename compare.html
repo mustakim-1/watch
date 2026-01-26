@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Watches | Dialcraft Watches</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        :root { --gold: #d4af37; --dark: #050505; }
+        body { background-color: var(--dark); color: #fff; font-family: 'Poppins', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .text-gold { color: var(--gold); }
+        .border-gold { border-color: var(--gold); }
+        .bg-surface { background-color: #111; }
+        
+        /* Table Styles */
+        .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .compare-table th, .compare-table td { 
+            padding: 1.5rem; 
+            text-align: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            vertical-align: middle;
+        }
+        .compare-table th { 
+            text-align: left; 
+            font-weight: 600; 
+            color: #888; 
+            width: 200px;
+            background: #0a0a0a;
+            position: sticky;
+            left: 0;
+            z-index: 10;
+        }
+        .compare-table img {
+            width: 150px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+        }
+        .remove-btn {
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+        .remove-btn:hover { text-decoration: underline; }
+    </style>
+</head>
+<body class="pt-24 pb-20">
+
+    <header class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-black/90 backdrop-blur-md border-b border-white/10">
+        <div class="text-2xl font-bold tracking-widest text-[#d4af37] font-playfair">DIALCRAFT WATCHES</div>
+        <nav class="flex gap-6">
+            <a href="index.html" class="text-white hover:text-[#d4af37] transition-colors">HOME</a>
+            <a href="product.html" class="text-white hover:text-[#d4af37] transition-colors">COLLECTION</a>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4">
+        <h1 class="text-4xl text-center mb-12 text-gold">Compare Timepieces</h1>
+        
+        <div class="overflow-x-auto">
+            <div id="compareContainer" class="min-w-full">
+                <!-- Content injected via JS -->
+                <p class="text-center text-gray-500 py-20">Loading comparison...</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-12">
+            <button onclick="clearComparison()" class="border border-red-500 text-red-500 px-6 py-2 rounded hover:bg-red-500/10 transition">Clear All</button>
+            <a href="index.html" class="ml-4 bg-[#d4af37] text-black px-8 py-2 rounded font-bold hover:bg-[#b8860b] transition">Add More Watches</a>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderComparison();
+        });
+
+        function renderComparison() {
+            const container = document.getElementById('compareContainer');
+            // Fetch comparison list IDs from localStorage (e.g., ['w1', 'w3'])
+            const compareIds = JSON.parse(localStorage.getItem('dialcraft_compare')) || [];
+            
+            // Fetch all products to match IDs
+            const allProducts = JSON.parse(localStorage.getItem('dialcraft_products')) || []; // fallback to defaults if needed
+            
+            // Filter products that are in the compare list
+            const productsToCompare = allProducts.filter(p => compareIds.includes(p.id));
+
+            if (productsToCompare.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-20">
+                        <i class="fas fa-balance-scale text-6xl text-gray-700 mb-4"></i>
+                        <p class="text-xl text-gray-400">Your comparison list is empty.</p>
+                        <a href="index.html" class="inline-block mt-4 text-gold hover:underline">Browse Collection</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Build Table
+            let html = '<table class="compare-table"><thead><tr><th>Feature</th>';
+            
+            // Header Row (Images & Names)
+            productsToCompare.forEach(p => {
+                html += `
+                    <td>
+                        <img src="${p.img || 'images/unnamed.png'}" alt="${p.title}">
+                        <h3 class="text-xl font-playfair mt-4 text-white">${p.title}</h3>
+                        <p class="text-gold font-bold mt-2">${p.price}</p>
+                        <span class="remove-btn" onclick="removeFromCompare('${p.id}')">Remove</span>
+                    </td>
+                `;
+            });
+            html += '</tr></thead><tbody>';
+
+            // Feature Rows
+            const features = [
+                { label: 'Movement', key: 'movement', default: 'Automatic Mechanical' },
+                { label: 'Case Size', key: 'caseSize', default: '42mm' },
+                { label: 'Water Resistance', key: 'waterResist', default: '100m' },
+                { label: 'Strap Material', key: 'strap', default: 'Premium Leather' },
+                { label: 'Warranty', key: 'warranty', default: '2 Years International' }
+            ];
+
+            features.forEach(feat => {
+                html += `<tr><th>${feat.label}</th>`;
+                productsToCompare.forEach(p => {
+                    // Check if 'specs' object exists, otherwise use defaults/mock
+                    const val = p.specs && p.specs[feat.key] ? p.specs[feat.key] : (p[feat.key] || feat.default);
+                    html += `<td class="text-gray-300">${val}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            // Action Row
+            html += '<tr><th>Action</th>';
+            productsToCompare.forEach(p => {
+                html += `<td><button onclick="addToCart('${p.id}')" class="bg-white/10 hover:bg-gold hover:text-black text-white px-6 py-2 rounded transition">Add to Cart</button></td>`;
+            });
+            html += '</tr></tbody></table>';
+
+            container.innerHTML = html;
+        }
+
+        function removeFromCompare(id) {
+            let list = JSON.parse(localStorage.getItem('dialcraft_compare')) || [];
+            list = list.filter(itemId => itemId !== id);
+            localStorage.setItem('dialcraft_compare', JSON.stringify(list));
+            renderComparison();
+        }
+
+        function clearComparison() {
+            localStorage.removeItem('dialcraft_compare');
+            renderComparison();
+        }
+
+        function addToCart(id) {
+             // Re-use standard add to cart logic or simple push
+             let cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+             const allProducts = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+             const product = allProducts.find(p => p.id === id);
+             if(product) {
+                 const existing = cart.find(item => item.id === id);
+                 if(existing) existing.quantity++;
+                 else cart.push({...product, quantity: 1});
+                 localStorage.setItem('dialcraft_cart', JSON.stringify(cart));
+                 alert('Added to cart');
+             }
+        }
+    </script>
+</body>
+</html>

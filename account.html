@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elite Account | Dialcraft Watches</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #050505;
+      --surface: #111111;
+      --surface-light: #1a1a1a;
+      --primary: #d4af37;
+      --primary-rgb: 212, 175, 55;
+      --primary-dark: #b8860b;
+      --primary-glow: 0 0 20px rgba(var(--primary-rgb), 0.3);
+      --accent: #f5e6be;
+      --text: #ffffff;
+      --text-dim: #a0a0a0;
+      --error: #ff4d4d;
+      --success: #00ff88;
+      --glass: rgba(10, 10, 10, 0.8);
+      --transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.5);
+      --radius-lg: 24px;
+      --radius-md: 12px;
+      --radius-sm: 4px;
+      --radius-pill: 100px;
+      --section-spacing: 120px;
+      --floating-z: 2000;
+      --modal-z: 3000;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    .logo {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Custom Cursor */
+    .custom-cursor {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+      background: rgba(var(--primary-rgb), 0.1);
+      backdrop-filter: blur(2px);
+    }
+
+    /* Preloader */
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5000;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+
+    .loader-content {
+      text-align: center;
+    }
+
+    .loader-logo {
+      font-family: 'Playfair Display';
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+      letter-spacing: 5px;
+    }
+
+    .loader-bar-container {
+      width: 200px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .loader-bar {
+      width: 100%;
+      height: 100%;
+      background: var(--primary);
+      transform: translateX(-100%);
+      animation: loading 2s infinite ease-in-out;
+    }
+
+    @keyframes loading {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      50% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 2000;
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      background: transparent;
+    }
+
+    header.scrolled {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      padding: 15px 60px;
+      border-bottom: 1px solid rgba(var(--primary-rgb), 0.1);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 35px;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      font-weight: 500;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: var(--primary);
+    }
+
+    .btn-nav-book {
+      background: var(--primary);
+      color: #000 !important;
+      padding: 10px 25px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      border: 1px solid var(--primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn-nav-book:hover {
+      background: transparent;
+      color: var(--primary) !important;
+    }
+
+    /* Account Dashboard */
+    .account-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 120px 40px 80px;
+    }
+
+    .account-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .account-header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .account-header p {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+    }
+
+    .account-grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 1024px) {
+      .account-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sidebar */
+    .account-sidebar {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      height: fit-content;
+    }
+
+    .user-profile {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+      color: #000;
+    }
+
+    .user-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .user-tier {
+      font-size: 0.9rem;
+      color: var(--primary);
+      background: rgba(212, 175, 55, 0.1);
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+    }
+
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+
+    .sidebar-menu a {
+      display: block;
+      padding: 15px 20px;
+      color: var(--text-dim);
+      text-decoration: none;
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(212, 175, 55, 0.1);
+      color: var(--primary);
+    }
+
+    /* Main Content */
+    .account-main {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+
+    .content-section {
+      display: none;
+      padding: 40px;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: between;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    /* Order History */
+    .orders-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .order-card {
+      background: var(--surface-light);
+      border-radius: var(--radius-md);
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .order-id {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .order-date {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    .order-status {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .order-status.delivered {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--success);
+    }
+
+    .order-status.processing {
+      background: rgba(212, 175, 55, 0.1);
+      color: var(--primary);
+    }
+
+    .order-items {
+      margin-bottom: 20px;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .order-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+    }
+
+    .order-item-info h4 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .order-item-info p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    .order-total {
+      text-align: right;
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    /* Spin Rewards */
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .reward-card {
+      background: var(--surface-light);
+      border-radius: var(--radius-md);
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .reward-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 1.5rem;
+      color: #000;
+    }
+
+    .reward-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+
+    .reward-desc {
+      color: var(--text-dim);
+      margin-bottom: 15px;
+    }
+
+    .reward-meta {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* Coupons */
+    .coupons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .coupon-card {
+      background: linear-gradient(135deg, var(--surface-light) 0%, rgba(212, 175, 55, 0.05) 100%);
+      border-radius: var(--radius-md);
+      padding: 25px;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .coupon-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .coupon-code {
+      font-family: monospace;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .coupon-discount {
+      font-size: 1.1rem;
+      margin-bottom: 15px;
+    }
+
+    .coupon-expiry {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .coupon-used {
+      opacity: 0.6;
+    }
+
+    .coupon-used .coupon-code {
+      text-decoration: line-through;
+    }
+
+    /* Addresses */
+    .addresses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .address-card {
+      background: var(--surface-light);
+      border-radius: var(--radius-md);
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .address-type {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .address-content {
+      line-height: 1.6;
+      color: var(--text-dim);
+    }
+
+    .address-actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-address {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-edit {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-edit:hover {
+      background: var(--primary);
+      color: #000;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid var(--error);
+      color: var(--error);
+    }
+
+    .btn-delete:hover {
+      background: var(--error);
+      color: #fff;
+    }
+
+    /* Profile Settings */
+    .settings-form {
+      max-width: 600px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid #333;
+      padding: 15px;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+    }
+
+    .btn-save {
+      background: var(--primary);
+      color: #000;
+      padding: 15px 30px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-save:hover {
+      background: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Wishlist */
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .recommendations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .wishlist-item {
+      background: var(--surface-light);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+    }
+
+    .wishlist-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .wishlist-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .wishlist-item-content {
+      padding: 20px;
+    }
+
+    .wishlist-item h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .wishlist-item p {
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .wishlist-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-wishlist {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-add-cart {
+      background: var(--primary);
+      color: #000;
+      border: 1px solid var(--primary);
+    }
+
+    .btn-add-cart:hover {
+      background: #fff;
+    }
+
+    .btn-remove-wishlist {
+      background: transparent;
+      border: 1px solid var(--error);
+      color: var(--error);
+    }
+
+    .btn-remove-wishlist:hover {
+      background: var(--error);
+      color: #fff;
+    }
+
+    /* Empty States */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .account-container {
+        padding: 100px 20px 40px;
+      }
+
+      .account-grid {
+        gap: 20px;
+      }
+
+      .account-sidebar {
+        padding: 20px;
+      }
+
+      .content-section {
+        padding: 20px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Custom Cursor -->
+  <div class="custom-cursor"></div>
+
+  <!-- Preloader -->
+  <div class="preloader">
+    <div class="loader-content">
+      <div class="loader-logo">Dial<span>Craft</span></div>
+      <div class="loader-bar-container">
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header id="main-header">
+    <a href="index.html" class="logo">Dialcraft Watches</a>
+    <nav class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="all-watches.html">Collection</a>
+      <a href="about.html">About</a>
+      <a href="support.html">Support</a>
+      <a href="account.html" style="color: #fff;">Account</a>
+      <div class="cart-icon" onclick="window.location.href='cart.html'"></div>
+    </nav>
+  </header>
+
+  <!-- Account Dashboard -->
+  <div class="account-container">
+    <div class="account-header">
+      <h1>Elite Account</h1>
+      <p>Your personal horological sanctuary</p>
+    </div>
+
+    <div class="account-grid">
+      <!-- Sidebar -->
+      <div class="account-sidebar">
+        <div class="user-profile">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="user-name" id="user-name">Guest</div>
+          <div class="user-tier" id="user-tier">Standard</div>
+        </div>
+
+        <ul class="sidebar-menu">
+          <li><a href="#orders" class="menu-link active" data-section="orders"><i class="fas fa-shopping-bag"></i> Order
+              History</a></li>
+          <li><a href="#rewards" class="menu-link" data-section="rewards"><i class="fas fa-gift"></i> Spin Rewards</a>
+          </li>
+          <li><a href="#coupons" class="menu-link" data-section="coupons"><i class="fas fa-ticket-alt"></i> Coupons</a>
+          </li>
+          <li><a href="#addresses" class="menu-link" data-section="addresses"><i class="fas fa-map-marker-alt"></i>
+              Addresses</a></li>
+          <li><a href="#profile" class="menu-link" data-section="profile"><i class="fas fa-user-cog"></i> Profile
+              Settings</a></li>
+          <li><a href="#wishlist" class="menu-link" data-section="wishlist"><i class="fas fa-heart"></i> Wishlist</a>
+          </li>
+          <li><a href="#recommendations" class="menu-link" data-section="recommendations"><i class="fas fa-lightbulb"></i> Recommendations</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="account-main">
+        <!-- Order History -->
+        <div id="orders" class="content-section active">
+          <div class="section-header">
+            <h2 class="section-title">Order History</h2>
+          </div>
+          <div class="orders-grid" id="orders-container">
+            <div class="empty-state">
+              <i class="fas fa-shopping-bag"></i>
+              <h3>No Orders Yet</h3>
+              <p>Your horological journey begins with your first acquisition.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Spin Rewards -->
+        <div id="rewards" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">Spin Rewards</h2>
+          </div>
+          <div class="rewards-grid" id="rewards-container">
+            <div class="empty-state">
+              <i class="fas fa-gift"></i>
+              <h3>No Rewards Yet</h3>
+              <p>Complete your first order to unlock the Lucky Spin experience.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coupons -->
+        <div id="coupons" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">Active Coupons</h2>
+          </div>
+          <div class="coupons-grid" id="coupons-container">
+            <div class="empty-state">
+              <i class="fas fa-ticket-alt"></i>
+              <h3>No Coupons Available</h3>
+              <p>Earn coupons through Lucky Spin rewards or special promotions.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Addresses -->
+        <div id="addresses" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">Saved Addresses</h2>
+            <button class="btn-save" onclick="addNewAddress()">Add New Address</button>
+          </div>
+          <div class="addresses-grid" id="addresses-container">
+            <div class="empty-state">
+              <i class="fas fa-map-marker-alt"></i>
+              <h3>No Addresses Saved</h3>
+              <p>Add delivery addresses for faster checkout experience.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Settings -->
+        <div id="profile" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">Profile Settings</h2>
+          </div>
+          <form class="settings-form" id="profile-form">
+            <div class="form-group">
+              <label for="profile-name">Full Name</label>
+              <input type="text" id="profile-name" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+              <label for="profile-email">Email Address</label>
+              <input type="email" id="profile-email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+              <label for="profile-phone">Phone Number</label>
+              <input type="tel" id="profile-phone" placeholder="Enter your phone number">
+            </div>
+            <div class="form-group">
+              <label for="profile-tier">Membership Tier</label>
+              <select id="profile-tier">
+                <option value="standard">Standard</option>
+                <option value="elite">Elite</option>
+                <option value="vip">VIP</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-save">Save Changes</button>
+          </form>
+        </div>
+
+        <!-- Wishlist -->
+        <div id="wishlist" class="content-section">
+          <div class="section-header">
+            <h2 class="section-title">My Wishlist</h2>
+          </div>
+          <div class="wishlist-grid" id="wishlist-container">
+            <div class="empty-state">
+              <i class="fas fa-heart"></i>
+              <h3>Wishlist is Empty</h3>
+              <p>Save your favorite timepieces for later consideration.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global Components Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      // Custom Cursor
+      const cursor = document.querySelector('.custom-cursor');
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
+      });
+
+      // Preloader
+      const preloader = document.querySelector('.preloader');
+      setTimeout(() => {
+        preloader.style.opacity = '0';
+        preloader.style.visibility = 'hidden';
+      }, 1500);
+
+      // Header Scroll
+      const header = document.getElementById('main-header');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
+      });
+
+      // Initialize Navigation (Moved here to ensure it works even if data fails)
+      document.querySelectorAll('.menu-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const section = e.target.closest('a').dataset.section;
+          switchSection(section);
+        });
+      });
+
+      // Initialize Account
+      try {
+        initializeAccount();
+      } catch (error) {
+        console.error("Account initialization failed:", error);
+      }
+    });
+
+    // Account Data Management
+    let currentUser = null;
+    let orders = [];
+    let rewards = [];
+    let coupons = [];
+    let addresses = [];
+    let wishlist = [];
+    let wishlistStore = [];
+
+    function initializeAccount() {
+      // Load user data
+      const currentUserId = localStorage.getItem('current_user_id');
+      const users = JSON.parse(localStorage.getItem('dialcraft_users')) || [];
+      
+      if (currentUserId) {
+          currentUser = users.find(u => u.id === currentUserId);
+      }
+      
+      if (!currentUser) {
+          currentUser = JSON.parse(localStorage.getItem('dialcraft_user'));
+      }
+
+      if (!currentUser) {
+        currentUser = {
+          name: 'Guest',
+          email: '',
+          tier: 'Standard',
+          id: 'guest_' + Date.now()
+        };
+        // Persist guest for this session
+        localStorage.setItem('dialcraft_user', JSON.stringify(currentUser));
+      }
+
+      // Load account data
+      const allOrders = JSON.parse(localStorage.getItem('dialcraft_orders')) || [];
+      const allRewards = JSON.parse(localStorage.getItem('dialcraft_spin_rewards')) || [];
+      const allCoupons = JSON.parse(localStorage.getItem('dialcraft_coupons')) || [];
+      const allAddresses = JSON.parse(localStorage.getItem('dialcraft_addresses')) || [];
+      const allWishlist = JSON.parse(localStorage.getItem('dialcraft_wishlist')) || [];
+      const allProducts = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+
+      // Filter data for current user
+      // We assume data without userId belongs to no one or legacy (hidden for safety in multi-user context)
+      // or we could show it to everyone. Let's filter strictly for now to ensure privacy.
+      orders = allOrders.filter(item => item.userId === currentUser.id);
+      rewards = allRewards.filter(item => item.userId === currentUser.id);
+      coupons = allCoupons.filter(item => item.userId === currentUser.id);
+      addresses = allAddresses.filter(item => item.userId === currentUser.id);
+      const normalizedWishlist = allWishlist.map(entry => {
+        if (typeof entry === 'string') {
+          const product = allProducts.find(item => item.title === entry) || {};
+          return { ...product, title: entry, userId: currentUser.id };
+        }
+        if (!entry.userId) {
+          return { ...entry, userId: currentUser.id };
+        }
+        return entry;
+      });
+      wishlistStore = normalizedWishlist;
+      localStorage.setItem('dialcraft_wishlist', JSON.stringify(wishlistStore));
+      wishlist = wishlistStore.filter(item => item.userId === currentUser.id);
+
+      // Update UI
+      updateUserProfile();
+      renderOrders();
+      renderRewards();
+      renderCoupons();
+      renderAddresses();
+      renderWishlist();
+      renderRecommendations();
+
+      // Profile form
+      const profileForm = document.getElementById('profile-form');
+      if (profileForm) {
+        profileForm.addEventListener('submit', saveProfile);
+      }
+    }
+
+    function updateUserProfile() {
+      document.getElementById('user-name').textContent = currentUser.name;
+      document.getElementById('user-tier').textContent = currentUser.tier;
+      document.getElementById('profile-name').value = currentUser.name;
+      document.getElementById('profile-email').value = currentUser.email;
+      document.getElementById('profile-phone').value = currentUser.phone || '';
+      document.getElementById('profile-tier').value = currentUser.tier.toLowerCase();
+    }
+
+    function switchSection(sectionId) {
+      // Update menu
+      document.querySelectorAll('.menu-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+
+      // Update content
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+    }
+
+    function renderOrders() {
+      const container = document.getElementById('orders-container');
+      if (orders.length === 0) return;
+
+      container.innerHTML = orders.map(order => `
+        <div class="order-card">
+          <div class="order-header">
+            <div class="order-id">${order.id}</div>
+            <div class="order-date">${new Date(order.date).toLocaleDateString()}</div>
+            <div class="order-status ${order.status}">${order.status}</div>
+          </div>
+          <div class="order-items">
+            ${order.items.map(item => `
+              <div class="order-item">
+                <img src="${item.img || item.image}" alt="${item.title}">
+                <div class="order-item-info">
+                  <h4>${item.title}</h4>
+                  <p>${item.price}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="order-total">Total: ৳${(order.total || (order.totals && order.totals.total) || 0).toLocaleString()}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderRewards() {
+      const container = document.getElementById('rewards-container');
+      if (rewards.length === 0) return;
+
+      container.innerHTML = rewards.map(reward => `
+        <div class="reward-card">
+          <div class="reward-icon">
+            <i class="fas fa-gift"></i>
+          </div>
+          <div class="reward-title">${reward.label}</div>
+          <div class="reward-desc">${reward.couponCode ? `Coupon: ${reward.couponCode}` : 'Physical reward'}</div>
+          <div class="reward-meta">${new Date(reward.time).toLocaleDateString()}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderCoupons() {
+      const container = document.getElementById('coupons-container');
+      const activeCoupons = coupons.filter(coupon => !coupon.used && Date.now() < coupon.expiry);
+
+      if (activeCoupons.length === 0) return;
+
+      container.innerHTML = activeCoupons.map(coupon => `
+        <div class="coupon-card ${coupon.used ? 'coupon-used' : ''}">
+          <div class="coupon-code">${coupon.code}</div>
+          <div class="coupon-discount">${coupon.percent}% Off</div>
+          <div class="coupon-expiry">Valid until ${new Date(coupon.expiry).toLocaleDateString()}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderAddresses() {
+      const container = document.getElementById('addresses-container');
+      if (addresses.length === 0) return;
+
+      container.innerHTML = addresses.map((address, index) => `
+        <div class="address-card">
+          <div class="address-type">${address.type || 'Home'}</div>
+          <div class="address-content">
+            ${address.street}<br>
+            ${address.city}, ${address.zip}<br>
+            ${address.country || 'Bangladesh'}
+          </div>
+          <div class="address-actions">
+            <button class="btn-address btn-edit" onclick="editAddress(${index})">Edit</button>
+            <button class="btn-address btn-delete" onclick="deleteAddress(${index})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderWishlist() {
+      const container = document.getElementById('wishlist-container');
+      if (wishlist.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-heart"></i>
+            <h3>Wishlist is Empty</h3>
+            <p>Save your favorite timepieces for later consideration.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = wishlist.map((item, index) => `
+        <div class="wishlist-item">
+          <img src="${item.img || item.image}" alt="${item.title}">
+          <div class="wishlist-item-content">
+            <h3>${item.title}</h3>
+            <p>${item.price}</p>
+            <div class="wishlist-actions">
+              <button class="btn-wishlist btn-add-cart" onclick="moveToCart(${index})">Add to Cart</button>
+              <button class="btn-wishlist btn-remove-wishlist" onclick="removeFromWishlist(${index})">Remove</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderRecommendations() {
+      const container = document.getElementById('recommendations-container');
+      const allProducts = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+
+      if (allProducts.length === 0) return;
+
+      // Generate recommendations based on user behavior
+      let recommendations = [];
+
+      // 1. Based on wishlist items
+      if (wishlist.length > 0) {
+        const wishlistCategories = [...new Set(wishlist.map(item => getProductCategory(item)))];
+        recommendations = allProducts.filter(product =>
+          wishlistCategories.includes(getProductCategory(product)) &&
+          !wishlist.some(w => w.title === product.title)
+        );
+      }
+
+      // 2. Based on order history
+      if (orders.length > 0 && recommendations.length < 4) {
+        const orderedCategories = [...new Set(orders.flatMap(order =>
+          order.items.map(item => getProductCategory(item))
+        ))];
+        const orderBasedRecs = allProducts.filter(product =>
+          orderedCategories.includes(getProductCategory(product)) &&
+          !orders.some(order => order.items.some(item => item.title === product.title))
+        );
+        recommendations = [...recommendations, ...orderBasedRecs];
+      }
+
+      // 3. Fallback to popular items (high ratings or featured)
+      if (recommendations.length < 4) {
+        const popularItems = allProducts.filter(product =>
+          product.category === 'luxury' || product.category === 'exclusive'
+        );
+        recommendations = [...recommendations, ...popularItems];
+      }
+
+      // Remove duplicates and limit to 6
+      recommendations = [...new Set(recommendations)].slice(0, 6);
+
+      if (recommendations.length === 0) return;
+
+      container.innerHTML = recommendations.map(product => `
+        <div class="wishlist-item">
+          <img src="${product.img}" alt="${product.title}">
+          <div class="wishlist-item-content">
+            <h3>${product.title}</h3>
+            <p>${product.price}</p>
+            <div class="wishlist-actions">
+              <button class="btn-wishlist btn-add-cart" onclick="addToCart('${product.title.replace(/'/g, "\\'")}')">Add to Cart</button>
+              <button class="btn-wishlist btn-remove-wishlist" onclick="window.location.href='product.html?id=${product.id || allProducts.indexOf(product)}'">View Details</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getProductCategory(product) {
+      const title = product.title.toLowerCase();
+      if (title.includes('naruto') || title.includes('saiyan') || title.includes('dragon ball')) return 'anime';
+      if (title.includes('titan') || title.includes('collab') || title.includes('edition')) return 'collab';
+      return 'luxury';
+    }
+
+    function saveProfile(e) {
+      e.preventDefault();
+      currentUser.name = document.getElementById('profile-name').value;
+      currentUser.email = document.getElementById('profile-email').value;
+      currentUser.phone = document.getElementById('profile-phone').value;
+      currentUser.tier = document.getElementById('profile-tier').value;
+
+      localStorage.setItem('dialcraft_user', JSON.stringify(currentUser));
+      updateUserProfile();
+      alert('Profile updated successfully!');
+    }
+
+    function addNewAddress() {
+      const address = {
+        type: 'Home',
+        street: '123 Example Street',
+        city: 'Dhaka',
+        zip: '1200',
+        country: 'Bangladesh'
+      };
+      addresses.push(address);
+      localStorage.setItem('dialcraft_addresses', JSON.stringify(addresses));
+      renderAddresses();
+    }
+
+    function editAddress(index) {
+      // Simple edit - in real app would open modal
+      alert('Edit address functionality would open a modal here');
+    }
+
+    function deleteAddress(index) {
+      if (confirm('Delete this address?')) {
+        addresses.splice(index, 1);
+        localStorage.setItem('dialcraft_addresses', JSON.stringify(addresses));
+        renderAddresses();
+      }
+    }
+
+    function addToCart(title) {
+      const products = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+      const wishlistItem = wishlist.find(item => item.title === title);
+      const product = wishlistItem || products.find(item => item.title === title);
+
+      if (!product) {
+        alert('Product not found.');
+        return;
+      }
+
+      let cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      const existingItem = cart.find(item => (product.id && item.id === product.id) || item.title === product.title);
+
+      if (existingItem) {
+        existingItem.quantity = (existingItem.quantity || 1) + 1;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+
+      localStorage.setItem('dialcraft_cart', JSON.stringify(cart));
+      alert(`${product.title} added to cart!`);
+    }
+
+    function removeWishlistItem(item) {
+      if (!item) return;
+      const itemId = item.id || item.productId;
+      wishlistStore = wishlistStore.filter(entry => {
+        if (entry.userId !== currentUser.id) return true;
+        if (itemId) {
+          return (entry.id || entry.productId) !== itemId;
+        }
+        return entry.title !== item.title;
+      });
+      wishlist = wishlistStore.filter(entry => entry.userId === currentUser.id);
+      localStorage.setItem('dialcraft_wishlist', JSON.stringify(wishlistStore));
+    }
+
+    function moveToCart(index) {
+      const item = wishlist[index];
+      if (!item) return;
+      let cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      const existingItem = cart.find(cartItem => (item.id && cartItem.id === item.id) || cartItem.title === item.title);
+      if (existingItem) {
+        existingItem.quantity = (existingItem.quantity || 1) + 1;
+      } else {
+        cart.push({ ...item, quantity: 1 });
+      }
+      localStorage.setItem('dialcraft_cart', JSON.stringify(cart));
+      removeWishlistItem(item);
+      renderWishlist();
+      alert(`${item.title} added to cart!`);
+    }
+
+    function removeFromWishlist(index) {
+      const item = wishlist[index];
+      removeWishlistItem(item);
+      renderWishlist();
+    }
+
+    // Global functions for external access
+    window.switchSection = switchSection;
+  </script>
+</body>
+
+</html>

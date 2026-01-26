@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support | Dialcraft Watches</title>
+  <meta name="description" content="Get help with your Dialcraft watch purchase, warranty, and care instructions." />
+  <link rel="icon" href="favicon.ico" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* General Styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #0d0d0d;
+      color: #f5f5f5;
+      font-family: "Poppins", sans-serif;
+      padding-top: 90px;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Header/Navbar */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #d4af37;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      position: relative;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #d4af37;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background-color: #d4af37;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .nav-menu a:hover {
+      color: #fff;
+    }
+
+    .nav-menu a:hover::after {
+      width: 100%;
+    }
+
+    /* Support Container */
+    .support-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .support-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .support-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2.5rem;
+      color: #d4af37;
+      margin-bottom: 15px;
+    }
+
+    .support-subtitle {
+      font-size: 1.1rem;
+      color: #ccc;
+    }
+
+    /* Support Grid */
+    .support-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    /* Quick Help */
+    .quick-help {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      height: fit-content;
+    }
+
+    .quick-help-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+      color: #d4af37;
+      margin-bottom: 25px;
+    }
+
+    .help-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .help-links li {
+      margin-bottom: 15px;
+    }
+
+    .help-links a {
+      display: block;
+      padding: 15px 20px;
+      background: #2a2a2a;
+      border-radius: 8px;
+      color: #f5f5f5;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .help-links a:hover {
+      background: rgba(212, 175, 55, 0.1);
+      color: #d4af37;
+      transform: translateX(5px);
+    }
+
+    .help-links a i {
+      margin-right: 10px;
+      color: #d4af37;
+    }
+
+    /* Contact Form */
+    .contact-section {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .contact-title {
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+      color: #d4af37;
+      margin-bottom: 25px;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-label {
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #f5f5f5;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      padding: 15px;
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 8px;
+      color: #f5f5f5;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: #d4af37;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-submit {
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      color: #0d0d0d;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .form-submit:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      margin-bottom: 60px;
+    }
+
+    .faq-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2rem;
+      color: #d4af37;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .faq-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .faq-item {
+      background: #1a1a1a;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 20px 25px;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      color: #f5f5f5;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    .faq-question i {
+      color: #d4af37;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      padding: 0 25px 25px;
+      color: #ccc;
+      line-height: 1.6;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+    }
+
+    /* Contact Info */
+    .contact-info {
+      background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .contact-info-title {
+      font-family: "Playfair Display", serif;
+      font-size: 2rem;
+      color: #d4af37;
+      margin-bottom: 30px;
+    }
+
+    .contact-methods {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .contact-method {
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .contact-method:hover {
+      transform: translateY(-5px);
+      background: rgba(212, 175, 55, 0.1);
+    }
+
+    .contact-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 1.5rem;
+      color: #0d0d0d;
+    }
+
+    .contact-title {
+      font-size: 1.2rem;
+      color: #d4af37;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .contact-detail {
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .support-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-methods {
+        grid-template-columns: 1fr;
+      }
+
+      .faq-question {
+        font-size: 1rem;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .support-container {
+      animation: fadeIn 0.8s ease-out;
+    }
+  </style>
+</head>
+
+<body>
+  <header id="main-header">
+    <div class="logo">Dialcraft Watches</div>
+    <nav class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="all-watches.html">Collection</a>
+      <a href="about.html">About</a>
+      <a href="support.html" style="color: #fff;">Support</a>
+      <a href="account.html">Account</a>
+      <div class="cart-icon" onclick="window.location.href='cart.html'">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cart-count">0</span>
+      </div>
+    </nav>
+  </header>
+
+  <div class="support-container">
+    <div class="support-header">
+      <h1 class="support-title">Support Center</h1>
+      <p class="support-subtitle">We're here to help you with your Dialcraft experience</p>
+    </div>
+
+    <div class="support-grid">
+      <!-- Quick Help -->
+      <div class="quick-help">
+        <h2 class="quick-help-title">Quick Help</h2>
+        <ul class="help-links">
+          <li><a href="#warranty"><i class="fas fa-shield-alt"></i> Warranty Information</a></li>
+          <li><a href="#shipping"><i class="fas fa-truck"></i> Shipping & Delivery</a></li>
+          <li><a href="#returns"><i class="fas fa-undo"></i> Returns & Exchanges</a></li>
+          <li><a href="#care"><i class="fas fa-tools"></i> Watch Care Guide</a></li>
+          <li><a href="#sizing"><i class="fas fa-ruler"></i> Size Guide</a></li>
+          <li><a href="#track"><i class="fas fa-search"></i> Track Your Order</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact-section">
+        <h2 class="contact-title">Contact Us</h2>
+        <form class="contact-form" id="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" class="form-input" id="first-name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" class="form-input" id="last-name" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" id="email" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject</label>
+            <select class="form-select" id="subject" required>
+              <option value="">Select a subject</option>
+              <option value="order">Order Inquiry</option>
+              <option value="warranty">Warranty Claim</option>
+              <option value="returns">Returns & Exchanges</option>
+              <option value="product">Product Information</option>
+              <option value="technical">Technical Support</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Order Number (Optional)</label>
+            <input type="text" class="form-input" id="order-number">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-textarea" id="message" required
+              placeholder="Please describe your inquiry in detail..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <button class="faq-question">
+            What is your warranty policy?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>All Dialcraft watches come with a 2-year international warranty covering manufacturing defects. The
+              warranty includes free repairs for any issues with the movement, case, or dial. Water resistance and
+              crystal damage are not covered under warranty. Please keep your purchase receipt as proof of warranty.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            How long does shipping take?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Orders within Bangladesh are delivered within 3-5 business days. International orders take 7-14 business
+              days depending on the destination. You'll receive a tracking number via email once your order ships.
+              Express shipping options are available at checkout.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I return or exchange my watch?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>We offer a 30-day return policy for unworn watches in original condition with all packaging and
+              documentation. Custom-engraved watches cannot be returned. Exchanges are accepted within 14 days. Contact
+              our support team to initiate a return or exchange.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            How do I care for my watch?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Avoid extreme temperatures, magnetic fields, and strong impacts. Clean with a soft cloth and mild soap
+              solution. Have your watch serviced every 3-5 years by a professional. Water-resistant watches should be
+              rinsed with fresh water after exposure to salt water.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Do you offer customization?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! We offer various customization options including engraving, strap changes, and dial modifications.
+              Visit our customization page or contact us for more details. Custom orders typically take 2-3 weeks to
+              complete.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            What payment methods do you accept?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>We accept bKash, Nagad, credit/debit cards, and cash on delivery. All payments are processed securely
+              through SSL encryption. For international orders, we also accept PayPal and bank transfers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="contact-info">
+      <h2 class="contact-info-title">Get in Touch</h2>
+      <div class="contact-methods">
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3 class="contact-title">Email Support</h3>
+          <p class="contact-detail">support@dialcraft.com</p>
+          <p class="contact-detail">24/7 Response</p>
+        </div>
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-phone"></i>
+          </div>
+          <h3 class="contact-title">Phone Support</h3>
+          <p class="contact-detail">+880 1234-567890</p>
+          <p class="contact-detail">Mon-Fri 9AM-6PM</p>
+        </div>
+        <div class="contact-method">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <h3 class="contact-title">Visit Us</h3>
+          <p class="contact-detail">123 Luxury Lane</p>
+          <p class="contact-detail">Dhaka, Bangladesh</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // FAQ Accordion
+      const faqItems = document.querySelectorAll('.faq-item');
+
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+          const isActive = item.classList.contains('active');
+          faqItems.forEach(i => i.classList.remove('active'));
+          if (!isActive) {
+            item.classList.add('active');
+          }
+        });
+      });
+
+      // Contact Form
+      const contactForm = document.getElementById('contact-form');
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const formData = {
+          firstName: document.getElementById('first-name').value,
+          lastName: document.getElementById('last-name').value,
+          email: document.getElementById('email').value,
+          subject: document.getElementById('subject').value,
+          orderNumber: document.getElementById('order-number').value,
+          message: document.getElementById('message').value,
+          timestamp: new Date().toISOString()
+        };
+
+        // Store in localStorage for demo (in real app, send to server)
+        const inquiries = JSON.parse(localStorage.getItem('dialcraft_inquiries')) || [];
+        inquiries.push(formData);
+        localStorage.setItem('dialcraft_inquiries', JSON.stringify(inquiries));
+
+        alert('Thank you for your message! We\'ll get back to you within 24 hours.');
+        contactForm.reset();
+      });
+
+      // Quick help links
+      document.querySelectorAll('.help-links a').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = e.target.closest('a').getAttribute('href').substring(1);
+
+          // Scroll to FAQ section and open relevant item
+          const faqSection = document.querySelector('.faq-section');
+          faqSection.scrollIntoView({ behavior: 'smooth' });
+
+          // Find and open relevant FAQ
+          const faqItems = document.querySelectorAll('.faq-item');
+          faqItems.forEach((item, index) => {
+            if (target === 'warranty' && index === 0) item.classList.add('active');
+            else if (target === 'shipping' && index === 1) item.classList.add('active');
+            else if (target === 'returns' && index === 2) item.classList.add('active');
+            else if (target === 'care' && index === 3) item.classList.add('active');
+            else item.classList.remove('active');
+          });
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

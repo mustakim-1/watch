@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChronoFit - Live AR Try-On</title>
+    <title>Dialcraft Watches | Live Atelier Try-On</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
@@ -16,10 +16,10 @@
 
     <style>
         :root {
-            --color-background-start: #111827; --color-background-end: #000000;
-            --color-container: #1F2937; --color-panel: #374151;
-            --color-border: #4B5563; --color-text-primary: #F3F4F6;
-            --color-accent: #FBBF24; --color-accent-dark: #D97706; --color-accent-glow: rgba(251, 191, 36, 0.3);
+            --color-background-start: #050505; --color-background-end: #0b0b0b;
+            --color-container: #0f0f0f; --color-panel: #141414;
+            --color-border: rgba(212, 175, 55, 0.25); --color-text-primary: #F5F5F5;
+            --color-accent: #D4AF37; --color-accent-dark: #B8860B; --color-accent-glow: rgba(212, 175, 55, 0.35);
             --font-display: 'Playfair Display', serif; --font-body: 'Montserrat', sans-serif;
         }
         body { background-color: var(--color-background-start); background-image: linear-gradient(to br, var(--color-background-start), var(--color-background-end)); font-family: var(--font-body); color: var(--color-text-primary); }
@@ -28,7 +28,7 @@
         #webcam { visibility: hidden; } /* Hide the raw video feed, we only need its data */
         #tryOnCanvas { cursor: grab; }
         #tryOnCanvas.dragging { cursor: grabbing; }
-        .panel { background-color: var(--color-panel); border: 1px solid var(--color-border); box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2); }
+        .panel { background-color: var(--color-panel); border: 1px solid var(--color-border); box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.4); }
         .font-display { font-family: var(--font-display); }
         .spinner { border: 6px solid rgba(255, 255, 255, 0.1); border-left-color: var(--color-accent); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -46,12 +46,12 @@
     
     <div class="bg-gray-800 border border-gray-700 shadow-2xl rounded-3xl p-6 sm:p-10 w-full max-w-7xl flex flex-col gap-8">
         <header class="text-center">
-            <h1 class="text-5xl md:text-7xl font-extrabold text-amber-400 font-display leading-tight">ChronoFit Live ✨</h1>
-            <p class="text-lg md:text-xl text-gray-300 mt-4 font-body">The future of watch try-on. Smooth, stable, and live.</p>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-amber-400 font-display leading-tight">Dialcraft Watches Atelier</h1>
+            <p class="text-lg md:text-xl text-gray-300 mt-4 font-body">Live try-on. Quiet control. Precision in motion.</p>
         </header>
 
         <section class="panel p-6 rounded-2xl">
-            <label class="block text-2xl md:text-3xl font-bold text-amber-400 mb-6 font-display">1. Select Your Watch</label>
+            <label class="block text-2xl md:text-3xl font-bold text-amber-400 mb-6 font-display">1. Select Your Dial</label>
             <div id="watchFaceOptions" class="scrollable-container flex flex-nowrap gap-6 overflow-x-auto">
                  <img src="images/unnamed-removebg-preview.png" alt="Indigo Dress Watch" class="option-image" data-watch-src="images/unnamed-removebg-preview.png">
                 <img src="https://via.placeholder.com/300x300/F39C12/FFFFFF?text=Vintage+Gold" alt="Vintage Gold Watch Face" class="option-image" data-watch-src="https://via.placeholder.com/300x300/F39C12/FFFFFF?text=Vintage+Gold">
@@ -67,9 +67,9 @@
                 <canvas id="tryOnCanvas"></canvas>
                 <div id="loadingOverlay" class="absolute inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex flex-col items-center justify-center text-center p-4">
                     <div id="loadingSpinner" class="spinner hidden"></div>
-                    <p id="loadingText" class="text-gray-200 text-2xl font-semibold font-display mt-5">Ready to begin your live try-on.</p>
+                    <p id="loadingText" class="text-gray-200 text-2xl font-semibold font-display mt-5">Ready to begin your atelier preview.</p>
                     <button id="startCamBtn" class="mt-6 bg-gradient-to-r from-amber-400 to-amber-600 text-gray-900 py-4 px-8 rounded-xl hover:from-amber-500 hover:to-amber-700 transition duration-300 ease-in-out font-bold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                        Start Camera
+                        Start Live View
                     </button>
                 </div>
             </div>
@@ -328,7 +328,7 @@
             tempCtx.restore();
 
             const link = document.createElement('a');
-            link.download = 'ChronoFit-Live-Snapshot.png';
+            link.download = 'Dialcraft-Watches-Atelier-Snapshot.png';
             link.href = tempCanvas.toDataURL('image/png');
             link.click();
         });
@@ -337,7 +337,7 @@
         window.onload = () => {
             const firstWatch = document.querySelector('#watchFaceOptions .option-image');
             if(firstWatch) firstWatch.click();
-            showLoadingState('Ready to begin your live try-on.', false, true);
+            showLoadingState('Ready to begin your atelier preview.', false, true);
         };
     </script>
 </body>

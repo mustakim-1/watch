@@ -8,7 +8,7 @@
     <meta name="description" content="Browse our complete collection of luxury anime-themed watches." />
     <link rel="icon" href="favicon.ico" />
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Lato:wght@300;400;700&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
@@ -30,7 +30,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: "Poppins", sans-serif;
+            font-family: 'Lato', sans-serif;
             padding-top: 90px;
         }
 
@@ -55,7 +55,7 @@
         }
 
         .logo {
-            font-family: "Playfair Display", serif;
+            font-family: 'Cinzel Decorative', serif;
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--gold);
@@ -131,6 +131,69 @@
             font-weight: 700;
         }
 
+        /* Mobile Nav Toggle */
+        .nav-toggler {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 30px;
+            height: 20px;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .line {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #d4af37;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        .line1 { top: 0; }
+        .line2 { top: 50%; transform: translateY(-50%); }
+        .line3 { bottom: 0; }
+
+        body.nav-open {
+            overflow: hidden;
+        }
+
+        header.nav-active .line1 { transform: rotate(45deg); top: 50%; }
+        header.nav-active .line2 { opacity: 0; }
+        header.nav-active .line3 { transform: rotate(-45deg); top: 50%; bottom: auto; }
+
+        @media (max-width: 768px) {
+            .nav-toggler {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: #0d0d0d;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transform: translateX(100%);
+                transition: transform 0.4s ease-in-out;
+                z-index: 1000;
+            }
+
+            header.nav-active .nav-menu {
+                transform: translateX(0);
+            }
+            
+            .nav-menu a {
+                font-size: 1.5rem;
+            }
+        }
+
         /* Hero Banner */
         .collection-hero {
             background: linear-gradient(135deg, var(--surface) 0%, var(--bg) 100%);
@@ -140,7 +203,7 @@
         }
 
         .collection-hero h1 {
-            font-family: "Playfair Display", serif;
+            font-family: 'Cinzel Decorative', serif;
             font-size: 4rem;
             color: #fff;
             margin-bottom: 15px;
@@ -197,6 +260,94 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .watches-grid {
+                grid-template-columns: repeat(2, 1fr); /* Force 2 columns on mobile */
+                gap: 10px; /* Reduce gap for mobile */
+            }
+            
+            .watches-container {
+                padding: 20px 10px; /* Reduce padding */
+            }
+            
+            /* Card tweaks for smaller layout */
+            .watch-card {
+                border-radius: 8px;
+                display: flex;
+                flex-direction: column;
+                background: #1a1a1a;
+            }
+            
+            .watch-card-image {
+                height: 120px;
+                padding: 5px;
+            }
+            
+            .watch-card-badge {
+                top: 8px;
+                left: 8px;
+                padding: 3px 6px;
+                font-size: 0.65rem;
+            }
+            
+            .watch-card-content {
+                padding: 8px;
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+            }
+            
+            .watch-card-title {
+                font-size: 0.75rem;
+                margin-bottom: 4px;
+                white-space: normal;
+                overflow: visible;
+                text-overflow: clip;
+                line-height: 1.2;
+                display: block;
+                height: auto;
+            }
+            
+            .watch-card-desc {
+                display: none;
+            }
+            
+            .watch-card-price {
+                font-size: 0.9rem;
+                margin-bottom: 6px;
+                color: #d4af37;
+            }
+
+            .watch-card-footer {
+                margin-top: auto;
+                flex-direction: column;
+                gap: 5px;
+                align-items: stretch;
+            }
+
+            .watch-card-btn {
+                padding: 6px 0;
+                font-size: 0.75rem;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 4px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .products-header {
+                padding: 0 10px;
+                margin-bottom: 15px;
+            }
+            
+            #results-count {
+                font-size: 0.85rem;
+                color: var(--text-dim);
+            }
         }
 
         /* Watch Card */
@@ -279,7 +430,7 @@
         }
 
         .watch-card-title {
-            font-family: "Playfair Display", serif;
+            font-family: 'Cinzel Decorative', serif;
             font-size: 1.5rem;
             color: #fff;
             margin-bottom: 10px;
@@ -392,7 +543,7 @@
             width: 100%;
             outline: none;
             font-size: 0.9rem;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Lato', sans-serif;
             letter-spacing: 0.5px;
         }
         
@@ -531,7 +682,7 @@
         .panel-section h4 {
             color: var(--gold);
             margin-bottom: 25px;
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cinzel Decorative', serif;
             letter-spacing: 1px;
             font-size: 1.2rem;
             display: flex;
@@ -592,7 +743,7 @@
             border-radius: 10px;
             outline: none;
             cursor: pointer;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Lato', sans-serif;
         }
 
         /* Responsive */
@@ -666,19 +817,38 @@
             }
         }
     </style>
+
+    <style>
+        /* Global Font Override */
+        h1, h2, h3, h4, h5, h6, .feature-title, .watch-title, .section-title, .special-title {
+            font-family: 'Cinzel Decorative', serif !important;
+        }
+        body, p, span, a, li, div {
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
-    <header>
+    <header id="main-header">
         <a href="index.html" class="logo">
             <img src="images/logo.png" alt="Dialcraft Watches">
         </a>
+        <button class="nav-toggler" aria-label="Toggle navigation">
+            <span class="line line1"></span>
+            <span class="line line2"></span>
+            <span class="line line3"></span>
+        </button>
         <nav class="nav-menu">
             <a href="index.html">Home</a>
             <a href="all-watches.html" style="color: #fff;">Collection</a>
             <a href="about.html">About</a>
             <a href="support.html">Support</a>
             <a href="account.html">Account</a>
+            <div class="cart-icon" onclick="openWishlistModal()" style="margin-right: 15px;">
+                <i class="far fa-heart"></i>
+                <span class="cart-count" id="wishlist-count">0</span>
+            </div>
             <div class="cart-icon" onclick="window.location.href='cart.html'">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-count" id="cart-count">0</span>
@@ -828,8 +998,22 @@
                     <div class="qv-actions">
                         <button class="qv-btn-primary" id="qv-add-cart">Add to Cart</button>
                         <button class="qv-btn-secondary" id="qv-details">View Full Details</button>
+                        <button class="qv-btn-secondary" id="qv-wishlist" style="margin-left: 10px; width: auto; flex: 0 0 auto;">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Modal -->
+    <div id="wishlist-modal" class="modal-overlay">
+        <div class="quick-view-content" style="max-width: 600px;">
+            <button class="close-modal" onclick="closeWishlistModal()">&times;</button>
+            <h2 style="color: var(--gold); font-family: 'Cinzel Decorative', serif; text-align: center; margin-bottom: 20px;">Your Wishlist</h2>
+            <div id="wishlist-items" style="display: flex; flex-direction: column; gap: 15px; max-height: 60vh; overflow-y: auto;">
+                <!-- Items injected here -->
             </div>
         </div>
     </div>
@@ -939,7 +1123,7 @@
         }
 
         .qv-info h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cinzel Decorative', serif;
             color: #fff;
             font-size: 2.2rem;
             margin-bottom: 10px;
@@ -1013,6 +1197,91 @@
         }
 
         .qv-btn-secondary:hover { background: rgba(212, 175, 55, 0.1); }
+
+        /* Pagination Controls */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 40px;
+            padding: 20px 0;
+        }
+
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--surface);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Lato', sans-serif;
+            font-weight: 600;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--gold);
+            color: var(--bg);
+            border-color: var(--gold);
+        }
+
+        .pagination-btn.active {
+            background: var(--gold);
+            color: var(--bg);
+            border-color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Wishlist Item Styles */
+        .wishlist-item {
+            display: flex;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .wishlist-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .wishlist-item-info {
+            flex: 1;
+        }
+        .wishlist-item-title {
+            color: #fff;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-family: 'Cinzel Decorative', serif;
+        }
+        .wishlist-item-price {
+            color: var(--gold);
+            font-weight: bold;
+        }
+        .wishlist-remove-btn {
+            background: transparent;
+            border: none;
+            color: #ff4d4d;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+        .wishlist-remove-btn:hover {
+            transform: scale(1.1);
+        }
     </style>
 
     <footer class="simple-footer">
@@ -1021,12 +1290,35 @@
 
     <script src="products.js"></script>
     <script>
+        // Responsive Navbar
+        function initializeResponsiveNavbar() {
+            const header = document.getElementById('main-header');
+            const navToggler = document.querySelector('.nav-toggler');
+            const navMenu = document.querySelector('.nav-menu');
+            if (!header || !navToggler || !navMenu) return;
+
+            navToggler.addEventListener('click', () => {
+                header.classList.toggle('nav-active');
+                document.body.classList.toggle('nav-open');
+            });
+            navMenu.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    header.classList.remove('nav-active');
+                    document.body.classList.remove('nav-open');
+                }
+            });
+        }
+
         let allProducts = [];
         let filteredProducts = [];
+        let currentPage = 1;
+        const itemsPerPage = 20;
 
         document.addEventListener('DOMContentLoaded', () => {
+            initializeResponsiveNavbar();
             loadWatches();
             updateCartCount();
+            updateWishlistCount();
             setupAdvancedFilters();
         });
 
@@ -1078,24 +1370,95 @@
 
         function renderWatches() {
             const grid = document.getElementById('watches-grid');
-            grid.innerHTML = filteredProducts.map((watch, index) => `
+            
+            // Pagination Logic
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            // Ensure current page is valid
+            if (currentPage > totalPages && totalPages > 0) {
+                currentPage = totalPages;
+            }
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedItems = filteredProducts.slice(startIndex, endIndex);
+
+            grid.innerHTML = paginatedItems.map((watch, index) => `
                 <div class="watch-card" data-category="${getCategoryFromTitle(watch.title)}" data-price="${parseFloat(watch.price.replace(/[^\d.]/g, ''))}" data-movement="${watch.specs?.movement || ''}" data-water="${watch.specs?.water || ''}" onclick="openQuickView('${watch.id || allProducts.indexOf(watch)}')">
                     <div class="watch-card-image">
                         <img src="${watch.img}" alt="${watch.title}" />
-                        ${index < 2 ? '<span class="watch-card-badge">Popular</span>' : ''}
+                        ${index < 2 && currentPage === 1 ? '<span class="watch-card-badge">Popular</span>' : ''}
+                        <button class="wishlist-btn" onclick="event.stopPropagation(); toggleWishlist('${watch.title.replace(/'/g, "\\'")}')" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); border: none; font-size: 1.2rem; cursor: pointer; padding: 0; border-radius: 50%; z-index: 20; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                            <i class="${getWishlist().some(item => item.title === watch.title) ? 'fas fa-heart' : 'far fa-heart'}" style="color: ${getWishlist().some(item => item.title === watch.title) ? '#d4af37' : '#fff'}"></i>
+                        </button>
                     </div>
                     <div class="watch-card-content">
                         <h3 class="watch-card-title">${watch.title}</h3>
                         <p class="watch-card-desc">${watch.desc}</p>
                         <div class="watch-card-footer">
                             <span class="watch-card-price">${watch.price}</span>
-                            <button class="watch-card-btn" onclick="event.stopPropagation(); addToCart('${watch.title.replace(/'/g, "\\'")}')">
-                                Add to Cart
-                            </button>
+                            <button class="watch-card-btn" ${watch.stock !== undefined && watch.stock <= 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} onclick="event.stopPropagation(); ${watch.stock !== undefined && watch.stock <= 0 ? '' : `addToCart('${watch.title.replace(/'/g, "\\'")}')`}">
+                            ${watch.stock !== undefined && watch.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                        </button>
                         </div>
                     </div>
                 </div>
             `).join('');
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            let paginationContainer = document.getElementById('pagination-controls');
+            if (!paginationContainer) {
+                paginationContainer = document.createElement('div');
+                paginationContainer.id = 'pagination-controls';
+                paginationContainer.className = 'pagination-container';
+                document.getElementById('watches-grid').parentNode.appendChild(paginationContainer);
+            }
+            
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                html += `
+                    <button class="pagination-btn ${currentPage === i ? 'active' : ''}" onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            html += `
+                <button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+
+            paginationContainer.innerHTML = html;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderWatches();
+            // Scroll to top of grid
+            const container = document.querySelector('.watches-container');
+            if (container) {
+                const headerOffset = 150;
+                const elementPosition = container.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
         }
 
         function openQuickView(id) {
@@ -1156,6 +1519,8 @@
             document.getElementById('qv-details').onclick = () => {
                 window.location.href = `product.html?id=${watch.id || products.indexOf(watch)}`;
             };
+
+            updateQuickViewWishlistBtn(watch.title);
 
             document.getElementById('quick-view-modal').classList.add('active');
         }
@@ -1326,6 +1691,7 @@
                 filteredProducts.reverse(); 
             }
 
+            currentPage = 1; // Reset to first page on filter change
             updateResultsCount();
             renderWatches();
 
@@ -1365,11 +1731,28 @@
             const watch = products.find(p => p.title === title);
             if (!watch) return;
 
+            // Stock Validation
+            const currentStock = watch.stock !== undefined ? watch.stock : 10;
+            if (currentStock <= 0) {
+                alert('Sorry, this item is out of stock!');
+                return;
+            }
+
             let cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
             const existing = cart.findIndex(item => item.title === watch.title);
 
+            let currentQtyInCart = 0;
             if (existing > -1) {
-                cart[existing].quantity = (cart[existing].quantity || 1) + 1;
+                currentQtyInCart = cart[existing].quantity || 1;
+            }
+
+            if (currentQtyInCart + 1 > currentStock) {
+                alert(`Sorry, we only have ${currentStock} in stock!`);
+                return;
+            }
+
+            if (existing > -1) {
+                cart[existing].quantity = currentQtyInCart + 1;
             } else {
                 cart.push({ ...watch, quantity: 1 });
             }
@@ -1384,6 +1767,116 @@
             const count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
             document.getElementById('cart-count').textContent = count;
         }
+
+        // Wishlist Logic
+        function getWishlist() {
+            return JSON.parse(localStorage.getItem('dialcraft_wishlist')) || [];
+        }
+
+        function saveWishlist(wishlist) {
+            localStorage.setItem('dialcraft_wishlist', JSON.stringify(wishlist));
+            updateWishlistCount();
+            
+            // Dispatch event for other tabs/components
+            window.dispatchEvent(new Event('storage'));
+        }
+
+        function toggleWishlist(title) {
+            let wishlist = getWishlist();
+            const index = wishlist.findIndex(item => item.title === title);
+            const products = JSON.parse(localStorage.getItem('dialcraft_products')) || watchData;
+            
+            if (index > -1) {
+                wishlist.splice(index, 1);
+            } else {
+                const product = products.find(p => p.title === title);
+                if (product) {
+                    wishlist.push(product);
+                }
+            }
+            saveWishlist(wishlist);
+            
+            // Re-render to update icons
+            renderWatches();
+            
+            // If modal is open, update it
+            if (document.getElementById('wishlist-modal').classList.contains('active')) {
+                renderWishlistItems();
+            }
+
+            // Update Quick View button if open
+            const qvTitle = document.getElementById('qv-title').innerText;
+            if (qvTitle === title) {
+                updateQuickViewWishlistBtn(title);
+            }
+        }
+
+        function updateWishlistCount() {
+            const count = getWishlist().length;
+            const badge = document.getElementById('wishlist-count');
+            if (badge) {
+                badge.textContent = count;
+                badge.style.display = count > 0 ? 'flex' : 'none';
+            }
+        }
+
+        function openWishlistModal() {
+            renderWishlistItems();
+            document.getElementById('wishlist-modal').classList.add('active');
+        }
+
+        function closeWishlistModal() {
+            document.getElementById('wishlist-modal').classList.remove('active');
+        }
+
+        function renderWishlistItems() {
+            const wishlist = getWishlist();
+            const container = document.getElementById('wishlist-items');
+            
+            if (wishlist.length === 0) {
+                container.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">Your wishlist is empty.</p>';
+                return;
+            }
+
+            container.innerHTML = wishlist.map(item => `
+                <div class="wishlist-item" onclick="openQuickView('${item.id || allProducts.findIndex(p => p.title === item.title)}')">
+                    <img src="${item.img}" alt="${item.title}">
+                    <div class="wishlist-item-info">
+                        <div class="wishlist-item-title">${item.title}</div>
+                        <div class="wishlist-item-price">${item.price}</div>
+                    </div>
+                    <button class="wishlist-remove-btn" onclick="event.stopPropagation(); toggleWishlist('${item.title.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function updateQuickViewWishlistBtn(title) {
+            const btn = document.getElementById('qv-wishlist');
+            if (!btn) return;
+            const icon = btn.querySelector('i');
+            const inWishlist = getWishlist().some(item => item.title === title);
+            
+            if (inWishlist) {
+                icon.className = 'fas fa-heart';
+                icon.style.color = '#d4af37';
+            } else {
+                icon.className = 'far fa-heart';
+                icon.style.color = '#d4af37';
+            }
+            
+            // Update onclick
+            btn.onclick = () => toggleWishlist(title);
+        }
+
+        // Close wishlist modal on outside click
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('wishlist-modal');
+            if (event.target == modal) {
+                closeWishlistModal();
+            }
+        });
     </script>
 </body>
 

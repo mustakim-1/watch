@@ -4,6 +4,7 @@ const watchData = [
     title: "Naruto Storm Watch",
     desc: "Flame dial design with vibrant red strap. Perfect for Naruto fans.",
     price: "৳1,499",
+    stock: 15,
     img: "images/naruto_storm.png",
     specs: {
       movement: "Automatic NH35",
@@ -24,6 +25,7 @@ const watchData = [
     title: "Saiyan Force Edition",
     desc: "Electric blue energy dial with black strap. Feel the power of the Saiyans.",
     price: "৳1,599",
+    stock: 12,
     img: "images/saiyan_force.png",
     specs: {
       movement: "Automatic NH35",
@@ -44,6 +46,7 @@ const watchData = [
     title: "Lunar Serenity",
     desc: "Elegant moon phases dial with soft pastel strap. For magical moments.",
     price: "৳1,699",
+    stock: 8,
     img: "images/lunar_serenity.png",
     specs: {
       movement: "Quartz",
@@ -64,6 +67,7 @@ const watchData = [
     title: "Dragon Ball Z Power",
     desc: "Golden aura accents with a rugged case design inspired by DBZ.",
     price: "৳1,699",
+    stock: 20,
     img: "images/dragon-ball-zee-chromebook-wallpaper.jpg",
     specs: {
       movement: "Automatic",
@@ -78,6 +82,7 @@ const watchData = [
     title: "Titan x DBZ Edition",
     desc: "Collaboration piece featuring intricate engraving and premium materials.",
     price: "৳2,499",
+    stock: 5,
     img: "images/unnamed.png",
     specs: {
       movement: "Swiss Automatic",
@@ -92,6 +97,7 @@ const watchData = [
     title: "Midnight Chrono",
     desc: "Tactical stealth design with night-vision inspired details.",
     price: "৳2,199",
+    stock: 7,
     img: "images/0745011JAA_flat_1-removebg-preview.png",
     specs: {
       movement: "Quartz Chronograph",
@@ -106,6 +112,7 @@ const watchData = [
     title: "Crimson Automatic",
     desc: "A bold statement piece with exposed automatic movement and deep red accents.",
     price: "৳3,299",
+    stock: 3,
     img: "images/c85264a70bc46321aef23f2b08d2831f.jpg_720x720q80-removebg-preview.png",
     specs: {
       movement: "Automatic Skeleton",

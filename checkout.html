@@ -8,7 +8,7 @@
   <meta name="description" content="Complete your purchase of luxury anime-themed watches." />
   <link rel="icon" href="favicon.ico" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Lato:wght@300;400;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
@@ -21,7 +21,7 @@
       margin: 0;
       background-color: #0d0d0d;
       color: #f5f5f5;
-      font-family: "Poppins", sans-serif;
+      font-family: 'Lato', sans-serif;
       padding-top: 90px;
     }
 
@@ -51,7 +51,7 @@
     }
 
     .logo {
-      font-family: "Playfair Display", serif;
+      font-family: 'Cinzel Decorative', serif;
       font-size: 1.8rem;
       font-weight: 700;
       color: #d4af37;
@@ -155,7 +155,7 @@
     }
 
     .checkout-title {
-      font-family: "Playfair Display", serif;
+      font-family: 'Cinzel Decorative', serif;
       font-size: 2.5rem;
       color: #d4af37;
       margin-bottom: 10px;
@@ -190,7 +190,7 @@
     }
 
     .section-title {
-      font-family: "Playfair Display", serif;
+      font-family: 'Cinzel Decorative', serif;
       font-size: 1.5rem;
       color: #d4af37;
       margin-bottom: 20px;
@@ -303,7 +303,7 @@
     }
 
     .summary-title {
-      font-family: "Playfair Display", serif;
+      font-family: 'Cinzel Decorative', serif;
       font-size: 1.8rem;
       color: #d4af37;
       margin-bottom: 25px;
@@ -446,6 +446,16 @@
       animation: fadeIn 0.8s ease-out;
     }
   </style>
+
+    <style>
+        /* Global Font Override */
+        h1, h2, h3, h4, h5, h6, .feature-title, .watch-title, .section-title, .special-title {
+            font-family: 'Cinzel Decorative', serif !important;
+        }
+        body, p, span, a, li, div {
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -628,6 +638,8 @@
 
     function loadOrderSummary() {
       const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      // Load products to check real-time stock
+      const products = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
 
       if (cart.length === 0) {
         window.location.href = 'cart.html';
@@ -639,6 +651,8 @@
       cartTotal = subtotal;
       shippingCost = subtotal > 5000 ? 0 : 200;
       
+      let allItemsAvailable = true;
+
       // Inject HTML Structure
       let html = `
         <h2 class="summary-title">Order Summary</h2>
@@ -646,13 +660,25 @@
       `;
       
       cart.forEach(item => {
+          // Find product in master list to check real-time stock
+          const product = products.find(p => (p.id && p.id === item.id) || p.title === item.title) || item;
+          // Default stock to 10 if undefined, consistent with other parts
+          const currentStock = product.stock !== undefined ? product.stock : 10;
+          const requestQty = item.quantity || 1;
+          const isStockIssue = currentStock < requestQty;
+          
+          if (isStockIssue) {
+              allItemsAvailable = false;
+          }
+
           html += `
-            <div class="summary-item">
+            <div class="summary-item" ${isStockIssue ? 'style="border-left: 3px solid #ef4444; padding-left: 10px; background: rgba(239, 68, 68, 0.1);"' : ''}>
                 <div class="item-info">
                     <img src="${item.img || item.image}" alt="${item.title}" class="item-image">
                     <div class="item-details">
                         <h4>${item.title}</h4>
-                        <p>Qty: ${item.quantity || 1}</p>
+                        <p>Qty: ${requestQty}</p>
+                        ${isStockIssue ? `<p style="color: #ef4444; font-size: 0.8rem; font-weight: bold;">Insufficient Stock (Only ${currentStock} left)</p>` : ''}
                     </div>
                 </div>
                 <span>${item.price}</span>
@@ -690,8 +716,8 @@
             <p id="coupon-message" style="font-size: 0.8rem; margin-top: 5px;"></p>
         </div>
 
-        <button type="button" class="place-order-btn" id="place-order-btn" onclick="placeOrder()">
-            Place Order
+        <button type="button" class="place-order-btn" id="place-order-btn" onclick="placeOrder()" ${!allItemsAvailable ? 'disabled title="Some items are out of stock"' : ''}>
+            ${!allItemsAvailable ? 'Some items are out of stock' : 'Place Order'}
         </button>
         <a href="cart.html" class="back-to-cart">Back to Cart</a>
       `;
@@ -925,13 +951,51 @@
     function placeOrder() {
       if (!validateForm()) return;
 
+      // Final Stock Validation
+      const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      let products = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+      
+      for (const item of cart) {
+          const product = products.find(p => (p.id && p.id === item.id) || p.title === item.title);
+          if (product) {
+              const currentStock = product.stock !== undefined ? product.stock : 10;
+              if (currentStock < (item.quantity || 1)) {
+                  alert(`Sorry, ${item.title} is out of stock or has insufficient quantity.`);
+                  loadOrderSummary(); // Refresh UI to show errors
+                  return;
+              }
+          }
+      }
+
       const btn = document.getElementById('place-order-btn');
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
       btn.disabled = true;
 
       setTimeout(() => {
+          // Update Stock
+          let productsUpdated = false;
+          // Reload products to ensure we have latest state (though unlikely to change in 2s in local env)
+          products = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+          
+          cart.forEach(cartItem => {
+             const product = products.find(p => (p.id && p.id === cartItem.id) || p.title === cartItem.title);
+             if (product) {
+                 // Default to 10 if undefined, but we should probably init it. 
+                 // If undefined, we assume it's tracked now.
+                 if (product.stock === undefined) product.stock = 10;
+                 
+                 product.stock -= (cartItem.quantity || 1);
+                 if (product.stock < 0) product.stock = 0;
+                 productsUpdated = true;
+             }
+          });
+          
+          if (productsUpdated) {
+              localStorage.setItem('dialcraft_products', JSON.stringify(products));
+          }
+
           // Collect Order Data
-          const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+          // const cart = ... (already defined above)
           
           const user = upsertUserFromCheckout();
           

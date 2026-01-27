@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChronoFit - Virtual Watch Try-On</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom styles for the canvas to ensure it's block-level and responsive */
@@ -202,6 +202,16 @@
             to { transform: translateY(0); opacity: 1; }
         }
     </style>
+
+    <style>
+        /* Global Font Override */
+        h1, h2, h3, h4, h5, h6, .feature-title, .watch-title, .section-title, .special-title {
+            font-family: 'Cinzel Decorative', serif !important;
+        }
+        body, p, span, a, li, div {
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-black font-montserrat antialiased flex flex-col items-center justify-center min-h-screen p-6 text-gray-100">
     <div class="bg-gray-800 shadow-2xl rounded-3xl p-8 w-full max-w-7xl flex flex-col gap-10 border border-gray-700">
@@ -344,7 +354,7 @@
                                 centerShiftX, centerShiftY, drawWidth, drawHeight);
             } else {
                 ctx.fillStyle = '#a8a29e'; /* Stone-400 */
-                ctx.font = '30px "Playfair Display", serif'; /* Changed font for luxury */
+                ctx.font = '30px 'Cinzel Decorative', serif'; /* Changed font for luxury */
                 ctx.textAlign = 'center';
                 ctx.fillText('1. Select a hand shade above', tryOnCanvas.width / 2, tryOnCanvas.height / 2 - 30);
             }
@@ -359,7 +369,7 @@
                 ctx.restore();
             } else if (handPhoto.src) {
                 ctx.fillStyle = '#a8a29e'; /* Stone-400 */
-                ctx.font = '30px "Playfair Display", serif'; /* Changed font for luxury */
+                ctx.font = '30px 'Cinzel Decorative', serif'; /* Changed font for luxury */
                 ctx.textAlign = 'center';
                 ctx.fillText('2. Select a watch face to overlay', tryOnCanvas.width / 2, tryOnCanvas.height / 2 + 30);
             }

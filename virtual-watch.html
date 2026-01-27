@@ -20,7 +20,7 @@
             --color-container: #0f0f0f; --color-panel: #141414;
             --color-border: rgba(212, 175, 55, 0.25); --color-text-primary: #F5F5F5;
             --color-accent: #D4AF37; --color-accent-dark: #B8860B; --color-accent-glow: rgba(212, 175, 55, 0.35);
-            --font-display: 'Playfair Display', serif; --font-body: 'Montserrat', sans-serif;
+            --font-display: 'Cinzel Decorative', serif; --font-body: 'Lato', sans-serif;
         }
         body { background-color: var(--color-background-start); background-image: linear-gradient(to br, var(--color-background-start), var(--color-background-end)); font-family: var(--font-body); color: var(--color-text-primary); }
         .live-view-container { position: relative; width: 100%; height: 100%; min-height: 500px; max-height: 90vh; overflow: hidden; border-radius: 1.5rem; background-color: #000; }
@@ -40,6 +40,16 @@
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--color-accent); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.4); margin-top: -8px; transition: background 0.2s ease, transform 0.2s ease; }
         input[type="range"]::-webkit-slider-thumb:hover { background: var(--color-accent-dark); transform: scale(1.1); }
         ::-webkit-scrollbar { width: 12px; height: 12px; } ::-webkit-scrollbar-track { background: var(--color-panel); border-radius: 10px; } ::-webkit-scrollbar-thumb { background: var(--color-accent-dark); border-radius: 10px; border: 3px solid var(--color-panel); } ::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+    </style>
+
+    <style>
+        /* Global Font Override */
+        h1, h2, h3, h4, h5, h6, .feature-title, .watch-title, .section-title, .special-title {
+            font-family: 'Cinzel Decorative', serif !important;
+        }
+        body, p, span, a, li, div {
+            font-family: 'Lato', sans-serif;
+        }
     </style>
 </head>
 <body class="antialiased flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">

@@ -8,7 +8,7 @@
   <meta name="description" content="Review your selected luxury watches and proceed to checkout." />
   <link rel="icon" href="favicon.ico" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Lato:wght@300;400;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
@@ -21,7 +21,7 @@
       margin: 0;
       background-color: #0d0d0d;
       color: #f5f5f5;
-      font-family: "Poppins", sans-serif;
+      font-family: 'Lato', sans-serif;
       padding-top: 90px;
     }
 
@@ -51,7 +51,7 @@
     }
 
     .logo {
-      font-family: "Playfair Display", serif;
+      font-family: 'Cinzel Decorative', serif;
       font-size: 1.8rem;
       font-weight: 700;
       color: #d4af37;
@@ -156,7 +156,7 @@
     }
 
     .cart-title {
-      font-family: "Playfair Display", serif;
+      font-family: 'Cinzel Decorative', serif;
       font-size: 2.5rem;
       color: #d4af37;
       margin-bottom: 10px;
@@ -328,7 +328,7 @@
     }
 
     .summary-title {
-      font-family: "Playfair Display", serif;
+      font-family: 'Cinzel Decorative', serif;
       font-size: 1.8rem;
       color: #d4af37;
       margin-bottom: 25px;
@@ -423,7 +423,114 @@
     .cart-item {
       animation: fadeIn 0.6s ease-out;
     }
+
+    /* Wishlist Modal Styles */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 2000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .quick-view-content {
+        background: #111;
+        border: 1px solid #d4af37;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 10px;
+        position: relative;
+        padding: 40px;
+        box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: color 0.3s;
+        z-index: 10;
+    }
+
+    .close-modal:hover { color: #fff; }
+
+    /* Wishlist Item Styles */
+    .wishlist-item {
+        display: flex;
+        gap: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 10px;
+        border-radius: 8px;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .wishlist-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .wishlist-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+    .wishlist-item-info {
+        flex: 1;
+    }
+    .wishlist-item-title {
+        color: #fff;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        font-family: 'Cinzel Decorative', serif;
+    }
+    .wishlist-item-price {
+        color: #d4af37;
+        font-weight: bold;
+    }
+    .wishlist-remove-btn {
+        background: transparent;
+        border: none;
+        color: #ff4d4d;
+        cursor: pointer;
+        font-size: 1.1rem;
+        transition: transform 0.2s;
+    }
+    .wishlist-remove-btn:hover {
+        transform: scale(1.1);
+    }
   </style>
+
+    <style>
+        /* Global Font Override */
+        h1, h2, h3, h4, h5, h6, .feature-title, .watch-title, .section-title, .special-title {
+            font-family: 'Cinzel Decorative', serif !important;
+        }
+        body, p, span, a, li, div {
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -438,6 +545,10 @@
       <a href="support.html">Support</a>
       <a href="account.html">Account</a>
       <a href="admin.html" style="color: #ff4d4d;">Admin</a>
+      <div class="cart-icon" onclick="openWishlistModal()" style="margin-right: 20px;">
+        <i class="fas fa-heart"></i>
+        <span class="cart-count" id="wishlist-count">0</span>
+      </div>
       <div class="cart-icon" onclick="window.location.href='cart.html'">
         <i class="fas fa-shopping-cart"></i>
         <span class="cart-count" id="cart-count">0</span>
@@ -462,10 +573,116 @@
     </div>
   </div>
 
+  <!-- Wishlist Modal -->
+  <div id="wishlist-modal" class="modal-overlay">
+      <div class="quick-view-content">
+          <button class="close-modal" onclick="closeWishlistModal()">&times;</button>
+          <h2 style="color: #d4af37; font-family: 'Cinzel Decorative', serif; text-align: center; margin-bottom: 20px;">Your Wishlist</h2>
+          <div id="wishlist-items" style="display: flex; flex-direction: column; gap: 15px; max-height: 60vh; overflow-y: auto;">
+              <!-- Items injected here -->
+          </div>
+      </div>
+  </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       loadCart();
       updateCartCount();
+      updateWishlistCount();
+    });
+
+    // Wishlist Logic
+    function getWishlist() {
+        return JSON.parse(localStorage.getItem('dialcraft_wishlist')) || [];
+    }
+
+    function saveWishlist(wishlist) {
+        localStorage.setItem('dialcraft_wishlist', JSON.stringify(wishlist));
+        updateWishlistCount();
+        
+        // Dispatch event for other tabs/components
+        window.dispatchEvent(new Event('storage'));
+    }
+
+    function toggleWishlist(title) {
+        let wishlist = getWishlist();
+        const index = wishlist.findIndex(item => item.title === title);
+        
+        // Since we only use this for removal in cart page, we don't strictly need the full add logic,
+        // but we'll include it for completeness if we ever add 'Move to Wishlist' from cart
+        
+        if (index > -1) {
+            wishlist.splice(index, 1);
+        } else {
+            // If we needed to add, we'd need access to the product object.
+            // For now, in cart page, we primarily remove from modal.
+            // If adding from cart items, we'd need to find the item in cart or product list.
+            const products = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+            const product = products.find(p => p.title === title);
+            if (product) {
+                 wishlist.push(product);
+            }
+        }
+        saveWishlist(wishlist);
+        
+        // If modal is open, update it
+        if (document.getElementById('wishlist-modal').classList.contains('active')) {
+            renderWishlistItems();
+        }
+    }
+
+    function updateWishlistCount() {
+        const count = getWishlist().length;
+        const badge = document.getElementById('wishlist-count');
+        if (badge) {
+            badge.textContent = count;
+            badge.style.display = count > 0 ? 'flex' : 'none';
+        }
+    }
+
+    function openWishlistModal() {
+        renderWishlistItems();
+        document.getElementById('wishlist-modal').classList.add('active');
+    }
+
+    function closeWishlistModal() {
+        document.getElementById('wishlist-modal').classList.remove('active');
+    }
+
+    function renderWishlistItems() {
+        const wishlist = getWishlist();
+        const container = document.getElementById('wishlist-items');
+        
+        // We need watchDataList for finding IDs if we want to link to product page.
+        // In cart.html we might not have watchDataList loaded. 
+        // We can try to load from localStorage products or just use index 0 as fallback or omit link if ID missing.
+        let products = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+        
+        if (wishlist.length === 0) {
+            container.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">Your wishlist is empty.</p>';
+            return;
+        }
+
+        container.innerHTML = wishlist.map(item => `
+            <div class="wishlist-item" onclick="window.location.href='product.html?id=${item.id}'">
+                <img src="${item.img}" alt="${item.title}">
+                <div class="wishlist-item-info">
+                    <div class="wishlist-item-title">${item.title}</div>
+                    <div class="wishlist-item-price">${item.price}</div>
+                </div>
+                <button class="wishlist-remove-btn" onclick="event.stopPropagation(); toggleWishlist('${item.title.replace(/'/g, "\\'")}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+    
+    // Close wishlist modal on outside click
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('wishlist-modal');
+        if (event.target == modal) {
+            closeWishlistModal();
+        }
     });
 
     function loadCart() {
@@ -556,6 +773,20 @@
 
     function changeQuantity(index, delta) {
       const cart = JSON.parse(localStorage.getItem('dialcraft_cart')) || [];
+      const item = cart[index];
+
+      // Validate stock if increasing quantity
+      if (delta > 0) {
+        const products = JSON.parse(localStorage.getItem('dialcraft_products')) || [];
+        const product = products.find(p => p.title === item.title);
+        const currentStock = (product && typeof product.stock !== 'undefined') ? product.stock : 10;
+
+        if ((item.quantity || 1) + delta > currentStock) {
+          alert(`Sorry, we only have ${currentStock} in stock!`);
+          return;
+        }
+      }
+
       cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + delta);
       localStorage.setItem('dialcraft_cart', JSON.stringify(cart));
       loadCart();
